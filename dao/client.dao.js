@@ -42,6 +42,16 @@ class ClientDao {
         }
     }
 
+    async updateJwt (email , jwt) {
+        const result = await clientModel.update({"jwt" : jwt } , {where:{"email" :email}, limit:1})
+        if ( result[0] > 0) {
+            return {success:true }
+        } else {
+            return {success:false}
+        }
+
+    }
+
 
 
 }
