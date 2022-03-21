@@ -2,65 +2,45 @@ import 'package:flutter/material.dart';
 
 enum AuthMode { Signup, Login }
 
-class AuthScreen extends StatelessWidget {
-  static const routName = '/auth';
+class LoginScreen extends StatelessWidget {
+  static const routName = '/login';
 
-  const AuthScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 177, 212, 165),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.transparent,
-                    width: 3,
-                    style: BorderStyle.solid,
-                  ),
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: Colors.green,
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/takwiraLogo.jpg'),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-              const Text(
-                'TAKWIRA',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold),
-              ),
-              AuthCard(),
-              GestureDetector(
-                onTap: () => Navigator.pushNamed(context, "/login"),
-                child: const Text('already have an account ?'),
-              ),
-            ],
-          ),
+      backgroundColor: Color.fromARGB(255, 177, 212, 165),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Text(
+              'TAKWIRA2',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold),
+            ),
+            Image.asset("assets/images/takwiraLogo.jpg"),
+            LoginCard(),
+            ElevatedButton(
+                onPressed: () => {}, child: Text('already have an account ?')),
+          ],
         ),
       ),
     );
   }
 }
 
-class AuthCard extends StatefulWidget {
+class LoginCard extends StatefulWidget {
   @override
-  _AuthCardState createState() => _AuthCardState();
+  _LoginCardState createState() => _LoginCardState();
 }
 
 final GlobalKey<FormState> _formKey = GlobalKey();
 
-class _AuthCardState extends State<AuthCard> {
+class _LoginCardState extends State<LoginCard> {
   Map<String, String> _authData = {
     'email': '',
     'password': '',
@@ -195,10 +175,6 @@ class _AuthCardState extends State<AuthCard> {
                   onPressed: _submit,
                   child: const Text(
                     'SIGN UP',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 25,
-                    ),
                   ),
                 ),
               ],

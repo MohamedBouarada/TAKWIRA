@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './providers/auth.dart';
 import './screens/auth_screen.dart';
+import './screens//login_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.green,
           ),
           home: const AuthScreen(),
+          routes: {
+            LoginScreen.routName: (ctx) => LoginScreen(),
+          },
         ),
       ),
     );
