@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './providers/auth.dart';
-import './screens/auth_screen.dart';
+import './screens/register_screen.dart';
 import './screens//login_screen.dart';
 
 void main() => runApp(const MyApp());
@@ -23,9 +23,10 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.green,
           ),
-          home: const AuthScreen(),
+          home: const LoginScreen(),
           routes: {
-            LoginScreen.routName: (ctx) => LoginScreen(),
+            //LoginScreen.routName: (ctx) => LoginScreen(),
+            AuthScreen.routName: (ctx) => AuthScreen(),
           },
         ),
       ),

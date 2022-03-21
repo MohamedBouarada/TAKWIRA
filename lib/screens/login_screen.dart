@@ -11,22 +11,49 @@ class LoginScreen extends StatelessWidget {
     final deviceSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 177, 212, 165),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Text(
-              'TAKWIRA2',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold),
-            ),
-            Image.asset("assets/images/takwiraLogo.jpg"),
-            LoginCard(),
-            ElevatedButton(
-                onPressed: () => {}, child: Text('already have an account ?')),
-          ],
+      backgroundColor: const Color.fromARGB(255, 177, 212, 165),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.transparent,
+                    width: 3,
+                    style: BorderStyle.solid,
+                  ),
+                  borderRadius: BorderRadius.circular(30.0),
+                  color: Colors.green,
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/takwiraLogo.jpg'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              const Text(
+                'TAKWIRA',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 50,
+                    fontWeight: FontWeight.bold),
+              ),
+              const LoginCard(),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 10.0,
+                ),
+                child: GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, "/auth"),
+                  child: const Text("Don't have an account ? create one"),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -34,6 +61,8 @@ class LoginScreen extends StatelessWidget {
 }
 
 class LoginCard extends StatefulWidget {
+  const LoginCard({Key? key}) : super(key: key);
+
   @override
   _LoginCardState createState() => _LoginCardState();
 }
@@ -44,9 +73,6 @@ class _LoginCardState extends State<LoginCard> {
   Map<String, String> _authData = {
     'email': '',
     'password': '',
-    'firstName': '',
-    'lastName': '',
-    'phoneNumber': '',
   };
 
   Future<void> _submit() async {}
@@ -83,75 +109,6 @@ class _LoginCardState extends State<LoginCard> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 25.0),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: 'First Name',
-                              fillColor: Colors.white,
-                              filled: true),
-                          keyboardType: TextInputType.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Invalid first name';
-                            }
-                          },
-                          onSaved: (newValue) {
-                            _authData['firstName'] = newValue!;
-                          },
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: 'Last Name',
-                            fillColor: Colors.white,
-                            filled: true),
-                        keyboardType: TextInputType.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Invalid first name';
-                          }
-                        },
-                        onSaved: (newValue) {
-                          _authData['lastName'] = newValue!;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: 'Phone Number',
-                      fillColor: Colors.white,
-                      filled: true),
-                  keyboardType: TextInputType.phone,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                  validator: (value) {
-                    var regExp = RegExp('[0-9]{8}');
-
-                    if (value!.isEmpty ||
-                        !regExp.hasMatch(value) ||
-                        value.length != 8) {
-                      return 'Invalid phone number';
-                    }
-                  },
-                  onSaved: (newValue) {
-                    _authData['phoneNumber'] = newValue!;
-                  },
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
                 TextFormField(
                   decoration: const InputDecoration(
                       labelText: 'Password',
@@ -174,7 +131,20 @@ class _LoginCardState extends State<LoginCard> {
                 ElevatedButton(
                   onPressed: _submit,
                   child: const Text(
-                    'SIGN UP',
+                    'LOGIN',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 25,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 10.0,
+                  ),
+                  child: GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, "/auth"),
+                    child: const Text("Forgot your password ?"),
                   ),
                 ),
               ],
