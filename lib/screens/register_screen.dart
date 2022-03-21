@@ -43,7 +43,7 @@ class AuthScreen extends StatelessWidget {
               AuthCard(),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, "/login"),
-                child: const Text('already have an account ?'),
+                child: const Text('already have an account ?Login'),
               ),
             ],
           ),
