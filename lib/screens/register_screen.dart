@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import "package:provider/provider.dart";
+import '../models/http_exception.dart';
+import "../providers/auth.dart";
+
 enum AuthMode { Signup, Login }
 
 class AuthScreen extends StatelessWidget {
@@ -58,9 +62,8 @@ class AuthCard extends StatefulWidget {
   _AuthCardState createState() => _AuthCardState();
 }
 
-final GlobalKey<FormState> _formKey = GlobalKey();
-
 class _AuthCardState extends State<AuthCard> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
   Map<String, String> _authData = {
     'email': '',
     'password': '',
@@ -69,7 +72,45 @@ class _AuthCardState extends State<AuthCard> {
     'phoneNumber': '',
   };
 
-  Future<void> _submit() async {}
+  Future<void> _submit() async {
+    void _showErrorDialog(String message) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('An Error Occurred!'),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Okay'),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            )
+          ],
+        ),
+      );
+    }
+
+    print(_authData);
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    _formKey.currentState!.save();
+    try {
+      await Provider.of<Auth>(context, listen: false).signup(
+        email: _authData['email']!,
+        firstName: _authData['firstName']!,
+        lastName: _authData['lastName']!,
+        phoneNumber: _authData['phoneNumber']!,
+        password: _authData['password']!,
+      );
+    } on HttpException catch (error) {
+      _showErrorDialog(error.toString());
+    } catch (error) {
+      _showErrorDialog("oops! something went wrong , please try again");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +132,7 @@ class _AuthCardState extends State<AuthCard> {
                       filled: true),
                   keyboardType: TextInputType.emailAddress,
                   style: const TextStyle(fontWeight: FontWeight.bold),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     if (value!.isEmpty || !value.contains('@')) {
                       return 'Invalid Email';
@@ -115,6 +157,7 @@ class _AuthCardState extends State<AuthCard> {
                               filled: true),
                           keyboardType: TextInputType.name,
                           style: const TextStyle(fontWeight: FontWeight.bold),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Invalid first name';
@@ -134,6 +177,7 @@ class _AuthCardState extends State<AuthCard> {
                             filled: true),
                         keyboardType: TextInputType.name,
                         style: const TextStyle(fontWeight: FontWeight.bold),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Invalid first name';
@@ -156,6 +200,7 @@ class _AuthCardState extends State<AuthCard> {
                       filled: true),
                   keyboardType: TextInputType.phone,
                   style: const TextStyle(fontWeight: FontWeight.bold),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     var regExp = RegExp('[0-9]{8}');
 
@@ -179,6 +224,7 @@ class _AuthCardState extends State<AuthCard> {
                       filled: true),
                   obscureText: true,
                   style: const TextStyle(fontWeight: FontWeight.bold),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Password is invalid';

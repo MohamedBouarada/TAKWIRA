@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import '../models/http_exception.dart';
 
 class Auth with ChangeNotifier {
   Future<void> signup({
@@ -11,19 +13,30 @@ class Auth with ChangeNotifier {
     required String phoneNumber,
     required String password,
   }) async {
-    const url = 'localhost:5000/client/add';
-    final response = await http.post(
-      Uri.parse(url),
-      body: json.encode(
-        {
-          'email': email,
-          'firstName': firstName,
-          'lastName': lastName,
-          'phoneNumber': phoneNumber,
-          'password': password,
+    const url = 'http://10.0.2.2:5000/client/add';
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
         },
-      ),
-    );
-    print(response);
+        body: json.encode(
+          {
+            'email': email,
+            'firstName': firstName,
+            'lastName': lastName,
+            'phoneNumber': phoneNumber,
+            'password': password,
+          },
+        ),
+      );
+      final responseData = json.decode(response.body);
+      if (response.statusCode != HttpStatus.created) {
+        throw HttpException(responseData);
+      }
+    } catch (error) {
+      print(error.toString());
+      rethrow;
+    }
   }
 }
