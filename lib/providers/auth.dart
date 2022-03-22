@@ -3,21 +3,24 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import "../models/http_exception.dart";
 
 class Auth with ChangeNotifier {
-  String _token = "";
-  late DateTime _expiryDate = DateTime.now();
+  late String _token = "";
+  late DateTime _expiryDate;
 
-  String get token {
-    if (_expiryDate.isAfter(DateTime.now()) && _token != "") {
-      return _token;
-    }
-    return "";
+  Future<bool?> get token async {
+    final prefs = await SharedPreferences.getInstance();
+    print('***********');
+    print(prefs.getString('token'));
+    final String? value = prefs.getString('token');
+    return value != null;
   }
 
   bool get isAuth {
-    return token != "";
+    print(token);
+    return false;
   }
 
   Future<void> signup({
@@ -78,9 +81,15 @@ class Auth with ChangeNotifier {
         throw HttpException(responseData);
       }
       _token = responseData;
-      _expiryDate = DateTime.now().add(
+      final prefs = await SharedPreferences.getInstance();
+
+// Save an integer value to 'counter' key.
+      await prefs.setString('token', responseData);
+      /* _expiryDate = DateTime.now().add(
         const Duration(days: 3),
       );
+      */
+      print(_token);
       notifyListeners();
     } catch (error) {
       print(error.toString());

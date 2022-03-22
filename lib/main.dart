@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.green,
           ),
-          home: auth.isAuth ? const FieldsScreen() : const LoginScreen(),
+          home: auth.isAuth ? FieldsScreen() : LoginScreen(),
           routes: {
             //LoginScreen.routName: (ctx) => LoginScreen(),
             AuthScreen.routName: (ctx) => AuthScreen(),
