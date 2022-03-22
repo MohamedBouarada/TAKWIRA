@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './providers/auth.dart';
 import './screens/register_screen.dart';
-import './screens//login_screen.dart';
+import './screens//fields_screen.dart';
+import './screens/login_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.green,
           ),
-          home: const LoginScreen(),
+          home: auth.isAuth ? const FieldsScreen() : const LoginScreen(),
           routes: {
             //LoginScreen.routName: (ctx) => LoginScreen(),
             AuthScreen.routName: (ctx) => AuthScreen(),
