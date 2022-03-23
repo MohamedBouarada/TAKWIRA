@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/widgets.dart';
+import 'package:takwira_mobile/models/storage_item.dart';
+import 'package:takwira_mobile/providers/storage_service.dart';
 
 import "../models/http_exception.dart";
 
@@ -66,7 +68,8 @@ class Auth with ChangeNotifier {
       }
 
 // Save an integer value to 'counter' key.
-
+      final StorageService _storageService = StorageService();
+      final StorageItem storageItem = StorageItem('token', responseData);
       notifyListeners();
     } catch (error) {
       print(error.toString());

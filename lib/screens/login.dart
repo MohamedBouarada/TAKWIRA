@@ -66,12 +66,15 @@ class LoginPage extends StatelessWidget {
                     height: 10,
                   ),
                   FadeAnimation(
-                      1,
-                      Text(
-                        "Login",
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      )),
+                    1,
+                    Text(
+                      "Login",
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: 12,
                   ),
@@ -88,6 +91,31 @@ class LoginPage extends StatelessWidget {
                 ],
               ),
               LoginCard(),
+              SizedBox(
+                height: 30,
+              ),
+              FadeAnimation(
+                1.5,
+                Text(
+                  " Forgot your password ?",
+                  style: TextStyle(
+                    shadows: <Shadow>[
+                      Shadow(
+                        offset: Offset(2, 2),
+                        blurRadius: 8.0,
+                        color: Color.fromARGB(
+                          255,
+                          121,
+                          119,
+                          119,
+                        ),
+                      ),
+                    ],
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 30,
               ),
@@ -187,12 +215,14 @@ class _LoginCardState extends State<LoginCard> {
   Widget build(BuildContext context) {
     return Container(
       child: Form(
+        key: _formKey,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               FadeAnimation(
                 1.3,
                 TextFormField(
+                  keyboardType: TextInputType.emailAddress,
                   style: const TextStyle(
                       color: Color.fromARGB(255, 9, 77, 9), fontSize: 16),
                   decoration: InputDecoration(

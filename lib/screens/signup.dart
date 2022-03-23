@@ -6,6 +6,7 @@ import 'package:takwira_mobile/animation/FadeAnimation.dart';
 import 'package:takwira_mobile/models/http_exception.dart';
 import 'package:takwira_mobile/providers/auth.dart';
 import 'package:takwira_mobile/screens/home_page.dart';
+import 'package:takwira_mobile/screens/login.dart';
 
 class SignupPage extends StatelessWidget {
   static const routName = '/signup';
@@ -164,12 +165,18 @@ class _AuthCardState extends State<AuthCard> {
     _formKey!.currentState!.save();
 
     try {
-      return await Provider.of<Auth>(context, listen: false).signup(
+      await Provider.of<Auth>(context, listen: false).signup(
         email: _authData['email']!,
         firstName: _authData['firstName']!,
         lastName: _authData['lastName']!,
         phoneNumber: _authData['phoneNumber']!,
         password: _authData['password']!,
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        ),
       );
     } on HttpException catch (error) {
       _showErrorDialog(error.toString());
