@@ -70,6 +70,7 @@ class Auth with ChangeNotifier {
 // Save an integer value to 'counter' key.
       final StorageService _storageService = StorageService();
       final StorageItem storageItem = StorageItem('token', responseData);
+      _storageService.writeSecureData(storageItem);
       notifyListeners();
     } catch (error) {
       print(error.toString());
