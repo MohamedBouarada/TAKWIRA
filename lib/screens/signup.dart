@@ -1,9 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, deprecated_member_use, missing_return
 
 import 'package:flutter/material.dart';
-import 'package:takwira_front/animation/FadeAnimation.dart';
+import 'package:provider/provider.dart';
+import 'package:takwira_mobile/animation/FadeAnimation.dart';
+import 'package:takwira_mobile/models/http_exception.dart';
+import 'package:takwira_mobile/providers/auth.dart';
+import 'package:takwira_mobile/screens/home_page.dart';
 
 class SignupPage extends StatelessWidget {
+  static const routName = '/signup';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +20,8 @@ class SignupPage extends StatelessWidget {
         backgroundColor: Color(0x665ac18e),
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -27,7 +33,7 @@ class SignupPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 40),
-          height: MediaQuery.of(context).size.height ,
+          height: MediaQuery.of(context).size.height,
           width: double.infinity,
           decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -44,22 +50,29 @@ class SignupPage extends StatelessWidget {
               Column(
                 children: <Widget>[
                   FadeAnimation(
-                      1,
-                      Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage('assets/logo0.png'),
-                                fit: BoxFit.fill)),
-                      )),
+                    1,
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/mainLogo.png'),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   FadeAnimation(
-                      1,
-                      Text(
-                        "Sign up",
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      )),
+                    1,
+                    Text(
+                      "Sign up",
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                   SizedBox(
                     height: 2,
                   ),
@@ -74,99 +87,15 @@ class SignupPage extends StatelessWidget {
                   // ),
                 ],
               ),
-              Column(
-                children: <Widget>[
-                  FadeAnimation(1.2, makeInput(label: "Email")),
-                  FadeAnimation(
-                    1.3,
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 25.0),
-                            child: TextFormField(
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                labelText: 'First Name',
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 10),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.grey[400]!),
-                                    borderRadius: BorderRadius.circular(10)),
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.grey[400]!)),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              labelText: 'Last Name',
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 10),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.grey[400]!),
-                                  borderRadius: BorderRadius.circular(10)),
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.grey[400]!)),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 13,
-                  ),
-                  FadeAnimation(
-                      1.4, makeInput(label: "Phone number", obscureText: true)),
-                  FadeAnimation(
-                      1.5, makeInput(label: "Password", obscureText: false)),
-                  FadeAnimation(1.6,
-                      makeInput(label: "Confirm Password", obscureText: false)),
-                ],
-              ),
-              FadeAnimation(
-                  1.5,
-                  Container(
-                    padding: EdgeInsets.only(top: 1, left: 3),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: MaterialButton(
-                      minWidth: double.infinity,
-                      height: 60,
-                      onPressed: () {},
-                      color: Color.fromARGB(255, 13, 117, 16),
-                      elevation: 10,
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(50)),
-                      child: Text(
-                        "Sign up",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            color: Colors.white),
-                      ),
-                    ),
-                  )),
+              AuthCard(),
               SizedBox(
                 height: 15,
               ),
               FadeAnimation(
-                  1.6,
-                  Row(
+                1.6,
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, "/login"),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
@@ -184,36 +113,298 @@ class SignupPage extends StatelessWidget {
                         ], fontWeight: FontWeight.w600, fontSize: 18),
                       ),
                     ],
-                  )),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Widget makeInput({label, obscureText = false}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        TextField(
-          obscureText: obscureText,
-          decoration: InputDecoration(
-            fillColor: Colors.white,
-            filled: true,
-            labelText: label,
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400]!),
-                borderRadius: BorderRadius.circular(10)),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey[400]!)),
+class AuthCard extends StatefulWidget {
+  @override
+  _AuthCardState createState() => _AuthCardState();
+}
+
+class _AuthCardState extends State<AuthCard> {
+  final GlobalKey<FormState>? _formKey = GlobalKey();
+  Map<String, String> _authData = {
+    'email': '',
+    'password': '',
+    'firstName': '',
+    'lastName': '',
+    'phoneNumber': '',
+  };
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('An Error Occurred!'),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> _submit() async {
+    var f = _formKey!.currentState;
+    if (f != null && !f.validate()) {
+      return;
+    }
+    _formKey!.currentState!.save();
+
+    try {
+      return await Provider.of<Auth>(context, listen: false).signup(
+        email: _authData['email']!,
+        firstName: _authData['firstName']!,
+        lastName: _authData['lastName']!,
+        phoneNumber: _authData['phoneNumber']!,
+        password: _authData['password']!,
+      );
+    } on HttpException catch (error) {
+      _showErrorDialog(error.toString());
+    } catch (error) {
+      _showErrorDialog("oops! something went wrong , please try again");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              FadeAnimation(
+                1.3,
+                TextFormField(
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 9, 77, 9),
+                    fontSize: 16,
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    labelText: 'E-mail',
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey[400]!),
+                        borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey[400]!),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value!.isEmpty || !value.contains('@')) {
+                      return 'Invalid Email';
+                    }
+                  },
+                  onSaved: (newValue) {
+                    _authData['email'] = newValue!;
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                ),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              FadeAnimation(
+                1.5,
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 25.0),
+                        child: TextFormField(
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 9, 77, 9),
+                              fontSize: 16),
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            labelText: 'First Name',
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 10),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey[400]!),
+                                borderRadius: BorderRadius.circular(10)),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[400]!),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Invalid first name';
+                            }
+                          },
+                          onSaved: (newValue) {
+                            _authData['firstName'] = newValue!;
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        style: const TextStyle(
+                            color: Color.fromARGB(255, 9, 77, 9), fontSize: 16),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          labelText: 'Last Name',
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 10),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey[400]!,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey[400]!,
+                            ),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Invalid Last Name';
+                          }
+                        },
+                        onSaved: (newValue) {
+                          _authData['lastName'] = newValue!;
+                        },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              FadeAnimation(
+                1.6,
+                TextFormField(
+                  style: const TextStyle(
+                    color: Color.fromARGB(255, 9, 77, 9),
+                    fontSize: 16,
+                  ),
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    labelText: 'Phone Number',
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey[400]!),
+                        borderRadius: BorderRadius.circular(10)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey[400]!),
+                    ),
+                  ),
+                  validator: (value) {
+                    var regExp = RegExp('[0-9]{8}');
+                    if (value!.isEmpty ||
+                        !regExp.hasMatch(value) ||
+                        value.length != 8) {
+                      return 'Invalid phone number';
+                    }
+                  },
+                  onSaved: (newValue) {
+                    _authData['phoneNumber'] = newValue!;
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              FadeAnimation(
+                1.4,
+                TextFormField(
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 9, 77, 9), fontSize: 16),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    labelText: 'Password',
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 10,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey[400]!),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey[400]!,
+                      ),
+                    ),
+                  ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  obscureText: true,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Password is invalid';
+                    }
+                  },
+                  onSaved: (newValue) {
+                    _authData['password'] = newValue!;
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              FadeAnimation(
+                1.5,
+                Container(
+                  padding: const EdgeInsets.only(top: 3, left: 3),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: MaterialButton(
+                    minWidth: double.infinity,
+                    height: 60,
+                    onPressed: _submit,
+                    color: const Color.fromARGB(255, 13, 117, 16),
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: const Text(
+                      "SIGN UP",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        SizedBox(
-          height: 13,
-        ),
-      ],
+      ),
     );
   }
 }
