@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/http_exception.dart';
+import "../providers/auth.dart";
 
 enum AuthMode { Signup, Login }
 
@@ -6,6 +10,7 @@ class LoginScreen extends StatelessWidget {
   static const routName = '/login';
 
   const LoginScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -42,7 +47,16 @@ class LoginScreen extends StatelessWidget {
                     fontSize: 50,
                     fontWeight: FontWeight.bold),
               ),
-              const LoginCard(),
+              LoginCard(),
+              Padding(
+                padding: EdgeInsets.only(
+                  top: 10.0,
+                ),
+                child: GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, "/auth"),
+                  child: const Text("Forgot your password ?"),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(
                   top: 10.0,
@@ -67,15 +81,48 @@ class LoginCard extends StatefulWidget {
   _LoginCardState createState() => _LoginCardState();
 }
 
-final GlobalKey<FormState> _formKey = GlobalKey();
-
 class _LoginCardState extends State<LoginCard> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
   Map<String, String> _authData = {
     'email': '',
     'password': '',
   };
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('An Error Occurred!'),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
 
-  Future<void> _submit() async {}
+  Future<void> _submit() async {
+    print(_authData);
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    _formKey.currentState!.save();
+    try {
+      await Provider.of<Auth>(context, listen: false).login(
+        email: _authData['email']!,
+        password: _authData['password']!,
+      );
+    } on HttpException catch (error) {
+      _showErrorDialog(error.toString());
+    } catch (error) {
+      _showErrorDialog("oops! something went wrong , please try again");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,15 +183,6 @@ class _LoginCardState extends State<LoginCard> {
                       fontWeight: FontWeight.w700,
                       fontSize: 25,
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 10.0,
-                  ),
-                  child: GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, "/auth"),
-                    child: const Text("Forgot your password ?"),
                   ),
                 ),
               ],

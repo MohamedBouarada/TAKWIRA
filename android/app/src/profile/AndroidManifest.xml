@@ -1,5 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD
+    package="com.example.takwira_front">
+=======
     package="com.example.takwira_mobile">
+>>>>>>> 87de5edd68c7611d27c0b75d8ad774c039b73b3c
     <!-- Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
