@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:takwira_mobile/models/http_exception.dart';
 import 'package:takwira_mobile/providers/auth.dart';
 import 'package:takwira_mobile/animation/FadeAnimation.dart';
+import 'package:takwira_mobile/screens/fields_screen.dart';
 import 'package:takwira_mobile/screens/home_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -203,6 +204,12 @@ class _LoginCardState extends State<LoginCard> {
       await Provider.of<Auth>(context, listen: false).login(
         email: _authData['email']!,
         password: _authData['password']!,
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FieldsScreen(),
+        ),
       );
     } on HttpException catch (error) {
       _showErrorDialog(error.toString());
