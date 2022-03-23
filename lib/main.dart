@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:takwira_mobile/screens/signup.dart';
 import './providers/auth.dart';
-import './screens/register_screen.dart';
+
 import './screens//fields_screen.dart';
 import './screens/home_page.dart';
 import './screens//login.dart';
