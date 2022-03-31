@@ -1,5 +1,6 @@
 
 const userModel = require("../models/user.model")
+const {where} = require("sequelize");
 
 
 class UserDao {
@@ -50,6 +51,24 @@ class UserDao {
             return {success:false}
         }
 
+    }
+    async findByRole(role) {
+        try{
+            const list = await userModel.findAll({where:{"role":role}})
+            return {success:true , data:list}
+        }catch (e) {
+            console.log(e)
+            return {success:false , data:null}
+        }
+
+    }
+    async updateRole(email,newRole) {
+        const result = await userModel.update({"role" : newRole} , {where:{"email":email},limit:1})
+        if ( result[0] > 0) {
+            return {success:true }
+        } else {
+            return {success:false}
+        }
     }
 
 

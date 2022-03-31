@@ -47,7 +47,7 @@ User.init({
         type : DataTypes.STRING ,
         allowNull : false ,
         validate: {
-            isIn: [[userTypes.Client,userTypes.Owner,userTypes.OwnerRequest]]
+            isIn: [[userTypes.Client,userTypes.Owner,userTypes.OwnerRequest,userTypes.Admin]]
         }
     },
 

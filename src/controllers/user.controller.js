@@ -8,8 +8,9 @@ const UserType = require("../enums/userTypes")
 class UserController {
 
     async register (req,res) {
-        const {firstName, lastName, email, password , phoneNumber , role} = req.body;
-        if(role !==UserType.OwnerRequest || role !==UserType.user) {
+        const {firstName, lastName, email, password , phoneNumber , role, repeatPassword} = req.body;
+
+        if(role !==UserType.OwnerRequest || role !==UserType.Client) {
             return res.status(StatusCodes.CONFLICT).json("error")
         }
         const emailExists =  await userDao.findByEmail(email);
@@ -72,6 +73,7 @@ class UserController {
         return res.status(StatusCodes.OK).json({token:jwtProcess.data,role:userExists.data.role})
 
     }
+
 
 }
 
