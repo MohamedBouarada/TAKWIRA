@@ -1,13 +1,13 @@
 
-const clientModel = require("../models/client.model")
+const userModel = require("../models/user.model")
 
 
-class ClientDao {
+class UserDao {
 
-    async  add (client) {
+    async  add (user) {
         try {
-            const clientToSave = clientModel.build(client);
-            const result = await  clientToSave.save();
+            const userToSave = userModel.build(user);
+            const result = await  userToSave.save();
             return {success: true}
         } catch (e) {
             console.log(e)
@@ -18,11 +18,11 @@ class ClientDao {
 
     async findByEmail (email) {
         try{
-            const client = await  clientModel.findOne({where : {"email":email}})
-            if(client==null) {
+            const user = await  userModel.findOne({where : {"email":email}})
+            if(user==null) {
                 return {success:true , data:null}
             }
-            return {success:true , data:client.dataValues}
+            return {success:true , data:user.dataValues}
         }catch (e) {
             console.log(e)
             return {success:false , data:null}
@@ -31,11 +31,11 @@ class ClientDao {
 
     async findByPhoneNumber (phoneNumber) {
         try{
-            const client = await  clientModel.findOne({where : {"phoneNumber":phoneNumber}})
-            if(client==null) {
+            const user = await  userModel.findOne({where : {"phoneNumber":phoneNumber}})
+            if(user==null) {
                 return {success:true , data:null}
             }
-            return {success:true , data:client.dataValues}
+            return {success:true , data:user.dataValues}
         }catch (e) {
             console.log(e)
             return {success:false , data:null}
@@ -43,7 +43,7 @@ class ClientDao {
     }
 
     async updateJwt (email , jwt) {
-        const result = await clientModel.update({"jwt" : jwt } , {where:{"email" :email}, limit:1})
+        const result = await userModel.update({"jwt" : jwt } , {where:{"email" :email}, limit:1})
         if ( result[0] > 0) {
             return {success:true }
         } else {
@@ -57,4 +57,4 @@ class ClientDao {
 }
 
 
-module.exports = new ClientDao() ;
+module.exports = new UserDao() ;

@@ -1,24 +1,22 @@
 
 const {Model , DataTypes} = require("sequelize")
 const sequelize = require("../database/connection") ;
+const userTypes = require("../enums/userTypes")
 
-class Client extends Model{}
+class User extends Model{}
 
 
-Client.init({
+User.init({
     id :{
         type: DataTypes.INTEGER ,
         primaryKey : true ,
         autoIncrement : true ,
     },
-    firstName: {
+    username: {
         type: DataTypes.STRING,
         allowNull : false
     },
-    lastName : {
-        type: DataTypes.STRING,
-        allowNull : false
-    } ,
+  
     email : {
         type :DataTypes.STRING,
         allowNull : false ,
@@ -41,11 +39,19 @@ Client.init({
     jwt :{
         type :DataTypes.STRING ,
         allowNull :true
-    }
+    } ,
+    role : {
+        type : DataTypes.STRING ,
+        allowNull : false ,
+        validate: {
+            isIn: [[userTypes.Client,userTypes.Owner,userTypes.OwnerRequest]]
+        }
+    },
+
 }, {
     sequelize,
-    modelName : "client"
+    modelName : "user"
 })
 
 
-module.exports = Client
+module.exports = User
