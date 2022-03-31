@@ -1,6 +1,6 @@
 
 const userModel = require("../models/user.model")
-const {where} = require("sequelize");
+
 
 
 class UserDao {
@@ -15,6 +15,19 @@ class UserDao {
             return {success:false}
         }
 
+    }
+
+    async findById(id){
+        try{
+            const user = await userModel.findOne({where:{id}})
+            if(user==null) {
+                return {success:true , data:null}
+            }
+            return {success:true , data:user.dataValues}
+        }catch (e) {
+            console.log(e)
+            return {success:false , data:null}
+        }
     }
 
     async findByEmail (email) {

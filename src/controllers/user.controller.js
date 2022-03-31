@@ -10,8 +10,8 @@ class UserController {
     async register (req,res) {
         const {firstName, lastName, email, password , phoneNumber , role, repeatPassword} = req.body;
 
-        if(role !==UserType.OwnerRequest || role !==UserType.Client) {
-            return res.status(StatusCodes.CONFLICT).json("error")
+        if(role !==UserType.OwnerRequest && role !==UserType.Client) {
+            return res.status(StatusCodes.CONFLICT).json("error in role")
         }
         const emailExists =  await userDao.findByEmail(email);
         const phoneNumberExists = await userDao.findByPhoneNumber(phoneNumber);

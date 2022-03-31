@@ -6,7 +6,7 @@ const UserType = require("../enums/userTypes")
 class AdminController {
     async registerNewAdminOrNewOwner(req,res) {
         const {firstName, lastName, email, password , phoneNumber , repeatPassword,role} = req.body;
-        if(role!==UserType.Admin || role!==UserType.Owner) {
+        if(role!==UserType.Admin && role!==UserType.Owner) {
             return res.status(StatusCodes.CONFLICT).json("error in role")
         }
         const emailExists =  await userDao.findByEmail(email);
@@ -43,18 +43,20 @@ class AdminController {
     }
 
     async activateOwnerAccounts(req,res) {
-        const {email,previousRole} = req.body ;
-        if(previousRole!==UserType.OwnerRequest) {
-            return res.status(StatusCodes.CONFLICT).json("error")
-        }
-        const emailExists =  await userDao.findByEmail(email);
-        if(emailExists.success===false ){
+        const id= req.params.id ;
+
+        const exists =  await userDao.findById(id);
+        if(exists.success===false ){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error")
         }
-        if(!emailExists.data) {
-            return  res.status(StatusCodes.NOT_FOUND).json("no user found with this email")
+        if(!exists.data) {
+            return  res.status(StatusCodes.NOT_FOUND).json("no user found ")
         }
-        const updateProcess = await userDao.updateRole(email,UserType.Owner);
+
+        if(exists.data.role !== UserType.OwnerRequest) {
+            return res.status(StatusCodes.CONFLICT).json("issue in user role");
+        }
+        const updateProcess = await userDao.updateRole(exists.data.email,UserType.Owner);
         if(updateProcess.success===false){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error")
         }
@@ -63,3 +65,6 @@ class AdminController {
     }
 
 }
+
+
+module.exports = new AdminController()
