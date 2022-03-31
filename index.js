@@ -4,16 +4,17 @@ const app = express() ;
 const {development} = require("./config/config")
 const sequelize = require("./database/connection");
 const {server} = development ;
-const clientRouter = require("./routes/client.route")
+const clientRouter = require("./routes/client.route");
 
-
+const terrainRouter = require("./routes/terrain.route");
 
 
 
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use("/client" , clientRouter)
+app.use("/client" , clientRouter);
+app.use("/terrain" , terrainRouter);
 
 
 
