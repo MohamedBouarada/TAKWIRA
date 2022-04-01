@@ -83,6 +83,19 @@ class UserDao {
             return {success:false}
         }
     }
+    async updateUserByEmail(email,updatedUser) {
+        try{
+            const result = await userModel.update(updatedUser,{where:{"email":email},limit:1})
+            if ( result[0] > 0) {
+                return {success:true }
+            } else {
+                return {success:false}
+            }
+        }catch (e) {
+            console.log(e)
+            return {success:false}
+        }
+    }
 
 
 

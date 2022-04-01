@@ -2,10 +2,15 @@ const userDao = require("../dao/user.dao");
 const StatusCodes = require("http-status-codes");
 const passwordHandling = require("../services/passwordHandling");
 const UserType = require("../enums/userTypes")
+const userRegistrationValidator = require("../validators/userRegistration.validator");
 
 class AdminController {
     async registerNewAdminOrNewOwner(req,res) {
         const {firstName, lastName, email, password , phoneNumber , repeatPassword,role} = req.body;
+        const validation = await userRegistrationValidator({firstName, lastName, email, password , phoneNumber , role, repeatPassword});
+       if(validation.success===false){
+           return res.status(StatusCodes.CONFLICT).json(validation.message);
+       }
         if(role!==UserType.Admin && role!==UserType.Owner) {
             return res.status(StatusCodes.CONFLICT).json("error in role")
         }
