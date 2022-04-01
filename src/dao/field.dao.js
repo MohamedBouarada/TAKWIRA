@@ -63,6 +63,18 @@ class fieldDao {
             return {success:false , data:null}
         }
     }
+    async findByAddress (adresse) {
+        try{
+            const fields = await  fieldModel.findAll({where : {"adresse":adresse}})
+            if(fields==null) {
+                return {success:true , data:null}
+            }
+            return {success:true , data:fields.dataValues}
+        }catch (e) {
+            console.log(e)
+            return {success:false , data:null}
+        }
+    }
 
 }
 
