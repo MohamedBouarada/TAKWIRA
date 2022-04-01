@@ -2,10 +2,10 @@ const { INTEGER } = require("sequelize");
 const {Model , DataTypes} = require("sequelize")
 const sequelize = require("../database/connection") ;
 
-class Terrain extends Model{}
+class field extends Model{}
 
 
-Terrain.init({
+field.init({
     id :{
         type: DataTypes.INTEGER ,
         primaryKey : true ,
@@ -23,11 +23,11 @@ Terrain.init({
         type :DataTypes.STRING,
         allowNull : false ,
     },
-    image :{
-        type: VARBINARY(max),
-        allowNull : false,
+    availibility : {
+        type : DataTypes.JSON,
+        allowNull : true,
     },
-    availablity : {
+    services : {
         type : DataTypes.JSON,
         allowNull : true,
     },
@@ -45,8 +45,8 @@ Terrain.init({
     }
 }, {
     sequelize,
-    modelName : "terrain"
+    modelName : "field"
 })
 
 
-module.exports = Terrain
+module.exports = field

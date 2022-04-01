@@ -1,11 +1,11 @@
-const terrainModel = require('../models/terrain.model');
+const fieldModel = require('../models/field.model');
 
-class TerrainDao {
+class fieldDao {
 
-    async  add (terrain) {
+    async  add (field) {
         try {
-            const terrainToSave = terrainModel.build(terrain);
-            const result = await  terrainToSave.save();
+            const fieldToSave = fieldModel.build(field);
+            const result = await  fieldToSave.save();
             return {success: true}
         } catch (e) {
             console.log(e)
@@ -16,11 +16,11 @@ class TerrainDao {
 
     async findById (id) {
         try{
-            const terrain = await  terrainModel.findOne({where : {"id":id}})
-            if(terrain==null) {
+            const field = await  fieldModel.findOne({where : {"id":id}})
+            if(field==null) {
                 return {success:true , data:null}
             }
-            return {success:true , data:terrain.dataValues}
+            return {success:true , data:field.dataValues}
         }catch (e) {
             console.log(e)
             return {success:false , data:null}
@@ -28,11 +28,11 @@ class TerrainDao {
     }
     async findByNameAdresse (name,adresse) {
         try{
-            const terrain = await  terrainModel.findOne({where : {"name":name , "adresse":adresse}})
-            if(terrain==null) {
+            const field = await  fieldModel.findOne({where : {"name":name , "adresse":adresse}})
+            if(field==null) {
                 return {success:true , data:null}
             }
-            return {success:true , data:terrain.dataValues}
+            return {success:true , data:field.dataValues}
         }catch (e) {
             console.log(e)
             return {success:false , data:null}
@@ -40,11 +40,11 @@ class TerrainDao {
     }
     async findByIdPropietaire (id) {
         try{
-            const terrains = await  terrainModel.findAll({where : {"idProprietaire":id}})
-            if(terrains==null) {
+            const fields = await  fieldModel.findAll({where : {"idProprietaire":id}})
+            if(fields==null) {
                 return {success:true , data:null}
             }
-            return {success:true , data:terrains.dataValues}
+            return {success:true , data:fields.dataValues}
         }catch (e) {
             console.log(e)
             return {success:false , data:null}
@@ -53,11 +53,11 @@ class TerrainDao {
 
     async findByPrice (prix) {
         try{
-            const terrains = await  terrainModel.findAll({where : {"prix":prix}})
-            if(terrains==null) {
+            const fields = await  fieldModel.findAll({where : {"prix":prix}})
+            if(fields==null) {
                 return {success:true , data:null}
             }
-            return {success:true , data:terrains.dataValues}
+            return {success:true , data:fields.dataValues}
         }catch (e) {
             console.log(e)
             return {success:false , data:null}
@@ -67,4 +67,4 @@ class TerrainDao {
 }
 
 
-module.exports = new TerrainDao() ;
+module.exports = new fieldDao() ;
