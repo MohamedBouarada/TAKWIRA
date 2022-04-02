@@ -89,7 +89,7 @@ class UserController {
     }
     async updateGeneralInfoField(req,res) {
         const { phoneNumber, firstName, lastName} = req.body;
-        const {authEmail,authId} = req.infos ;
+        const {authEmail,authId ,authRole} = req.infos ;
         const validation = await userUpdateValidator({email:authEmail,phoneNumber,firstName,lastName});
         if(validation.success===false){
             return res.status(StatusCodes.CONFLICT).json(validation.message);
@@ -101,7 +101,7 @@ class UserController {
         if(!userExists.data) {
             return  res.status(StatusCodes.NOT_FOUND).json("no user found with this email , please login again")
         }
-        if(userExists.data.id !== authId) {
+        if(userExists.data.id !== authId || authRole!==UserType.Admin) {
             return res.status(StatusCodes.UNAUTHORIZED).json('unauthorized action')
         }
         const updateProcess = await userDao.updateUserByEmail(authEmail,{phoneNumber,firstName,lastName})
@@ -113,7 +113,7 @@ class UserController {
 
     async updatePassword(req,res){
         const {oldPassword,newPassword,repeatNewPassword} = req.body;
-        const {authEmail,authId} = req.infos ;
+        const {authEmail,authId,authRole} = req.infos ;
         const validation = await userPasswordUpdateValidator({email:authEmail,oldPassword,newPassword,repeatNewPassword});
         if(validation.success===false){
             return res.status(StatusCodes.CONFLICT).json(validation.message);
@@ -126,7 +126,7 @@ class UserController {
             return  res.status(StatusCodes.CONFLICT).json("no user found with this email , please  login again")
         }
 
-        if(clientExists.data.id !== authId) {
+        if(clientExists.data.id !== authId || authRole!==UserType.Admin) {
             return res.status(StatusCodes.UNAUTHORIZED).json('unauthorized action')
         }
 

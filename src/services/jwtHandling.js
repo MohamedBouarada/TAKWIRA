@@ -31,7 +31,7 @@ class JwtHandling {
                 if(!(user.find((e)=>userType===e))) {
                     return res.status(StatusCodes.UNAUTHORIZED).json('unauthorized action')
                 }
-                req.infos= {"authEmail":email,"authId":id , userType} ;
+                req.infos= {"authEmail":email,"authId":id , "authRole":userType} ;
                 return next();
             }catch (err) {
                  return res.status(StatusCodes.UNAUTHORIZED).send('invalid token')
