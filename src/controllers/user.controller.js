@@ -7,6 +7,7 @@ const jwtHandling = require("../services/jwtHandling")
 const userRegistrationValidator = require("../validators/userRegistration.validator");
 const userLoginValidator = require("../validators/userLogin.validator");
 const userUpdateValidator = require('../validators/userGeneralInfosUpdate.validator');
+const userPasswordUpdateValidator = require("../validators/userPasswordUpdate.validator");
 const UserType = require("../enums/userTypes");
 
 class UserController {
@@ -87,19 +88,23 @@ class UserController {
 
     }
     async updateGeneralInfoField(req,res) {
-        const {email, phoneNumber, firstName, lastName} = req.body;
-        const validation = await userUpdateValidator({email,phoneNumber,firstName,lastName});
+        const { phoneNumber, firstName, lastName} = req.body;
+        const {authEmail,authId} = req.infos ;
+        const validation = await userUpdateValidator({email:authEmail,phoneNumber,firstName,lastName});
         if(validation.success===false){
             return res.status(StatusCodes.CONFLICT).json(validation.message);
         }
-        const userExists = await userDao.findByEmail(email) ;
+        const userExists = await userDao.findByEmail(authEmail) ;
         if(userExists.success===false) {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error while updating , please try again1")
         }
         if(!userExists.data) {
-            return  res.status(StatusCodes.NOT_FOUND).json("no user found with this email , please verify your credentials")
+            return  res.status(StatusCodes.NOT_FOUND).json("no user found with this email , please login again")
         }
-        const updateProcess = await userDao.updateUserByEmail(email,{phoneNumber,firstName,lastName})
+        if(userExists.data.id !== authId) {
+            return res.status(StatusCodes.UNAUTHORIZED).json('unauthorized action')
+        }
+        const updateProcess = await userDao.updateUserByEmail(authEmail,{phoneNumber,firstName,lastName})
         if(updateProcess.success===false){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error while updating user , please try again")
         }
@@ -107,7 +112,43 @@ class UserController {
     }
 
     async updatePassword(req,res){
-        const {email,oldPassword,newPassword,repeatNewPassword} = req.body;
+        const {oldPassword,newPassword,repeatNewPassword} = req.body;
+        const {authEmail,authId} = req.infos ;
+        const validation = await userPasswordUpdateValidator({email:authEmail,oldPassword,newPassword,repeatNewPassword});
+        if(validation.success===false){
+            return res.status(StatusCodes.CONFLICT).json(validation.message);
+        }
+        const clientExists = await userDao.findByEmail(authEmail) ;
+        if(clientExists.success===false) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error occurred please try again ")
+        }
+        if(!clientExists.data) {
+            return  res.status(StatusCodes.CONFLICT).json("no user found with this email , please  login again")
+        }
+
+        if(clientExists.data.id !== authId) {
+            return res.status(StatusCodes.UNAUTHORIZED).json('unauthorized action')
+        }
+
+
+        const passwordVerification = await passwordHandling.decryptingPassword(oldPassword , clientExists.data.password);
+        if(passwordVerification.success===false) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error while updating password , please try again")
+        }
+        if(!passwordVerification.data) {
+            return res.status(StatusCodes.FORBIDDEN).json("wrong password")
+        }
+        const hashedPassword = await passwordHandling.encryptingPassword(newPassword) ;
+        if(hashedPassword.success === false) {
+            return  res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error while registering , please try again")
+        }
+        const updateProcess = await userDao.updateUserByEmail(authEmail, {password:hashedPassword.data});
+        if(updateProcess.success===false) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error while updating password , please try again")
+        }
+        return res.status(StatusCodes.OK).json("password updated successfully")
+
+
     }
 
 
