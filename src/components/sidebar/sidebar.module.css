@@ -1,0 +1,27 @@
+
+
+
+
+
+.navbar {
+    position: fixed;
+    background-color: var(--bg-primary);
+    transition: width 600ms ease;
+
+    top: 0;
+    width: 5rem;
+    height: 100vh;
+}
+.navbar:hover {
+    width: 16rem;
+}
+
+.navbarNav{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
