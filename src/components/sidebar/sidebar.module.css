@@ -11,9 +11,12 @@
     top: 0;
     width: 5rem;
     height: 100vh;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
 }
 .navbar:hover {
-    width: 16rem;
+    width: 20rem;
+
 }
 
 .navbarNav{

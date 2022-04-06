@@ -6,10 +6,10 @@
 :root {
     font-size: 16px;
     font-family: 'Open Sans';
-    --text-primary: #b6b6b6;
-    --text-secondary: #ececec;
-    --bg-primary: #23232e;
-    --bg-secondary: #141418;
+    --text-primary: #FFFFFF;
+    --text-secondary: #FFFFFF;
+    --bg-primary: #76be0b;
+    --bg-secondary: linear-gradient(99.54deg, #0A6523 7.46%, #12582C 7.47%, rgba(18, 88, 44, 0.78) 45.14%, rgba(18, 88, 44, 0.78) 48.35%, rgba(18, 88, 44, 0.78) 53.87%, rgba(18, 88, 44, 0.78) 62.6%, rgba(18, 88, 44, 0.78) 95.68%);;
     --transition-speed: 600ms;
 }
 

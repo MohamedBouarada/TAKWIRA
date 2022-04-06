@@ -1,18 +1,18 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {faGear } from "@fortawesome/free-solid-svg-icons"
+
 
 import styles from "./sidebarElement.module.css"
-export const SidebarElement = ({hover,isLogo})=> {
+export const SidebarElement = ({hover,icon,title})=> {
 
-    const className = isLogo? `${styles.logo}`:`${styles.navItem }`
+
 
     return (
         <>
-<li className={className}>
+<li className={styles.navItem}>
     <a  href='#' className={styles.navLink}>
-            <FontAwesomeIcon icon={faGear } />
-        {!hover && (<span>text text text</span>)}
+            <FontAwesomeIcon icon={icon } />
+        {!hover && (<span>{title}</span>)}
     </a>
 </li>
         </>
