@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 import styles from "./sidebarElement.module.css"
-export const SidebarElement = ({hover,icon,title})=> {
+import {useSelector} from "react-redux";
+import {selectSideBarHovering} from "../sidebar/sidebarSlice";
+export const SidebarElement = ({icon,title})=> {
 
-
+    const hover =useSelector(selectSideBarHovering);
 
     return (
         <>

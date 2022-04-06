@@ -1,8 +1,10 @@
 
 import styles from "./sidebarLogo.module.css"
+import {useSelector} from "react-redux";
+import {selectSideBarHovering} from "../sidebar/sidebarSlice";
 
-export const SidebarLogo = ({hover})=> {
-
+export const SidebarLogo = ()=> {
+    const hover =useSelector(selectSideBarHovering);
     return (
         <>
             <li className={styles.logo}>
