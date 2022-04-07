@@ -15,6 +15,10 @@
 
     transition: var(--transition-speed);
 }
+.navLinkClicked{
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+}
 
 .navLink:hover {
 

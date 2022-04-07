@@ -2,7 +2,8 @@ import {createSlice} from "@reduxjs/toolkit";
 
 
 const initialState={
-    isHovering :1
+    isHovering :1,
+    isClicked : 1,
 }
 
 export const sidebarSlice = createSlice({
@@ -14,6 +15,10 @@ export const sidebarSlice = createSlice({
         },
         notHovering : (state)=> {
             state.isHovering =1
+        },
+        clicking : (state , action) => {
+
+            state.isClicked =action.payload ;
         }
 
     }
@@ -21,7 +26,8 @@ export const sidebarSlice = createSlice({
 })
 
 
-export const {hovering,notHovering} = sidebarSlice.actions ;
+export const {hovering,notHovering , clicking} = sidebarSlice.actions ;
 export const selectSideBarHovering = state => state.sidebar.isHovering;
+export const selectSideBarClicking = state => state.sidebar.isClicked ;
 
 export default sidebarSlice.reducer ;
