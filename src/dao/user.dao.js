@@ -1,6 +1,6 @@
 
 const userModel = require("../models/user.model")
-
+const sequelize = require("../database/connection") ;
 
 
 class UserDao {
@@ -95,6 +95,28 @@ class UserDao {
             console.log(e)
             return {success:false}
         }
+    }
+
+    async getAllUsers (orderBy,sort , limit , offset) {
+        try{
+            const usersList = await  userModel.findAndCountAll({
+                order : [
+                    [orderBy,sort]
+                ],
+                attributes : {
+                    exclude : ["password"] ,
+
+                } ,
+                limit : limit ,
+                offset : offset,
+
+            } )
+            return {success:true , data:usersList}
+        }catch (e) {
+            console.log(e)
+            return {success:false , data:null}
+        }
+
     }
 
 

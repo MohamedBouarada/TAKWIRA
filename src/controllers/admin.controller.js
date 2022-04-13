@@ -69,6 +69,18 @@ class AdminController {
 
     }
 
+    async getAllUsers(req,res) {
+        const sort = req.query.sort || "ASC";
+        const orderBy = req.query.order || "createdAt";
+        const page= req.query.page ? parseInt(req.query.page.toString(),10) :  1 ;
+        const perPage = req.query.perPage? parseInt(req.query.perPage.toString(),10) :  5 ;
+        const offset = (page - 1) * perPage;
+
+        const result = await userDao.getAllUsers(orderBy,sort,perPage,offset);
+        console.log(perPage , offset)
+        return res.json(result)
+    }
+
 }
 
 
