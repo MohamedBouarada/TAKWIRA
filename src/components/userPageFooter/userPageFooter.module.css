@@ -1,0 +1,21 @@
+
+.global{
+
+    height: 83px;
+
+    width: 100%;
+    position: absolute;
+    border-top: #DFDFDF 3px solid;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+}
+
+.title{
+    color: #6C757D;
+    font-family: 'Poppins', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+}

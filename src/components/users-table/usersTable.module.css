@@ -1,11 +1,5 @@
 
 
-.global{
-    margin-left: 16rem;
-    padding: 1rem;
-    width: calc(100% - 21rem);
-
-}
 
 .table{
     width: 100%;

@@ -2,7 +2,8 @@ import React from 'react';
 import {Sidebar} from "../sidebar/Sidebar";
 
 import './App.css'
-import {UsersTable} from "../users-table/UsersTable";
+
+import {UserListPage} from "../../pages/userListPage/UserListPage";
 
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
     <div >
 
         <Sidebar/>
-        <UsersTable/>
+       <UserListPage/>
     </div>
   );
 }

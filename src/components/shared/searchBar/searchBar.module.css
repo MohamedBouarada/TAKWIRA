@@ -1,0 +1,42 @@
+
+
+.bar {
+    width: 100%;
+    background-color: #FFFFFF;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    height: 91px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+
+}
+
+.title{
+    color: rgba(19, 113, 10, 0.78);
+    font-family: 'Roboto', serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 24px;
+}
+
+.bar *{
+    margin: auto;
+}
+
+.input {
+    background: #F8F9FA;
+    border-radius: 20px;
+    border-color: transparent;
+color: rgba(159, 162, 171, 1);
+    width: 424px;
+    height: 44px;
+    text-align: center;
+    font-family: 'Poppins', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 22px;
+}
