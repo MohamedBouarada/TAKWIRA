@@ -1,0 +1,26 @@
+
+
+.global {
+
+    border-radius: 4px;
+    width: 32px;
+    height: 42px;
+padding: 5px;
+   display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #6C757D;
+    font-family: 'Poppins', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.notClicked{
+    background: #FFFFFF;
+}
+
+.clicked {
+    background: rgba(33, 146, 24, 0.49);
+}
