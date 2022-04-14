@@ -1,6 +1,7 @@
 
 const userModel = require("../models/user.model")
 const sequelize = require("../database/connection") ;
+const {Op} = require("sequelize");
 
 
 class UserDao {
@@ -117,6 +118,43 @@ class UserDao {
             return {success:false , data:null}
         }
 
+    }
+
+    async getAllUsersFiltered (orderBy,sort , limit , offset,searchValue,role="*"){
+        try{
+            const usersList =  await userModel.findAndCountAll({
+                where :{
+                    [Op.and] : [
+                        {
+                            [Op.or] :[
+                                {firstName: {[Op.like] : `%${searchValue}%`}},
+                                {lastName: {[Op.like] : `%${searchValue}%`}},
+                                {email: {[Op.like] : `%${searchValue}%`}},
+                                {phoneNumber: {[Op.like] : `%${searchValue}%`}},
+                            ]
+                        },
+                       role==="*"? {
+
+                        }: {role}
+                    ]
+
+
+                },
+                order : [
+                    [orderBy,sort]
+                ],
+                attributes : {
+                    exclude : ["password"] ,
+
+                } ,
+                limit : limit ,
+                offset : offset,
+            })
+            return {success:true , data:usersList}
+        }catch (e) {
+            console.log(e)
+            return {success:false , data:null}
+        }
     }
 
 

@@ -84,6 +84,23 @@ class AdminController {
         return res.status(StatusCodes.OK).json({result, pagesNumber})
     }
 
+    async searchForUsers(req,res){
+        const sort = req.query.sort || "ASC";
+        const orderBy = req.query.order || "createdAt";
+        const page= req.query.page ? parseInt(req.query.page.toString(),10) :  1 ;
+        const perPage = req.query.perPage? parseInt(req.query.perPage.toString(),10) :  5 ;
+        const offset = (page - 1) * perPage;
+        const searchValue = req.query.searchValue ? req.query.searchValue : ""
+        const role = req.query.role ? req.query.role : "*"
+        const result = await userDao.getAllUsersFiltered(orderBy,sort,perPage,offset,searchValue,role);
+        if(result.success===false) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error occurred")
+        }
+        const pagesNumber= Math.ceil(result.data.count/perPage)
+        return res.status(StatusCodes.OK).json({result, pagesNumber})
+    }
+
+
 }
 
 
