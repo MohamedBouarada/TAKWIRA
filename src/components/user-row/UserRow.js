@@ -3,6 +3,7 @@ import {Button} from "../shared/button/Button";
 import {faEllipsis} from "@fortawesome/free-solid-svg-icons";
 
 
+
 export const UserRow =({id,name,image,phoneNumber,email,createdAt})=> {
 
     return (
@@ -13,7 +14,7 @@ export const UserRow =({id,name,image,phoneNumber,email,createdAt})=> {
             <td> <span>{   new Date(createdAt).toLocaleDateString()}</span> </td>
             <td> <span>{email}</span> </td>
             <td> <span>{phoneNumber}</span> </td>
-            <td> <Button buttonText={'delete'} backgroundColor={'#DC3545'} />  </td>
+            <td><div onClick={()=>console.log("&&&&")}> <Button buttonText={'delete'} backgroundColor={'#DC3545'} width={"70px"} height={"22px"}  /> </div> </td>
             <td> <FontAwesomeIcon icon={faEllipsis}/> </td>
 
         </tr>

@@ -3,7 +3,7 @@ import {createSlice} from "@reduxjs/toolkit";
 
 const initialState={
     isHovering :1,
-    isClicked : 1,
+    isClicked : 0,
 }
 
 export const sidebarSlice = createSlice({

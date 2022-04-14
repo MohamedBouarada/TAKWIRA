@@ -1,12 +1,12 @@
 import styles from "./button.module.css"
 
-export const Button = ({  backgroundColor , buttonText})=> {
+export const Button = ({   width, height, backgroundColor , buttonText})=> {
 
 
     return (
         <>
 
-        <button className={styles.global} style={{backgroundColor}}>  {buttonText}</button>
+        <button className={styles.global} style={{backgroundColor,width,height}}>  {buttonText}</button>
         </>
     )
 
