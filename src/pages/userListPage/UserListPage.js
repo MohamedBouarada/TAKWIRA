@@ -32,7 +32,7 @@ export const UserListPage = ()=> {
         <>
 <div className={styles.global}>
 
-    <SearchBar/>
+
     <ParamsBar/>
         <UsersTable/>
     <UserPageFooter/>

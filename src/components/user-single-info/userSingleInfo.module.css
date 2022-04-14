@@ -1,0 +1,27 @@
+
+
+.global {
+    display: flex;
+    flex-direction: row;
+    font-family: 'Aladin', serif;
+    font-style: normal;
+    font-weight: 400;
+
+    line-height: 120%;
+justify-content: start;
+    color: #000000;
+
+    opacity: 0.5;
+
+
+}
+
+.title{
+    text-decoration: underline  ;
+    font-size: 25px;
+}
+
+.content {
+    font-size: 22px;
+
+}

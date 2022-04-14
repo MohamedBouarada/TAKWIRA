@@ -1,0 +1,26 @@
+.container{
+    background: linear-gradient(106.42deg, #0A6523 9.09%, rgba(75, 237, 61, 0.32) 66.57%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 60px;
+    width: calc(100% - 21rem);
+    height: 70vh;
+    margin-left: 16rem;
+    position: relative;
+}
+
+.closeMark{
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: white;
+    cursor: pointer;
+}
+.closeMark svg {
+    width: 50px;
+    height: 50px;
+}
+
+.detailsContainer {
+    width: 50%;
+
+}
