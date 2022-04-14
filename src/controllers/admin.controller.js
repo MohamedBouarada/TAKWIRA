@@ -77,8 +77,11 @@ class AdminController {
         const offset = (page - 1) * perPage;
 
         const result = await userDao.getAllUsers(orderBy,sort,perPage,offset);
-        console.log(perPage , offset)
-        return res.json(result)
+    if(result.success===false) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error occurred")
+    }
+        const pagesNumber= Math.ceil(result.data.count/perPage)
+        return res.status(StatusCodes.OK).json({result, pagesNumber})
     }
 
 }
