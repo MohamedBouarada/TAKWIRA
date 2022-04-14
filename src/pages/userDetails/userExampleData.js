@@ -14,7 +14,3 @@ export const clientExample = {
 
 
 
-
-export const ownerExample ={
-
-}

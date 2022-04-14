@@ -4,6 +4,8 @@ import {faXmarkCircle} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import {clientExample} from "./userExampleData";
 import {UserSingleInfo} from "../../components/user-single-info/UserSingleInfo";
+import {Options} from "../../components/shared/options/Options";
+import {FieldsRelatedToOwners} from "../../components/fields-related-to-owners/FieldsRelatedToOwners";
 
 export const UserDetailsPage = ()=> {
 
@@ -12,9 +14,10 @@ export const UserDetailsPage = ()=> {
 
     return (
         <>
-       <div className={styles.container}>
-        <div className={styles.closeMark} onClick={()=>navigate("/")}> <FontAwesomeIcon icon={faXmarkCircle}/></div>
 
+       <div className={styles.container}>
+           <div className={styles.closeMark} onClick={()=>navigate("/")}> <FontAwesomeIcon icon={faXmarkCircle}/></div>
+           <div className={styles.userInfo}>
 
             <div className={styles.detailsContainer}>
                 <UserSingleInfo title="id" content={id}/>
@@ -28,6 +31,15 @@ export const UserDetailsPage = ()=> {
 
 
             </div>
+
+           <div className={styles.options}>
+               <Options/>
+           </div>
+       </div>
+           <div>
+               <FieldsRelatedToOwners/>
+           </div>
+
        </div>
         </>
     )

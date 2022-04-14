@@ -1,0 +1,35 @@
+
+.global {
+    display: flex;
+    flex-direction: row;
+}
+
+.global div {
+    background:rgba(255,255,255,0.9);
+    border-radius: 15px;
+    text-align: center;
+    margin: 10px;
+    height: 55px;
+    width: 140px;
+
+    font-family: 'Poppins', serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 30px;
+    padding: 12px;
+    cursor: pointer;
+
+}
+
+.delete {
+    color: rgba(239, 27, 27, 0.78);
+}
+
+.edit{
+    color: rgba(33, 146, 24, 0.78);
+}
+.ban{
+color:rgba(241, 13, 13, 1)
+}
+

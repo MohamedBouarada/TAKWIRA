@@ -1,27 +1,39 @@
 
-
+@import url('https://fonts.googleapis.com/css2?family=Aladin&display=swap');
 .global {
     display: flex;
     flex-direction: row;
-    font-family: 'Aladin', serif;
+    font-family:  'Aladin', cursive;
     font-style: normal;
     font-weight: 400;
-
+    font-size: 1.2rem;
     line-height: 120%;
-justify-content: start;
+
     color: #000000;
 
     opacity: 0.5;
+position: relative;
+    align-items: end;
+    margin-top: 10px;
+    margin-left: 30px;
 
 
 }
 
 .title{
     text-decoration: underline  ;
-    font-size: 25px;
+
+    text-align: start;
+    margin-right: 30px;
+
+    margin-left: 30px;
 }
 
 .content {
-    font-size: 22px;
+
+    text-align: start;
+
+    position: absolute;
+    left: 30%;
 
 }

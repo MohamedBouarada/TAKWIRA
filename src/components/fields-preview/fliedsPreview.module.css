@@ -1,0 +1,48 @@
+
+
+
+.global {
+width: 500px;
+    background: rgba(75, 237, 61, 0.08);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 40px;
+
+
+    padding-top: 30px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+
+
+}
+
+.displayRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding:10px;
+}
+
+.fieldImage{
+    width: 277px;
+    height: 137px;
+}
+
+.viewMore {
+    background: #FFFFFF;
+    border-radius: 11px;
+color:rgba(33, 146, 24, 0.78);
+    font-family: 'Poppins', serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 21px;
+    width: 95px;
+    height: 50px;
+    text-align: center;
+    margin: auto;
+    padding-top: 10px;
+
+
+}
+
+

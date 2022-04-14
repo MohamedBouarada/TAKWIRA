@@ -5,6 +5,7 @@
     padding: 1rem;
     width: calc(100% - 21rem);
     position: relative;
-    height: 100vh;
+    height:100vh;
+    max-height: 100vh;
 }
 
