@@ -10,6 +10,8 @@ const initialState={
     orderBy : "createdAt",
     usersList: [] ,
     countUsers : 1,
+    searchValue :"",
+    role:"*"
 }
 
 
@@ -17,11 +19,13 @@ export const getUsers = createAsyncThunk(
     "user/fetchUsers",
     async (_,{getState})=>{
         const {user} =getState();
-        const {sort,perPage,page,orderBy} = user
-        return await getAllUsers(orderBy,sort,perPage,page) ;
+        const {sort,perPage,page,orderBy,searchValue,role} = user
+        return await getAllUsers(orderBy,sort,perPage,page,searchValue,role) ;
 
     }
 );
+
+
 
 
 export const userSlice = createSlice({
@@ -58,8 +62,22 @@ export const userSlice = createSlice({
                 state.orderBy =action.payload
                 state.sort = "ASC"
             }
+        },
+        changeSearch : (state,action)=>{
+            state.searchValue = action.payload;
+
+        },
+        changeRole : (state,action) => {
+            console.log(action.payload)
+           if(action.payload==="ALL"){
+               state.role ="*"
+           } else {
+               state.role =action.payload
+           }
+
         }
     },
+
     extraReducers: (builder => {
         builder.addCase(getUsers.fulfilled , (state,action)=>{
 
@@ -84,7 +102,9 @@ export const selectPerPage = state=>state.user.perPage;
 export const selectPage = state => state.user.page;
 export  const selectUsersList = state => state.user.usersList;
 export const selectPagesNumber = state => state.user.pagesNumber;
-export const selectUsersCount = state =>state.user.countUsers
+export const selectUsersCount = state =>state.user.countUsers;
+export const selectSearchValue = state => state.user.searchValue;
+export const selectRole = state => state.user.role
 
-export const {incrementPage , decrementPage ,changePerPage ,changeOrderAndSort} = userSlice.actions
+export const {incrementPage , decrementPage ,changePerPage ,changeOrderAndSort,changeSearch,changeRole} = userSlice.actions
 export default  userSlice.reducer ;

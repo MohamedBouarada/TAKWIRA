@@ -5,12 +5,12 @@ axios.defaults.baseURL = "http://localhost:5000" ;
 
 
 
-export const getAllUsers =  async (orderBy="id",sort="ASC",perPage=5,page=1)=>{
+export const getAllUsers =  async (orderBy="id",sort="ASC",perPage=5,page=1,searchValue="",role="*")=>{
 
     try{
         const response = await axios({
             method : "GET",
-            url :`/admin/users/all?sort=${sort}&order=${orderBy}&perPage=${perPage}&page=${page}`,
+            url :`/admin/users/filtered?sort=${sort}&order=${orderBy}&perPage=${perPage}&page=${page}&searchValue=${searchValue}&role=${role}`,
 
         })
         return {success:true , data : response.data}

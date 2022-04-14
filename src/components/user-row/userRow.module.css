@@ -1,0 +1,32 @@
+
+
+.actionsButton {
+    cursor: pointer;
+}
+.actionsMenu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    cursor: pointer;
+}
+.actionsMenu *{
+    color: #6C757D;
+    background: transparent;
+    border: none;
+    margin: auto;
+}
+
+.rowBgColor{
+    background-color: #FFFFFF;
+}
+.rowBgColorClicked {
+    background-color: rgba(54, 198, 41, 0.66);
+}
+.rowBgColorClicked td {
+    background: none;
+}
+
+.rowBgColor td {
+    background: none;
+}

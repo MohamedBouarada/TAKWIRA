@@ -4,26 +4,36 @@ import {SearchBar} from "../../components/shared/searchBar/SearchBar";
 import {UserPageFooter} from "../../components/userPageFooter/UserPageFooter";
 import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {getUsers, selectOrderBy, selectPage, selectPerPage, selectSort, selectUsersList} from "./userSlice";
+import {
+    getUsers,
+    selectOrderBy,
+    selectPage,
+    selectPerPage, selectRole,
+    selectSearchValue,
+    selectSort,
+    selectUsersList
+} from "./userSlice";
 import {Button} from "../../components/shared/button/Button";
+import {ParamsBar} from "../../components/shared/params-bar/ParamsBar";
 
 export const UserListPage = ()=> {
     const page = useSelector(selectPage)
     const perPage= useSelector(selectPerPage)
     const orderBy = useSelector(selectOrderBy)
     const sort = useSelector(selectSort)
+    const searchValue = useSelector(selectSearchValue)
+    const role = useSelector(selectRole)
+    console.log("roooooooooooole  " , role)
     const dispatch = useDispatch();
     useEffect( ()=>{
         dispatch(getUsers())
-    } , [page ,perPage,orderBy,sort])
+    } , [page ,perPage,orderBy,sort ,searchValue,role])
     return (
         <>
 <div className={styles.global}>
 
     <SearchBar/>
-    <div className={styles.mainButton }>
-        <Button buttonText={"ADD NEW +"} width={"150px"} backgroundColor={ "rgba(54, 198, 41, 0.66)"} height={"50px"}/>
-    </div>
+    <ParamsBar/>
         <UsersTable/>
     <UserPageFooter/>
 </div>

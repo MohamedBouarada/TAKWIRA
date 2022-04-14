@@ -1,0 +1,22 @@
+
+
+.global{
+    display: flex;
+    margin-bottom: 25px;
+    align-items: center;
+}
+
+.selectRole{
+    background: transparent;
+    width: 160px;
+    height:36px;
+    border: none;
+    font-family: 'Roboto', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 28px;
+    margin-right: 50px;
+
+}
+
