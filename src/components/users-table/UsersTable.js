@@ -49,6 +49,7 @@ const usersList = useSelector(selectUsersList)
                         createdAt={createdAt}
                         email={email}
                         image={faCircleUser}
+                        id={id}
                     />
                 )
             }))}

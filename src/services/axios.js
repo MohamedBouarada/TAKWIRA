@@ -20,3 +20,33 @@ export const getAllUsers =  async (orderBy="id",sort="ASC",perPage=5,page=1,sear
     }
 
 }
+
+export const getOneUser = async (id)=> {
+    try{
+
+        const response = await axios({
+            method : "get",
+            url : `/admin/users/find/${id}`
+        })
+            return {success:true,data:response.data}
+
+    }catch (e) {
+        console.log(e)
+        return {success:false,data:e.response.data}
+    }
+}
+
+export const addNewUser = async (firstName,lastName,email,password,phoneNumber,role,repeatPassword) =>{
+    try{
+        const response =  await axios({
+            method:"post",
+            url:"/user/add",
+            data : {firstName,lastName,email,password,phoneNumber,role,repeatPassword}
+        })
+
+        return {success: true , data:response.data}
+    }catch (e) {
+        console.log(e)
+        return {success: false , data:e.response.data}
+    }
+}

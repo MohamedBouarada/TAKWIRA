@@ -1,0 +1,65 @@
+
+
+.global {
+    margin-left: 21rem;
+    font-family: 'Poppins', serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 38px;
+    color: #586870;
+    width: calc(100%- 21rem);
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+
+
+}
+.userImage{
+    background: rgba(54, 198, 41, 0.66);
+    width: 400px;
+    border-radius: 50px;
+    margin: auto;
+
+}
+
+.displayColumn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.global div input {
+    background: rgba(255, 255, 255, 0.4);
+
+width: 400px;
+    height: 40px;
+    border: 1px solid #C0C6C9;
+    border-radius: 8px;
+    font-family: 'Poppins', serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+
+
+}
+
+.buttonSubmit {
+    width: 150px;
+    height: 70px;
+
+    background: rgba(54, 198, 41, 0.66);
+    font-family: 'Roboto', serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 20px;
+    color: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.075);
+    border-radius: 20px;
+
+    text-align: center;
+
+    margin-top: 5px;
+
+}

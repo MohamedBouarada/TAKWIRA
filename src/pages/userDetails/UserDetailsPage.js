@@ -6,18 +6,41 @@ import {clientExample} from "./userExampleData";
 import {UserSingleInfo} from "../../components/user-single-info/UserSingleInfo";
 import {Options} from "../../components/shared/options/Options";
 import {FieldsRelatedToOwners} from "../../components/fields-related-to-owners/FieldsRelatedToOwners";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import {
+    getSingleUser, selectInfoCreatedAt, selectInfoEmail,
+    selectInfoFirstName,
+    selectInfoId,
+    selectInfoLastName, selectInfoPhoneNumber,
+    selectInfoRole, selectInfoUpdatedAt
+} from "../userFormPage/userInfoSlice";
 
 export const UserDetailsPage = ()=> {
+    const dispatch = useDispatch()
+    const id= useSelector(selectInfoId);
+    const firstName= useSelector(selectInfoFirstName);
+    const lastName= useSelector(selectInfoLastName);
+    const role= useSelector(selectInfoRole);
+    const email= useSelector(selectInfoEmail);
+    const phoneNumber= useSelector(selectInfoPhoneNumber);
+    const createdAt= useSelector(selectInfoCreatedAt);
+    const updatedAt= useSelector(selectInfoUpdatedAt);
+    useEffect( ()=>{
+        dispatch(getSingleUser())
+    }, [id])
 
     let navigate = useNavigate()
-    const {id,firstName,lastName,role,email,createdAt,updatedAt,phoneNumber} = clientExample
+
+    const display = role==="ADMIN" || role==="CLIENT" ? styles.displayRow : styles.displayColumn
+    const globalDisplay = role==="ADMIN" || role==="CLIENT" ? styles.displayColumn : styles.displayRow
 
     return (
         <>
 
-       <div className={styles.container}>
+       <div className={`${styles.container} ${globalDisplay}`}>
            <div className={styles.closeMark} onClick={()=>navigate("/")}> <FontAwesomeIcon icon={faXmarkCircle}/></div>
-           <div className={styles.userInfo}>
+           <div  className={`${display}`}>
 
             <div className={styles.detailsContainer}>
                 <UserSingleInfo title="id" content={id}/>
@@ -36,9 +59,15 @@ export const UserDetailsPage = ()=> {
                <Options/>
            </div>
        </div>
-           <div>
-               <FieldsRelatedToOwners/>
-           </div>
+           {(role==="OWNER" || role==="OWNER_REQUEST") && (
+               <div>
+
+                   <FieldsRelatedToOwners/>
+
+               </div>
+           )}
+
+
 
        </div>
         </>

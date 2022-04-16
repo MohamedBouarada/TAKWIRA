@@ -6,6 +6,7 @@ import './App.css'
 import {UserListPage} from "../../pages/userListPage/UserListPage";
 import {UserDetailsPage} from "../../pages/userDetails/UserDetailsPage";
 import {SearchBar} from "../shared/searchBar/SearchBar";
+import {UserFormPage} from "../../pages/userFormPage/UserFormPage";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Routes>
             <Route  path="/" element={<UserListPage />}/>
             <Route  path="/details" element={<UserDetailsPage />}/>
+            <Route path="/user/add" element={<UserFormPage/>}/>
         </Routes>
         </BrowserRouter>
 

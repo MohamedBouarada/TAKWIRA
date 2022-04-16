@@ -1,7 +1,12 @@
 
-.global {
+.displayRow {
     display: flex;
     flex-direction: row;
+}
+
+.displayColumn{
+    display: flex;
+    flex-direction: column;
 }
 
 .global div {

@@ -4,8 +4,13 @@ import {faEdit, faEllipsis, faInfoCircle, faXmark} from "@fortawesome/free-solid
 
 import styles from "./userRow.module.css"
 import {useState} from "react";
+import {useDispatch} from "react-redux";
+import {changeUserId} from "../../pages/userFormPage/userInfoSlice";
+import {useNavigate} from "react-router-dom";
 
 export const UserRow =({id,name,image,phoneNumber,email,createdAt})=> {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 const [actionClicked,setActionClicked] = useState(false)
     const showActionsMenu=()=> setActionClicked(true)
     const discardActionsMenu = ()=>setActionClicked(false)
@@ -30,7 +35,7 @@ const [actionClicked,setActionClicked] = useState(false)
 
                 {actionClicked && (
                     <div className={styles.actionsMenu}>
-                        <div>
+                        <div onClick={()=>{dispatch(changeUserId(id)) ; navigate("/details")}}>
                             <FontAwesomeIcon icon={faInfoCircle}/>
                         </div>
                         <div>

@@ -9,11 +9,10 @@
     max-height: 80vh;
     margin-left: 16rem;
     position: relative;
-    display: flex;
-    flex-direction: row;
+
     padding-top: 20px;
     padding-bottom: 10px;
-    justify-content: space-around;
+
 
 }
 
@@ -41,7 +40,14 @@ padding-bottom: 30px;
     top: 25%;
 }
 
-.userInfo {
+.displayColumn {
     display: flex;
     flex-direction: column;
+
+}
+
+.displayRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
