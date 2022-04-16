@@ -59,6 +59,9 @@ export const infoSlice = createSlice({
         },
         changeUserRepeatPassword : (state,action)=>{
             state.repeatPassword= action.payload
+        },
+        changeUserEdit : (state,action) =>{
+            state.edit = action.payload
         }
     },
     extraReducers: (builder => {
@@ -66,7 +69,7 @@ export const infoSlice = createSlice({
             if(action.payload.success===true) {
 
                 const {id,firstName,lastName,createdAt,updatedAt,phoneNumber,email,role}= action.payload.data;
-                if(role!=="OWNER" || role!== "OWNER_REQUEST"){
+
                     state.id=id;
                     state.firstName=firstName;
                     state.lastName=lastName;
@@ -75,7 +78,7 @@ export const infoSlice = createSlice({
                     state.phoneNumber=phoneNumber;
                     state.email=email;
                     state.role=role;
-                }
+
 
             }
         })
@@ -107,6 +110,7 @@ export const selectInfoUpdatedAt = state=>state.info.createdAt
 export const selectInfoRole = state =>state.info.role
 export const selectInfoPassword = state => state.info.password
 export const selectInfoRepeatPassword = state=> state.info.repeatPassword
+export const selectInfoEdit = state => state.info.edit;
 
 export const {changeUserId ,
     changeUserLastName,
@@ -115,6 +119,7 @@ export const {changeUserId ,
     changeUserPassword,
     changeUserRole,
     changeUserFirstName,
-    changeUserEmail} = infoSlice.actions
+    changeUserEmail,
+    changeUserEdit} = infoSlice.actions
 
 export default infoSlice.reducer

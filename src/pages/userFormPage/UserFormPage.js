@@ -1,6 +1,6 @@
 
 import styles from "./userFormPage.module.css"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
     addOneUser,
@@ -10,8 +10,8 @@ import {
     changeUserPassword,
     changeUserPhoneNumber,
     changeUserRepeatPassword,
-    changeUserRole,
-    selectInfoCreatedAt,
+    changeUserRole, getSingleUser,
+    selectInfoCreatedAt, selectInfoEdit,
     selectInfoEmail,
     selectInfoFirstName,
     selectInfoId,
@@ -26,8 +26,12 @@ import {useNavigate} from "react-router-dom";
 
 export const UserFormPage = ()=> {
 
+
+
     const dispatch = useDispatch()
     const id= useSelector(selectInfoId);
+
+
     const infoFirstName= useSelector(selectInfoFirstName);
     const infoLastName= useSelector(selectInfoLastName);
     const infoRole= useSelector(selectInfoRole);
@@ -35,37 +39,38 @@ export const UserFormPage = ()=> {
     const infoPhoneNumber= useSelector(selectInfoPhoneNumber);
     const infoPassword = useSelector(selectInfoPassword)
     const infoRepeatPassword = useSelector(selectInfoRepeatPassword)
+    const infoEdit = useSelector(selectInfoEdit)
 
-    const [firstName,setFirstName] = useState(infoFirstName)
-    const [lastName,setLastName] = useState(infoLastName)
-    const [phoneNumber ,setPhoneNumber] = useState(infoPhoneNumber)
-    const [email,setEmail] = useState(infoEmail)
-    const [password,setPassword] = useState(infoPassword)
-    const [repeatPassword,setRepeatPassword]= useState(infoRepeatPassword)
-    const [role,setRole] = useState(infoRole)
+
     let navigate = useNavigate()
 
         const handleSubmit=() => {
-            dispatch(changeUserFirstName(firstName))
-            dispatch(changeUserLastName(lastName))
-            dispatch(changeUserEmail(email))
-            dispatch(changeUserPassword(password))
-            dispatch(changeUserRepeatPassword(repeatPassword))
-            dispatch(changeUserPhoneNumber(phoneNumber))
-            dispatch(changeUserRole(role))
+
             dispatch(addOneUser())
             navigate("/details")
 
 
     }
-    console.log("rooooooooooooooooole   " ,role)
+    useEffect(()=>{
+if(infoEdit){
+    console.log("****************" , infoFirstName)
+    dispatch(getSingleUser())
+}
+
+
+
+    }, [id])
+
+
+
+
 
     return (
         <>
 <div className={styles.global}>
     <div className={styles.displayColumn}>
-    <div>
-        <select name="selectRole"  value={role} onChange={(e)=>setRole(e.target.value)}>
+    <div  >
+        <select  className={styles.roleOption} name="selectRole"  value={infoRole} onChange={(e)=>dispatch(changeUserRole(e.target.value))}>
             <option value="CLIENT">CLIENT</option>
             <option value="OWNER">OWNER</option>
             <option value="ADMIN">ADMIN</option>
@@ -76,28 +81,33 @@ export const UserFormPage = ()=> {
 
                     <label htmlFor="firstName">First Name</label>
                 <div>
-                <input type="text" name="firstName" required value={firstName} onChange={(e)=>setFirstName(e.target.value)}/>
+                <input type="text" name="firstName" required value={infoFirstName} onChange={(e)=>dispatch(changeUserFirstName(e.target.value))}/>
                 </div>
                 <label htmlFor="lastName">Last Name</label>
                 <div>
-                <input type="text" name="lastName" required value={lastName} onChange={(e)=>setLastName(e.target.value)}/>
+                <input type="text" name="lastName" required value={infoLastName} onChange={(e)=>dispatch(changeUserLastName(e.target.value))}/>
                 </div>
                 <label htmlFor="phoneNumber"> Phone Number</label>
                 <div>
-                <input type="text" name="phoneNumber" required value={phoneNumber} onChange={(e)=>setPhoneNumber(e.target.value)}/>
+                <input type="text" name="phoneNumber" required value={infoPhoneNumber} onChange={(e)=>dispatch(changeUserPhoneNumber(e.target.value))}/>
                 </div>
                 <label htmlFor="email"> Email</label>
                 <div>
-                <input type="email" name="email" required value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                <input type="email" name="email" required value={infoEmail} onChange={(e)=>dispatch(changeUserEmail(e.target.value))}/>
                 </div>
-                <label htmlFor="password"> Create Password</label>
-                <div>
-                <input type="password" name="password" required value={password} onChange={(e)=>setPassword(e.target.value)}/>
-                </div>
-                <label htmlFor="repeatPassword"> Repeate Password</label>
-                <div>
-                    <input type="password" name="repeatPassword" required value={repeatPassword} onChange={(e)=>setRepeatPassword(e.target.value)}/>
-                </div>
+                {infoEdit===false && (
+                    <>
+                    <label htmlFor="password"> Create Password</label>
+                    <div>
+                    <input type="password" name="password" required value={infoPassword} onChange={(e)=>dispatch(changeUserPassword(e.target.value))}/>
+                    </div>
+                    <label htmlFor="repeatPassword"> Repeate Password</label>
+                    <div>
+                    <input type="password" name="repeatPassword" required value={infoRepeatPassword} onChange={(e)=>dispatch(changeUserRepeatPassword(e.target.value))}/>
+                    </div>
+                    </>
+                )}
+
 
             </form>
     </div>

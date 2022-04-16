@@ -46,7 +46,7 @@ width: 400px;
 
 .buttonSubmit {
     width: 150px;
-    height: 70px;
+    height: 30px;
 
     background: rgba(54, 198, 41, 0.66);
     font-family: 'Roboto', serif;
@@ -60,6 +60,23 @@ width: 400px;
 
     text-align: center;
 
+    padding-top: 5px;
     margin-top: 5px;
+    cursor: pointer;
+
+}
+
+.roleOption{
+    background: transparent;
+    border: none;
+    font-family: 'Poppins', serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    padding-bottom: 10px;
+
+}
+
+.underline {
 
 }
