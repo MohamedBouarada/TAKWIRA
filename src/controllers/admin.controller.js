@@ -100,6 +100,21 @@ class AdminController {
         return res.status(StatusCodes.OK).json({result, pagesNumber})
     }
 
+    async getUserById(req,res) {
+        const id = req.params.id;
+        if(!id) {
+            return res.status(StatusCodes.BAD_REQUEST).json("no id specified")
+        }
+        const user =await userDao.findById(id);
+        if(user.success===false) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error occurred")
+        }
+        if(!user.data) {
+            return res.status(StatusCodes.NOT_FOUND).json(` no user found with id : ${id}`)
+        }
+        return res.status(StatusCodes.OK).json(user.data)
+    }
+
 
 }
 

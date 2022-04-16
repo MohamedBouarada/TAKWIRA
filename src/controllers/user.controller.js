@@ -53,7 +53,7 @@ class UserController {
         if(saving.success===false){
             return  res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error while registering , please try again")
         }
-        return  res.status(StatusCodes.CREATED).json("new user created successfully")
+        return  res.status(StatusCodes.CREATED).json(saving.data)
     }
 
     async login( req , res) {

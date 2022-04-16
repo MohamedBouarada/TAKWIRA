@@ -10,17 +10,20 @@ class UserDao {
         try {
             const userToSave = userModel.build(user);
             const result = await  userToSave.save();
-            return {success: true}
+            return {success: true ,data:result.dataValues.id}
         } catch (e) {
             console.log(e)
-            return {success:false}
+            return {success:false , data:null}
         }
 
     }
 
     async findById(id){
         try{
-            const user = await userModel.findOne({where:{id}})
+            const user = await userModel.findOne({where:{id},
+                attributes: {
+                    exclude: ["password"]
+                }})
             if(user==null) {
                 return {success:true , data:null}
             }
@@ -33,7 +36,10 @@ class UserDao {
 
     async findByEmail (email) {
         try{
-            const user = await  userModel.findOne({where : {"email":email}})
+            const user = await  userModel.findOne({
+                where : {"email":email},
+
+            })
             if(user==null) {
                 return {success:true , data:null}
             }
