@@ -13,6 +13,19 @@ class fieldDao {
         }
 
     }
+    async  update (field,id) {
+        try {
+            
+            const fieldToSave = fieldModel.update(field,{where : {"id":id}});
+            return {success: true}
+        } catch (e) {
+            console.log(e)
+            return {success:false}
+        }
+
+    }
+
+   
 
     async findById (id) {
         try{
@@ -40,11 +53,13 @@ class fieldDao {
     }
     async findByIdPropietaire (id) {
         try{
+            console.log(id)
             const fields = await  fieldModel.findAll({where : {"idProprietaire":id}})
+            
             if(fields==null) {
                 return {success:true , data:null}
             }
-            return {success:true , data:fields.dataValues}
+            return {success:true , data:fields}
         }catch (e) {
             console.log(e)
             return {success:false , data:null}
@@ -75,7 +90,16 @@ class fieldDao {
             return {success:false , data:null}
         }
     }
-
+    async delete (id) {
+        try{
+            const response = await  fieldModel.destroy({where : {"id":id}})
+            console.log("field deleted successfully");
+            return {success: true}
+        }catch (e) {
+            console.log(e)
+            return {success:false}
+        }
+    }
 }
 
 
