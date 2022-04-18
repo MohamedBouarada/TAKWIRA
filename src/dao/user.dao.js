@@ -90,17 +90,21 @@ class UserDao {
             return {success:false}
         }
     }
-    async updateUserByEmail(email,updatedUser) {
+    async updateUserGeneralInfos(id,updatedUser) {
         try{
-            const result = await userModel.update(updatedUser,{where:{"email":email},limit:1})
-            if ( result[0] > 0) {
-                return {success:true }
-            } else {
-                return {success:false}
+            const user = await userModel.findOne({where:{id},
+                attributes: {
+                    exclude: ["password"]
+                }})
+            if(!user) {
+                return {success:false , data:null}
             }
+            user.set(updatedUser);
+           const result= await user.save() ;
+           return {success:true , data : result.dataValues.id}
         }catch (e) {
             console.log(e)
-            return {success:false}
+            return {success:false , data :e.errors[0].message}
         }
     }
 

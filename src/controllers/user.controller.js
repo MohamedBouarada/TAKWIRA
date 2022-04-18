@@ -88,27 +88,53 @@ class UserController {
 
     }
     async updateGeneralInfoField(req,res) {
-        const { phoneNumber, firstName, lastName} = req.body;
+        const {id, phoneNumber, firstName, lastName,email} = req.body;
         const {authEmail,authId ,authRole} = req.infos ;
-        const validation = await userUpdateValidator({email:authEmail,phoneNumber,firstName,lastName});
+        const validation = await userUpdateValidator({email,phoneNumber,firstName,lastName});
         if(validation.success===false){
             return res.status(StatusCodes.CONFLICT).json(validation.message);
         }
-        const userExists = await userDao.findByEmail(authEmail) ;
+        const userExists = await userDao.findById(id) ;
         if(userExists.success===false) {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error while updating , please try again1")
         }
         if(!userExists.data) {
             return  res.status(StatusCodes.NOT_FOUND).json("no user found with this email , please login again")
         }
-        if(userExists.data.id !== authId || authRole!==UserType.Admin) {
+        if(userExists.data.email !== authEmail && authRole!==UserType.Admin) {
             return res.status(StatusCodes.UNAUTHORIZED).json('unauthorized action')
         }
-        const updateProcess = await userDao.updateUserByEmail(authEmail,{phoneNumber,firstName,lastName})
-        if(updateProcess.success===false){
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error while updating user , please try again")
+        if(userExists.data.email !==email && userExists.data.phoneNumber!==phoneNumber ) {
+            const updateProcess = await userDao.updateUserGeneralInfos(userExists.data.id,{email,phoneNumber,firstName,lastName})
+            if(updateProcess.success===false){
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(updateProcess.data)
+            }
+            return res.status(StatusCodes.OK).json(updateProcess.data)
         }
-        return res.status(StatusCodes.OK).json("user updated successfully")
+        if(userExists.data.email !== email){
+            const updateProcess = await userDao.updateUserGeneralInfos(userExists.data.id,{email,firstName,lastName})
+            if(updateProcess.success===false){
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(updateProcess.data)
+            }
+            return res.status(StatusCodes.OK).json(updateProcess.data)
+        }
+        if(userExists.data.phoneNumber !== phoneNumber) {
+            const updateProcess = await userDao.updateUserGeneralInfos(userExists.data.id,{phoneNumber,firstName,lastName})
+            if(updateProcess.success===false){
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(updateProcess.data)
+            }
+            return res.status(StatusCodes.OK).json(updateProcess.data)
+        }
+
+            const updateProcess = await userDao.updateUserGeneralInfos(userExists.data.id,{firstName,lastName})
+            if(updateProcess.success===false){
+                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error while updating user , please try again")
+            }
+            return res.status(StatusCodes.OK).json(updateProcess.data)
+
+
+
+
     }
 
     async updatePassword(req,res){
