@@ -20,7 +20,7 @@ import {
     selectInfoPhoneNumber,
     selectInfoRepeatPassword,
     selectInfoRole,
-    selectInfoUpdatedAt
+    selectInfoUpdatedAt, updateUser
 } from "./userInfoSlice";
 import {useNavigate} from "react-router-dom";
 
@@ -45,15 +45,18 @@ export const UserFormPage = ()=> {
     let navigate = useNavigate()
 
         const handleSubmit=() => {
+if(infoEdit) {
+    dispatch(updateUser())
+}else {
+    dispatch(addOneUser())
+    navigate("/details")
+}
 
-            dispatch(addOneUser())
-            navigate("/details")
 
 
     }
     useEffect(()=>{
 if(infoEdit){
-    console.log("****************" , infoFirstName)
     dispatch(getSingleUser())
 }
 

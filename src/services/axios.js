@@ -3,7 +3,7 @@ import axios from "axios"
 axios.defaults.baseURL = "http://localhost:5000" ;
 
 
-
+axios.defaults.headers.common["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZpcnN0QWRtaW5AZ21haWwuY29tIiwidXNlclR5cGUiOiJBRE1JTiIsImlkIjo1LCJpYXQiOjE2NTAyOTc4MzksImV4cCI6MTY1MDU1NzAzOX0.fk_zNQS1MzRBQRvkLnpgAZPmnDPtuTT81VLF9SAiwlc"
 
 export const getAllUsers =  async (orderBy="id",sort="ASC",perPage=5,page=1,searchValue="",role="*")=>{
 
@@ -44,6 +44,20 @@ export const addNewUser = async (firstName,lastName,email,password,phoneNumber,r
             data : {firstName,lastName,email,password,phoneNumber,role,repeatPassword}
         })
 
+        return {success: true , data:response.data}
+    }catch (e) {
+        console.log(e)
+        return {success: false , data:e.response.data}
+    }
+}
+
+export const updateUserGeneralInfos= async (id,email,firstName,lastName,phoneNumber)=>{
+    try{
+        const response = await axios({
+            method:"put",
+            url:"/user/updateGeneralInfos",
+            data :{id,email,firstName,lastName,phoneNumber}
+        })
         return {success: true , data:response.data}
     }catch (e) {
         console.log(e)

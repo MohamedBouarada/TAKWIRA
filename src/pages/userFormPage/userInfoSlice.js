@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {addNewUser, getOneUser} from "../../services/axios";
+import {addNewUser, getOneUser, updateUserGeneralInfos} from "../../services/axios";
 
 const  initialState = {
     firstName :"",
@@ -34,6 +34,15 @@ export const addOneUser = createAsyncThunk(
     }
 )
 
+export const updateUser = createAsyncThunk(
+    "info/updateGeneralInfos",
+    async (_ , {getState})=>{
+        const {info} = getState()
+        const {id,firstName,lastName,email,phoneNumber} = info;
+        return await  updateUserGeneralInfos(id,email,firstName,lastName,phoneNumber)
+    }
+)
+
 export const infoSlice = createSlice({
     name:"info",
     initialState,
@@ -62,6 +71,19 @@ export const infoSlice = createSlice({
         },
         changeUserEdit : (state,action) =>{
             state.edit = action.payload
+        } ,
+        initState : (state,action) => {
+            state.id="";
+            state.firstName ="";
+            state.lastName="";
+            state.email = "";
+            state.phoneNumber = "";
+            state.role="CLIENT";
+            state.password="";
+            state.repeatPassword="";
+            state.createdAt="";
+            state.updatedAt="";
+            state.edit=false;
         }
     },
     extraReducers: (builder => {
@@ -95,6 +117,13 @@ export const infoSlice = createSlice({
                 state.id=action.payload.data
 
             })
+            .addCase(updateUser.fulfilled ,(state,action)=>{
+                if(action.payload.success===true){
+                    state.id=action.payload.data
+                }else {
+
+                }
+            })
     })
 
 })
@@ -120,6 +149,6 @@ export const {changeUserId ,
     changeUserRole,
     changeUserFirstName,
     changeUserEmail,
-    changeUserEdit} = infoSlice.actions
+    changeUserEdit , initState} = infoSlice.actions
 
 export default infoSlice.reducer

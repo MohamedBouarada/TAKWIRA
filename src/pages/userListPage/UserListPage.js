@@ -23,7 +23,6 @@ export const UserListPage = ()=> {
     const sort = useSelector(selectSort)
     const searchValue = useSelector(selectSearchValue)
     const role = useSelector(selectRole)
-    console.log("roooooooooooole  " , role)
     const dispatch = useDispatch();
     useEffect( ()=>{
         dispatch(getUsers())
