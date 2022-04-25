@@ -9,6 +9,8 @@ const adminRouter = require("./routes/admin.route");
 
 const cors = require('cors')
 
+const fieldRouter = require("./routes/field.route");
+
 
 
 
@@ -17,7 +19,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(cors())
 app.use("/user" , userRouter);
 app.use("/admin" , adminRouter);
-
+app.use("/field", fieldRouter);
 
 
 
