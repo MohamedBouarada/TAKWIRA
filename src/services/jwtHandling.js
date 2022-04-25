@@ -27,11 +27,12 @@ class JwtHandling {
         if(token) {
             try {
                 const {email,id,userType} = await jwt.verify(token , process.env.JWT_SECRET) ;
-                if(userType !== user) {
+
+                if(!(user.find((e)=>userType===e))) {
                     return res.status(StatusCodes.UNAUTHORIZED).json('unauthorized action')
                 }
-                req.infos= {"authEmail":email,"authId":id , userType} ;
-                next();
+                req.infos= {"authEmail":email,"authId":id , "authRole":userType} ;
+                return next();
             }catch (err) {
                  return res.status(StatusCodes.UNAUTHORIZED).send('invalid token')
             }
