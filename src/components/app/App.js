@@ -7,6 +7,7 @@ import {UserListPage} from "../../pages/userListPage/UserListPage";
 import {UserDetailsPage} from "../../pages/userDetails/UserDetailsPage";
 import {SearchBar} from "../shared/searchBar/SearchBar";
 import {UserFormPage} from "../../pages/userFormPage/UserFormPage";
+import {FieldsListPage} from "../../pages/fieldsListPage/FieldsListPage";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route  path="/" element={<UserListPage />}/>
             <Route  path="/details" element={<UserDetailsPage />}/>
             <Route path="/user/add" element={<UserFormPage/>}/>
+            <Route path="/fields/list" element ={<FieldsListPage/>}/>
         </Routes>
         </BrowserRouter>
 

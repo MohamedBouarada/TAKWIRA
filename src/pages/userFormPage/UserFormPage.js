@@ -67,7 +67,7 @@ if(infoEdit){
 
 
 
-
+const buttonText = infoEdit? "EDIT USER" : "+ ADD NEW USER";
     return (
         <>
 <div className={styles.global}>
@@ -119,7 +119,7 @@ if(infoEdit){
     </div>
     </div>
 <div className={styles.buttonSubmit} onClick={handleSubmit}>
-    + ADD NEW CLIENT
+    {buttonText}
 </div>
 
 </div>

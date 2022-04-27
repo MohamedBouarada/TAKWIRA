@@ -1,0 +1,8 @@
+.global {
+    margin-left: 16rem;
+    padding: 1rem;
+    width: calc(100% - 21rem);
+    position: relative;
+    height:80vh;
+
+}

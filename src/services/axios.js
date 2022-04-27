@@ -64,3 +64,19 @@ export const updateUserGeneralInfos= async (id,email,firstName,lastName,phoneNum
         return {success: false , data:e.response.data}
     }
 }
+
+export const getAllFields= async (orderBy="id",sort="ASC",perPage=5,page=1,searchValue="",type="*" , surface="*")=>{
+
+    try{
+        const response = await axios({
+            method : "GET",
+            url :`/field/search/all?sort=${sort}&order=${orderBy}&perPage=${perPage}&page=${page}&searchValue=${searchValue}&type=${type}&surface=${surface}`,
+
+        })
+        return {success:true , data : response.data}
+    }catch (e) {
+        console.log(e)
+        return {success:false , data : e.response.data}
+    }
+
+}
