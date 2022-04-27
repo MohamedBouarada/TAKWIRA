@@ -1,4 +1,6 @@
 const fieldModel = require('../models/field.model');
+const {Op} = require("sequelize");
+const User = require("../models/user.model");
 
 class fieldDao {
 
@@ -25,7 +27,51 @@ class fieldDao {
 
     }
 
-   
+   async getAllFieldsPaginatedAndSorted (orderBy,sort , limit , offset,searchValue,type,surface) {
+            try{
+                const fieldsList = await fieldModel.findAndCountAll({
+                    include : {
+                        model : User ,
+                        attributes : {
+                            exclude : ["password" , "jwt"]
+                        }
+                    },
+
+                    where :{
+                        [Op.and] : [
+                            {
+                                [Op.or] :[
+                                    {name: {[Op.like] : `%${searchValue}%`}},
+                                    {adresse: {[Op.like] : `%${searchValue}%`}},
+                                    {prix: {[Op.like] : `%${searchValue}%`}},
+                                    {description: {[Op.like] : `%${searchValue}%`}},
+                                ]
+                            },
+                            type==="*"? {
+
+                            }: {type},
+                            surface==="*"? {
+
+                            }: {surface}
+                        ]
+
+
+                    },
+                    order : [
+                        [orderBy,sort]
+                    ],
+
+                    limit : limit ,
+                    offset : offset,
+
+
+                })
+                return {success: true , data : fieldsList}
+            }catch (e) {
+                console.log(e)
+                return {success:false , data:e.toString()}
+            }
+   }
 
     async findById (id) {
         try{

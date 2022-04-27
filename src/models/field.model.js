@@ -3,6 +3,7 @@ const {Model , DataTypes} = require("sequelize")
 const sequelize = require("../database/connection") ;
 const userModel = require("./user.model");
 const fieldTypes = require("../enums/fieldTypes");
+const User = require("./user.model");
 class field extends Model{}
 
 
@@ -52,15 +53,12 @@ field.init({
         type : DataTypes.TEXT,
         allowNull : false ,
     } ,
-    idProprietaire : {
-        type : DataTypes.INTEGER,
-        allowNull : false ,
-        references: userModel.id,
-    }
+
 }, {
     sequelize,
     modelName : "field"
 })
+
 
 
 module.exports = field

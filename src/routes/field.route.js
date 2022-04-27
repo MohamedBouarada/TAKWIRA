@@ -8,6 +8,6 @@ router.get("/getByOwner/:id" , fieldController.getByOwner)
 router.get("/:id" , fieldController.getById)
 router.put("/:id" , fieldController.update)
 router.delete("/:id" , fieldController.delete)
-
+router.get("/search/all" , fieldController.searchForFields)
 
 module.exports = router ;

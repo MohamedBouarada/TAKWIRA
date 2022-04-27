@@ -9,7 +9,7 @@ const TennisSurface = require("../enums/FieldSurfacesTypes/TennisSurfaces")
 class fieldController {
 
     async add (req,res) {
-        const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , idProprietaire}=req.body;
+        const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , userId}=req.body;
         
         if(type!==FieldType.Tennis && type!==FieldType.Football && type!==FieldType.Basketball && type!==FieldType.Golf) {
             return res.status(StatusCodes.CONFLICT).json("error in type")
@@ -22,7 +22,7 @@ class fieldController {
         }
         const fieldExists =  await fieldDao.findByNameAdresse(name,adresse);
         //check if the sender of this req is the field owner !!
-        const ownerExists = await userDao.findById(idProprietaire);
+        const ownerExists = await userDao.findById(userId);
        
         
         if(fieldExists.success===false){
@@ -50,7 +50,7 @@ class fieldController {
             period,
             surface,
             description,
-            idProprietaire,
+            userId,
         }
         const saving = await  fieldDao.add(fieldToSave);
         if(saving.success===false){
@@ -78,7 +78,7 @@ class fieldController {
         return res.status(StatusCodes.OK).json(field.data);
     }
     async update (req,res) {
-        const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , idProprietaire}=req.body;
+        const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , userId}=req.body;
         const id = req.params.id;
 
         if(type!==FieldType.Tennis && type!==FieldType.Football && type!==FieldType.Basketball && type!==FieldType.Golf) {
@@ -92,7 +92,7 @@ class fieldController {
         }
         const fieldExists =  await fieldDao.findById(id);
         //check if the sender of this req is the field owner !!
-        const ownerExists = await userDao.findById(idProprietaire);
+        const ownerExists = await userDao.findById(userId);
        
         
         if(fieldExists.success===false){
@@ -120,7 +120,7 @@ class fieldController {
             period,
             surface,
             description,
-            idProprietaire,
+            userId,
         }
         const saving = await  fieldDao.update(fieldToUpdate,id);
         if(saving.success===false){
@@ -149,6 +149,23 @@ class fieldController {
         return res.status(StatusCodes.OK).json("field deleted successfully");    
         }
         
+    }
+
+    async searchForFields(req,res) {
+        const sort = req.query.sort || "ASC";
+        const orderBy = req.query.order || "createdAt";
+        const page= req.query.page ? parseInt(req.query.page.toString(),10) :  1 ;
+        const perPage = req.query.perPage? parseInt(req.query.perPage.toString(),10) :  5 ;
+        const offset = (page - 1) * perPage;
+        const searchValue = req.query.searchValue ? req.query.searchValue : ""
+        const type = req.query.type ? req.query.type : "*"
+        const surface = req.query.surface ? req.query.surface : "*"
+        const result = await fieldDao.getAllFieldsPaginatedAndSorted(orderBy,sort,perPage,offset,searchValue,type,surface);
+        if(result.success===false) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error occurred")
+        }
+        const pagesNumber= Math.ceil(result.data.count/perPage)
+        return res.status(StatusCodes.OK).json({result, pagesNumber})
     }
 }
 

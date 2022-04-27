@@ -2,6 +2,7 @@
 const userModel = require("../models/user.model")
 const sequelize = require("../database/connection") ;
 const {Op} = require("sequelize");
+const field = require("../models/field.model");
 
 
 class UserDao {
@@ -111,6 +112,7 @@ class UserDao {
     async getAllUsers (orderBy,sort , limit , offset) {
         try{
             const usersList = await  userModel.findAndCountAll({
+                include : field,
                 order : [
                     [orderBy,sort]
                 ],

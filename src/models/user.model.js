@@ -2,6 +2,7 @@
 const {Model , DataTypes} = require("sequelize")
 const sequelize = require("../database/connection") ;
 const userTypes = require("../enums/userTypes")
+const field = require("./field.model");
 
 class User extends Model{}
 
@@ -55,6 +56,9 @@ User.init({
     sequelize,
     modelName : "user"
 })
+
+User.hasMany(field   )
+field.belongsTo(User )
 
 
 module.exports = User

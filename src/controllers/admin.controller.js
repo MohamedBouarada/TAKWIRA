@@ -1,4 +1,5 @@
 const userDao = require("../dao/user.dao");
+const fieldDao = require("../dao/field.dao")
 const StatusCodes = require("http-status-codes");
 const passwordHandling = require("../services/passwordHandling");
 const UserType = require("../enums/userTypes")
