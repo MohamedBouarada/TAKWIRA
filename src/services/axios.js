@@ -80,3 +80,18 @@ export const getAllFields= async (orderBy="id",sort="ASC",perPage=5,page=1,searc
     }
 
 }
+
+
+export const getOneField = async (id)=> {
+    try{
+        const response = await  axios({
+            method:"get",
+            url : `/field/${id}`
+        })
+
+        return {success:true , data : response.data}
+    }catch (e) {
+console.log(e)
+        return {success : false , data:e.response.data}
+    }
+}

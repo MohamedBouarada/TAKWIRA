@@ -6,6 +6,7 @@ import {changeUserEdit, changeUserId} from "../../pages/userFormPage/userInfoSli
 import {useState} from "react";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {changeFieldId} from "../../pages/field-form-page/fieldInfoSlice";
 
 
 export const FieldRow  = ({id,name,image,adresse,services,createdAt})=> {
@@ -40,7 +41,7 @@ export const FieldRow  = ({id,name,image,adresse,services,createdAt})=> {
                 {actionClicked && (
                     <div className={styles.actionsMenu}>
                         <div
-                           onClick={()=>{dispatch(changeUserId(id)) ;navigate("/details")}}
+                           onClick={()=>{dispatch(changeFieldId(id)) ;navigate("/fields/details")}}
                         >
                             <FontAwesomeIcon icon={faInfoCircle}/>
                         </div>

@@ -5,6 +5,7 @@ import userReducer from "../../pages/userListPage/userSlice"
 import infoReducer from "../../pages/userFormPage/userInfoSlice"
 import fieldReducer from "../../pages/fieldsListPage/fieldsSlice"
 import appReducer from  "../../components/app/appSlice"
+import fieldInfoReducer from "../../pages/field-form-page/fieldInfoSlice";
 export const store = configureStore({
     reducer: {
         counter: counterReducer,
@@ -13,5 +14,9 @@ export const store = configureStore({
         info : infoReducer,
         field : fieldReducer,
         app : appReducer,
+        fieldInfo : fieldInfoReducer
     },
 });
+
+
+

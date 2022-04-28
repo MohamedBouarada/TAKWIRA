@@ -9,7 +9,7 @@ import {FieldsRelatedToOwners} from "../../components/fields-related-to-owners/F
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {
-    getSingleUser, selectInfoCreatedAt, selectInfoEmail,
+    getSingleUser, selectFieldsRelatedToUser, selectInfoCreatedAt, selectInfoEmail,
     selectInfoFirstName,
     selectInfoId,
     selectInfoLastName, selectInfoPhoneNumber,
@@ -26,6 +26,7 @@ export const UserDetailsPage = ()=> {
     const phoneNumber= useSelector(selectInfoPhoneNumber);
     const createdAt= useSelector(selectInfoCreatedAt);
     const updatedAt= useSelector(selectInfoUpdatedAt);
+    const fields = useSelector(selectFieldsRelatedToUser)
     useEffect( ()=>{
         dispatch(getSingleUser())
     }, [id])
@@ -59,7 +60,7 @@ export const UserDetailsPage = ()=> {
                <Options/>
            </div>
        </div>
-           {(role==="OWNER" || role==="OWNER_REQUEST") && (
+           {(role==="OWNER" || role==="OWNER_REQUEST") && fields.length>0 && (
                <div>
 
                    <FieldsRelatedToOwners/>

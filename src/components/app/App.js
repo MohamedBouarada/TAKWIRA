@@ -8,6 +8,7 @@ import {UserDetailsPage} from "../../pages/userDetails/UserDetailsPage";
 import {SearchBar} from "../shared/searchBar/SearchBar";
 import {UserFormPage} from "../../pages/userFormPage/UserFormPage";
 import {FieldsListPage} from "../../pages/fieldsListPage/FieldsListPage";
+import {FieldDetailsPage} from "../../pages/field-details-page/FieldDetailsPage";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route  path="/details" element={<UserDetailsPage />}/>
             <Route path="/user/add" element={<UserFormPage/>}/>
             <Route path="/fields/list" element ={<FieldsListPage/>}/>
+            <Route path="/fields/details" element = {<FieldDetailsPage/>}/>
         </Routes>
         </BrowserRouter>
 
