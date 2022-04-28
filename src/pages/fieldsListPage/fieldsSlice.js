@@ -30,7 +30,59 @@ export const fieldSlice =createSlice({
     name : "field",
     initialState,
     reducers : {
+        decrementPage : (state)=> {
+            if(state.page>1) {
+                state.page -=1 ;
+            }
+        },
+        incrementPage :(state)=>{
+            if(state.page< state.pagesNumber) {
+                state.page +=1
+            }
+        },
+        changePerPage : (state,action)=> {
 
+            if(action.payload>0 && action.payload<=state.countFields){
+
+                state.perPage =action.payload
+            } else {
+                state.perPage = 5;
+            }
+        },
+        changeOrderAndSort :(state,action) => {
+            if(state.orderBy === action.payload) {
+                if(state.sort==="ASC") {
+                    state.sort="DESC"
+                } else{
+                    state.sort = "ASC"
+                }
+            } else {
+                state.orderBy =action.payload
+                state.sort = "ASC"
+            }
+        },
+        changeFieldsSearch : (state,action)=>{
+            state.searchValue = action.payload;
+
+        },
+        changeType : (state,action) => {
+            console.log(action.payload)
+            if(action.payload==="ALL"){
+                state.type ="*"
+            } else {
+                state.type =action.payload
+            }
+
+        },
+        changeSurface : (state,action) => {
+            console.log(action.payload)
+            if(action.payload==="ALL"){
+                state.surface ="*"
+            } else {
+                state.surface =action.payload
+            }
+
+        }
     },
     extraReducers : (builder => {
         builder.addCase(getFields.fulfilled , (state,action)=> {
@@ -54,6 +106,10 @@ export  const selectFieldsList = state => state.field.fieldsList;
 export const selectPagesNumber = state => state.field.pagesNumber;
 export const selectFieldsCount = state =>state.field.countFields;
 export const selectSearchValue = state => state.field.searchValue;
-export const selectRole = state => state.field.role
+export const selectType = state => state.field.type;
+export const  selectSurface = state =>state.field.surface;
+
+
+export const {incrementPage , decrementPage ,changePerPage ,changeOrderAndSort,changeFieldsSearch,changeType,changeSurface} = fieldSlice.actions
 
 export default  fieldSlice.reducer ;

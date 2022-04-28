@@ -15,6 +15,7 @@ import {
 } from "./userSlice";
 import {Button} from "../../components/shared/button/Button";
 import {ParamsBar} from "../../components/shared/params-bar/ParamsBar";
+import {changeSearchBarContext} from "../../components/app/appSlice";
 
 export const UserListPage = ()=> {
     const page = useSelector(selectPage)
@@ -23,9 +24,17 @@ export const UserListPage = ()=> {
     const sort = useSelector(selectSort)
     const searchValue = useSelector(selectSearchValue)
     const role = useSelector(selectRole)
+
     const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(changeSearchBarContext("users"))
+    })
     useEffect( ()=>{
-        dispatch(getUsers())
+
+            dispatch(getUsers())
+
+
     } , [page ,perPage,orderBy,sort ,searchValue,role])
     return (
         <>

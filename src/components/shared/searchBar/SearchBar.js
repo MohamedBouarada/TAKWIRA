@@ -1,16 +1,24 @@
 
 import styles from "./searchBar.module.css"
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useState} from "react";
 import {changeSearch} from "../../../pages/userListPage/userSlice";
+import {selectAppSearchbarContext} from "../../app/appSlice";
+import {changeFieldsSearch} from "../../../pages/fieldsListPage/fieldsSlice";
 
 
 export const SearchBar =()=> {
 
 const dispatch = useDispatch()
+    const context = useSelector(selectAppSearchbarContext)
     const [inputValue,setInputValue] = useState("")
     const handleChange = (e)=> {
-    dispatch(changeSearch(e.target.value))
+    if(context==="users") {
+        dispatch(changeSearch(e.target.value))
+    }else if(context==="fields"){
+        dispatch(changeFieldsSearch(e.target.value))
+    }
+
     setInputValue(e.target.value)
     }
 

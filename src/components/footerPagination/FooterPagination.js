@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     changePerPage,
     decrementPage,
-    incrementPage,
+    incrementPage, selectPage,
     selectPagesNumber,
     selectPerPage, selectUsersCount
 } from "../../pages/userListPage/userSlice";
@@ -19,6 +19,7 @@ export const FooterPagination = ()=> {
 const numberPages = useSelector(selectPagesNumber)
     const perPage = useSelector(selectPerPage)
     const total = useSelector(selectUsersCount)
+    const page = useSelector(selectPage);
     console.log(perPage)
 
 const [inputValue,setInputValue] = useState(perPage)
@@ -50,7 +51,7 @@ const [inputValue,setInputValue] = useState(perPage)
             </button>
 
             {
-                [...Array(numberPages)].map((element,index)=> <PageNumberSingleItem key={index} num={index+1}/>)
+                [...Array(numberPages)].map((element,index)=> <PageNumberSingleItem key={index} page={page} num={index+1}/>)
             }
 
 

@@ -1,11 +1,10 @@
 import {useDispatch, useSelector} from "react-redux";
-    import {selectOrderBy, selectSort, selectFieldsList} from "../../pages/fieldsListPage/fieldsSlice";
+    import {selectOrderBy, selectSort, selectFieldsList,changeOrderAndSort} from "../../pages/fieldsListPage/fieldsSlice";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronDown, faChevronUp, faCircleUser} from "@fortawesome/free-solid-svg-icons";
 import styles from "../users-table/usersTable.module.css";
 import {tableHeaders} from "./fieldsData";
-import {changeOrderAndSort} from "../../pages/userListPage/userSlice";
-import {UserRow} from "../user-row/UserRow";
+
 import {FieldRow} from "../field-row/FieldRow";
 
 
@@ -29,7 +28,7 @@ export const FieldsTable = ()=> {
                         return (
 
                             <th  key={index}
-                            //     onClick={()=>dispatch(changeOrderAndSort(order))}
+                                onClick={()=>dispatch(changeOrderAndSort(element))}
                             >
                                 {element}
                                 &nbsp;&nbsp;{element===orderBy&&(
