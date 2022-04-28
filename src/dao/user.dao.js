@@ -22,6 +22,7 @@ class UserDao {
     async findById(id){
         try{
             const user = await userModel.findOne({where:{id},
+                include : field,
                 attributes: {
                     exclude: ["password"]
                 }})
