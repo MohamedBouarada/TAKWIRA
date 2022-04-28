@@ -1,7 +1,9 @@
 
 import styles from "./fliedsPreview.module.css"
 
+
 export const FieldsPreview= ({image,fieldName,address,createdAt})=> {
+
 
 
     return(

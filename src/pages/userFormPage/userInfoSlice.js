@@ -13,6 +13,9 @@ const  initialState = {
     edit:false,
     password: "",
     repeatPassword :"",
+    fieldsRelatedToUser : [],
+    fieldIndex : 0 ,
+    currentFieldShowed : {},
 }
 
 export const getSingleUser = createAsyncThunk(
@@ -72,6 +75,23 @@ export const infoSlice = createSlice({
         changeUserEdit : (state,action) =>{
             state.edit = action.payload
         } ,
+        incrementFieldIndex : (state,action) => {
+            console.log("incrementing")
+            if(state.fieldIndex=== state.fieldsRelatedToUser.length-1){
+
+            }else {
+                state.fieldIndex = state.fieldIndex+1;
+                state.currentFieldShowed = state.fieldsRelatedToUser[state.fieldIndex]
+            }
+        },
+        decrementFieldIndex : (state,action) => {
+            if(state.fieldIndex=== 0){
+
+            }else {
+                state.fieldIndex = state.fieldIndex-1;
+                state.currentFieldShowed = state.fieldsRelatedToUser[state.fieldIndex]
+            }
+        },
         initState : (state,action) => {
             state.id="";
             state.firstName ="";
@@ -100,6 +120,11 @@ export const infoSlice = createSlice({
                     state.phoneNumber=phoneNumber;
                     state.email=email;
                     state.role=role;
+                    if(role === "OWNER" || role==="OWNER_REQUEST"){
+                        state.fieldsRelatedToUser = action.payload.data.fields;
+                        state.fieldIndex = 0 ;
+                            state.currentFieldShowed = action.payload.data.fields[0];
+                    }
 
 
             }
@@ -140,6 +165,9 @@ export const selectInfoRole = state =>state.info.role
 export const selectInfoPassword = state => state.info.password
 export const selectInfoRepeatPassword = state=> state.info.repeatPassword
 export const selectInfoEdit = state => state.info.edit;
+export const selectFieldsRelatedToUser = state=>state.info.fieldsRelatedToUser ;
+export const selectCurrentFieldIndex = state => state.info.fieldIndex;
+export const selectCurrentFieldShowed = state=>state.info.currentFieldShowed;
 
 export const {changeUserId ,
     changeUserLastName,
@@ -149,6 +177,6 @@ export const {changeUserId ,
     changeUserRole,
     changeUserFirstName,
     changeUserEmail,
-    changeUserEdit , initState} = infoSlice.actions
+    changeUserEdit , initState ,incrementFieldIndex,decrementFieldIndex} = infoSlice.actions
 
 export default infoSlice.reducer
