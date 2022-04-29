@@ -17,6 +17,7 @@ const initialState = {
     period : "",
     surface : "",
     description : "",
+    relatedUser  : {},
 
 }
 
@@ -45,7 +46,7 @@ export const fieldInfoSlice = createSlice({
         builder.addCase(getSingleField.fulfilled , (state,action)=>{
             if(action.payload.success===true) {
                 console.log(action.payload.data)
-                const {id,name,adresse,createdAt,updatedAt,type,surface,services,prix,description,period} = action.payload.data
+                const {id,name,adresse,createdAt,updatedAt,type,surface,services,prix,description,period,user,userId} = action.payload.data
                 state.id = id;
                 state.name = name;
                 state.adresse = adresse;
@@ -57,6 +58,8 @@ export const fieldInfoSlice = createSlice({
                 state.prix = prix;
                 state.description = description;
                 state.period = period;
+                state.relatedUser = user;
+                state.userId = userId;
             }
         })
     }
@@ -76,6 +79,8 @@ export const selectFieldInfoServices = state => state.fieldInfo.services;
 export const selectFieldInfoPrix = state => state.fieldInfo.prix;
 export const selectFieldInfoPeriod = state => state.fieldInfo.period;
 export const selectFieldInfoDescription = state => state.fieldInfo.description;
+export const selectFieldInfoRelatedOwner = state => state.fieldInfo.relatedUser;
+export const selectFieldInfoUserId = state =>state.fieldInfo.userId;
 
 
 export const {changeFieldId} = fieldInfoSlice.actions

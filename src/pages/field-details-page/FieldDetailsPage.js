@@ -18,6 +18,9 @@ import {
     selectFieldInfoType,
     selectFieldInfoUpdatedAt
 } from "../field-form-page/fieldInfoSlice";
+import {OwnerPreview} from "../../components/owner-preview/OwnerPreview";
+import {OwnerRelatedToField} from "../../components/owner-related-to-field/OwnerRelatedToField";
+import {Options} from "../../components/shared/options/Options";
 
 
 export const FieldDetailsPage = ()=> {
@@ -45,9 +48,9 @@ console.log(id)
 
     return (
         <>
-            <div className={`${styles.container} `}>
+            <div className={`${styles.container} ${styles.displayRow}`}>
                 <div className={styles.closeMark} onClick={()=>navigate("/")}> <FontAwesomeIcon icon={faXmarkCircle}/></div>
-                <div  //className={`${display}`}
+                <div  className={`${styles.displayColumn}`}
                 >
 
                     <div className={styles.detailsContainer}>
@@ -57,16 +60,23 @@ console.log(id)
                         <UserSingleInfo title="type" content={type}/>
                         <UserSingleInfo title="surface" content={surface}/>
                         <UserSingleInfo title="services" content={services}/>
-                        <UserSingleInfo title="description" content={description}/>
+
                         <UserSingleInfo title="period" content={period}/>
                         <UserSingleInfo title="prix" content={prix}/>
                         <UserSingleInfo title="createdAt" content={ new Date(createdAt).toLocaleString()}/>
                         <UserSingleInfo title="updatedAt" content={new Date(updatedAt).toLocaleString()}/>
 
-
+                        <UserSingleInfo title="description" content={description}/>
                     </div>
                 </div>
+                <div className={styles.options}>
+                    <Options/>
+                </div>
 
+
+            <div>
+        <OwnerRelatedToField/>
+            </div>
             </div>
         </>
     )
