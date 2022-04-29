@@ -75,7 +75,14 @@ class fieldDao {
 
     async findById (id) {
         try{
-            const field = await  fieldModel.findOne({where : {"id":id}})
+            const field = await  fieldModel.findOne({where : {"id":id},
+                include : {
+                    model : User ,
+                    attributes : {
+                        exclude : ["password" , "jwt"]
+                    }
+                },
+            })
             if(field==null) {
                 return {success:true , data:null}
             }
