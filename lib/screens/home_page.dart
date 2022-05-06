@@ -28,7 +28,6 @@ class HomePageState extends State<HomePage> {
 
   void readToken() async {
     _token = (await _storageService.readSecureData('token'))!;
-
     setState(() {});
     HomePage.isAuth = _token.isNotEmpty;
   }

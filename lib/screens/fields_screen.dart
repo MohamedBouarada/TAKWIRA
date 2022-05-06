@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, unused_local_variable, constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:takwira_mobile/models/storage_item.dart';
 import 'package:takwira_mobile/providers/storage_service.dart';

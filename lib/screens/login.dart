@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, deprecated_member_use, body_might_complete_normally_nullable
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:takwira_mobile/models/http_exception.dart';
@@ -132,6 +134,7 @@ class LoginPage extends StatelessWidget {
                       ),
                       Text(
                         " Sign up",
+                        // ignore: prefer_const_constructors
                         style: TextStyle(
                           shadows: <Shadow>[
                             Shadow(
@@ -204,6 +207,7 @@ class _LoginCardState extends State<LoginCard> {
         email: _authData['email']!,
         password: _authData['password']!,
       );
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
     } on HttpException catch (error) {
       _showErrorDialog(error.toString());
     } catch (error) {
