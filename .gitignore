@@ -45,5 +45,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 lib/pages/
-lib/screens/client_field_screen.dart/
-lib/widgets/calendar.dart/
+lib/services/

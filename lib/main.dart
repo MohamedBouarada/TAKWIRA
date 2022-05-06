@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:takwira_mobile/providers/field.dart';
 import 'package:takwira_mobile/providers/fields.dart';
-import 'package:takwira_mobile/screens/client_field_screen.dart';
+import 'package:takwira_mobile/services/client_field_screen.dart';
 import 'package:takwira_mobile/screens/signup.dart';
 import './providers/auth.dart';
 import './providers/fields.dart';
