@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:takwira_mobile/providers/field.dart';
 import 'package:takwira_mobile/providers/fields.dart';
-import 'package:takwira_mobile/services/client_field_screen.dart';
+import 'package:takwira_mobile/screens/client_field_screen.dart';
+import 'package:takwira_mobile/screens/field_details_screen.dart';
 import 'package:takwira_mobile/screens/signup.dart';
+import 'package:takwira_mobile/widgets/booking.dart';
+import 'package:takwira_mobile/widgets/helpContainer.dart';
 import './providers/auth.dart';
 import './providers/fields.dart';
 import './screens//fields_screen.dart';
@@ -42,7 +45,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.green,
           ),
-          home: ClientFieldScreen(),
+          home: Details( imgUrl: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', placeName: 'hammamet', rating: 4.5,),
+         //home: HelpContainer(),
           routes: {
             LoginPage.routName: (ctx) => LoginPage(),
             SignupPage.routName: (ctx) => SignupPage(),
