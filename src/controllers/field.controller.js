@@ -6,11 +6,21 @@ const UserType = require("../enums/userTypes");
 const FieldType = require("../enums/fieldTypes")
 const FootSurface = require("../enums/FieldSurfacesTypes/FootSurfaces");
 const TennisSurface = require("../enums/FieldSurfacesTypes/TennisSurfaces")
+const convertUtility = require("../utils/jsonString.utility")
+const fs = require("fs");
+const path = require("path");
+const {NOT_FOUND} = require("http-status-codes");
 class fieldController {
 
     async add (req,res) {
-        const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , userId}=req.body;
-        
+
+        const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , userId,localisation}=req.body;
+         let photos = ""
+        if(req.files) {
+            const files = req.files ;
+            const photoList = files.map((element) => { return {name: element.filename}});
+            photos = convertUtility.convertJsonToString(photoList);
+        }
         if(type!==FieldType.Tennis && type!==FieldType.Football && type!==FieldType.Basketball && type!==FieldType.Golf) {
             return res.status(StatusCodes.CONFLICT).json("error in type")
         }
@@ -40,6 +50,7 @@ class fieldController {
         if(ownerExists.data["role"] !==UserType.Owner) {
             return  res.status(StatusCodes.NOT_FOUND).json("not a field owner")
         }
+
         const fieldToSave = {
             name,
             adresse,
@@ -51,6 +62,8 @@ class fieldController {
             surface,
             description,
             userId,
+            images:photos,
+            localisation
         }
         const saving = await  fieldDao.add(fieldToSave);
         if(saving.success===false){
@@ -67,7 +80,8 @@ class fieldController {
         if(fields.success ===false){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error");
         }
-        return res.status(StatusCodes.OK).json(fields.data);
+        const photoString = convertUtility.convertStringToJson(fields.dataValues.images)
+        return res.status(StatusCodes.OK).json({...fields.data , images : photoString});
     }
     async getById(req,res){
         const id = req.params.id;
@@ -166,6 +180,30 @@ class fieldController {
         }
         const pagesNumber= Math.ceil(result.data.count/perPage)
         return res.status(StatusCodes.OK).json({result, pagesNumber})
+    }
+    async deleteImage(req,res) {
+        const {imageName,fieldId} = req.params ;
+        fs.unlink(path.resolve(path.join(__dirname,"..","..",imageName)),(err)=>{
+            if (err){
+                return res.status(StatusCodes.NOT_FOUND).json("file not found")
+            }
+        })
+        const field = await  fieldDao.findById(fieldId);
+        if(field.success===false) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error")
+        }
+        if(!field.data) {
+            return res.status(StatusCodes.NOT_FOUND).json("field not found")
+        }
+        const photoList = convertUtility.convertStringToJson(field.data.images)
+        const filteredPhotos = photoList.filter((element)=> element.name !== imageName)
+         field.data.images = convertUtility.convertJsonToString(filteredPhotos);
+        const updateResult =await fieldDao.update(field.data , fieldId);
+        if(updateResult.success){
+            return  res.status(StatusCodes.OK).json("image deleted successfully")
+        }
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error in deleting image")
+
     }
 }
 

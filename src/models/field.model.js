@@ -53,6 +53,14 @@ field.init({
         type : DataTypes.TEXT,
         allowNull : false ,
     } ,
+    images : {
+        type : DataTypes.STRING,
+        allowNull : true
+    } ,
+    localisation : {
+        type : DataTypes.STRING,
+        allowNull : false
+    }
 
 }, {
     sequelize,
