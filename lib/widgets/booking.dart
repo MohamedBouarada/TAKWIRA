@@ -30,7 +30,7 @@ class _BookingState extends State<Booking> {
     currentMonthList.sort((a, b) => a.day.compareTo(b.day));
     currentMonthList = currentMonthList.toSet().toList();
     scrollController =
-        ScrollController(initialScrollOffset: 70.0 * currentDateTime.day);
+        ScrollController(initialScrollOffset: 100.0 * currentDateTime.day);
     super.initState();
   }
 

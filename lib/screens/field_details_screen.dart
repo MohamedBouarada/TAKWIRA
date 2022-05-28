@@ -302,7 +302,7 @@ class _CardBodyState extends State<CardBody> {
                   });
                 },
                 child: const Text(
-                  'Infos Field',
+                  'Info Field',
                   textAlign: TextAlign.center,
                 ),
               ),

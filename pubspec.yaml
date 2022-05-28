@@ -51,6 +51,7 @@ dependencies:
   cached_network_image: ^3.2.0
   google_fonts: ^2.3.2
   table_calendar: ^3.0.5
+  flutter_svg: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +89,8 @@ flutter:
     - assets/name1.png
     - assets/mainLogo.png
     - assets/images/ 
+    - assets/user_images/ 
+    - assets/icons/ 
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
