@@ -1,4 +1,6 @@
 
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 const primary = Color(0xff4f359b);
@@ -32,6 +34,7 @@ const cyan = Color(0xFF4ac2dc);
 const darkerGreen = Color(0xFFb0d96d);
 const d_green = Color(0xFF54D3C2);
 const dark_d_green = Color.fromARGB(255, 40, 153, 138);
+const light_d_green = Color.fromARGB(169, 84, 211, 194);
 const listColors = [
   green,
   purple,
