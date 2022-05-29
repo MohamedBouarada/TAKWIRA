@@ -12,7 +12,7 @@ export const FieldsPreview= ({image,fieldName,address,createdAt})=> {
         <div className={styles.global}>
             <div className={styles.displayRow}>
                 <div>{fieldName}</div>
-                <div className={styles.fieldImage}><img src={image} alt="field image"/></div>
+                <div className={styles.fieldImage}><img src={`http://localhost:5000/static/${image}`} alt="field image" style={{width:"270px",height:"130px"}}/></div>
             </div>
             <div className={styles.displayRow}>
                 <div>address</div>
