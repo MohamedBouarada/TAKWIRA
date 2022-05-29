@@ -107,7 +107,7 @@ class fieldDao {
     async findByIdPropietaire (id) {
         try{
             console.log(id)
-            const fields = await  fieldModel.findAll({where : {"idProprietaire":id}})
+            const fields = await  fieldModel.findAll({where : {"userId":id}})
             
             if(fields==null) {
                 return {success:true , data:null}

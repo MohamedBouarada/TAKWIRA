@@ -80,8 +80,9 @@ class fieldController {
         if(fields.success ===false){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error");
         }
-        const photoString = convertUtility.convertStringToJson(fields.dataValues.images)
-        return res.status(StatusCodes.OK).json({...fields.data , images : photoString});
+       // const photoString = convertUtility.convertStringToJson(fields.dataValues.images)
+       // return res.status(StatusCodes.OK).json({...fields.data , images : photoString});
+        return res.status(StatusCodes.OK).json(fields.data);
     }
     async getById(req,res){
         const id = req.params.id;
@@ -114,10 +115,10 @@ class fieldController {
        
         
         if(fieldExists.success===false){
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error")
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error1")
         }
         if(ownerExists.success===false){
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error")
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error2")
         }
         if(ownerExists.data===null) {
             return  res.status(StatusCodes.BAD_REQUEST).json("cannot identify user")
