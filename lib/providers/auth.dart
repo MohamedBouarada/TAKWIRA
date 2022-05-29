@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -16,7 +18,7 @@ class Auth with ChangeNotifier {
     required String phoneNumber,
     required String password,
   }) async {
-    const url = 'http://10.0.2.2:5000/client/add';
+    const url = 'http://10.0.2.2:5000/user/add';
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -30,6 +32,7 @@ class Auth with ChangeNotifier {
             'lastName': lastName,
             'phoneNumber': phoneNumber,
             'password': password,
+            'role':"CLIENT"
           },
         ),
       );
@@ -48,7 +51,7 @@ class Auth with ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    const url = 'http://10.0.2.2:5000/client/login';
+    const url = 'http://10.0.2.2:5000/user/login';
     try {
       final response = await http.post(
         Uri.parse(url),

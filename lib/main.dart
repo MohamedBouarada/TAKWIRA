@@ -1,11 +1,18 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:takwira_mobile/providers/field.dart';
+import 'package:takwira_mobile/providers/fields.dart';
 import 'package:takwira_mobile/screens/signup.dart';
 import './providers/auth.dart';
-
+import './providers/fields.dart';
 import './screens//fields_screen.dart';
 import './screens/home_page.dart';
 import './screens//login.dart';
+import 'screens/field_edit_screen.dart';
+
+import 'screens/owner_field_list.dart';
 
 void main() => runApp(const MyApp());
 
@@ -14,11 +21,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(HomePage.isAuth);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
           value: Auth(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Field(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Fields(),
         ),
       ],
       child: Consumer<Auth>(
@@ -27,10 +39,13 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.green,
           ),
-          home: HomePage(),
+          home: IndexPage(),
           routes: {
             LoginPage.routName: (ctx) => LoginPage(),
             SignupPage.routName: (ctx) => SignupPage(),
+
+            IndexPage.routName: (context) => IndexPage(),
+            // '/edit-Field': (context) => const FieldAdd(),
           },
         ),
       ),
