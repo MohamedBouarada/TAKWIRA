@@ -10,12 +10,14 @@ const adminRouter = require("./routes/admin.route");
 const cors = require('cors')
 
 const fieldRouter = require("./routes/field.route");
+const path = require("path");
 
 
 
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use("/static",express.static(path.join(__dirname , "..","uploads")));
 app.use(cors())
 app.use("/user" , userRouter);
 app.use("/admin" , adminRouter);

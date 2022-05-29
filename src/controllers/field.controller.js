@@ -9,7 +9,7 @@ const TennisSurface = require("../enums/FieldSurfacesTypes/TennisSurfaces")
 const convertUtility = require("../utils/jsonString.utility")
 const fs = require("fs");
 const path = require("path");
-const {NOT_FOUND} = require("http-status-codes");
+
 class fieldController {
 
     async add (req,res) {
@@ -89,7 +89,11 @@ class fieldController {
         if(field.success ===false){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error");
         }
-        return res.status(StatusCodes.OK).json(field.data);
+        if(!field.data){
+            return res.status(StatusCodes.NOT_FOUND).json("no field found with tis id")
+        }
+        const photoString = convertUtility.convertStringToJson(field.data.images)
+        return res.status(StatusCodes.OK).json({...field.data , images : photoString});
     }
     async update (req,res) {
         const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , userId}=req.body;
@@ -183,7 +187,7 @@ class fieldController {
     }
     async deleteImage(req,res) {
         const {imageName,fieldId} = req.params ;
-        fs.unlink(path.resolve(path.join(__dirname,"..","..",imageName)),(err)=>{
+        fs.unlink(path.resolve(path.join(__dirname,"..","..","uploads",imageName)),(err)=>{
             if (err){
                 return res.status(StatusCodes.NOT_FOUND).json("file not found")
             }
@@ -205,6 +209,32 @@ class fieldController {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error in deleting image")
 
     }
+
+    async addImage(req,res) {
+        console.log(req)
+        const {fieldId} = req.params ;
+        const field = await fieldDao.findById(fieldId) ;
+        if(field.success===false){
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error")
+        }
+        if(! field.data) {
+            return res.status(StatusCodes.NOT_FOUND).json("no field found")
+        }
+        const data = field.data ;
+        const imageFromDB = convertUtility.convertStringToJson(data.images)
+        const imageList = imageFromDB? imageFromDB : [];
+        if( imageList.length >=5) {
+            return res.status(StatusCodes.BAD_REQUEST).json("max image  number reached")
+        }
+        const newList = imageList.concat([{name: req.file.filename}]);
+        data.images = convertUtility.convertJsonToString(newList);
+        const updateResult = await fieldDao.update(data,fieldId);
+        if(updateResult.success===false){
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error in updating")
+        }
+        return res.status(StatusCodes.OK).json("image added successfully")
+    }
+
 }
 
 
