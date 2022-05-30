@@ -66,7 +66,8 @@ field.init({
     },
     fermeture : {
         type : DataTypes.TIME
-    }
+    },
+
 
 }, {
     sequelize,

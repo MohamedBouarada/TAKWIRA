@@ -13,8 +13,10 @@ class TimeHandling {
         const timeMoment = moment(time)
         const startMoment = moment(startDate)
         const endMoment = moment(endDate)
+        console.log(timeMoment,startMoment,endMoment)
         return timeMoment.isBetween(startMoment,endMoment)
     }
+    checkReservation
 }
 
 module.exports = new TimeHandling()

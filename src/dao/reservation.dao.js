@@ -1,4 +1,5 @@
 const reservationModel = require("../models/reservation.model")
+const {Op} = require("sequelize");
 
 class ReservationDao {
     async add(reservation){
@@ -10,6 +11,22 @@ class ReservationDao {
         }catch (e) {
           console.log(e)
             return {success:false}
+        }
+    }
+    async getWithFieldId(fieldId) {
+        try{
+            const reservationList = await reservationModel.findAll({
+                where : {
+                   fieldId,
+
+
+
+                }
+            })
+            return {success:true,data:reservationList}
+        }catch (e) {
+console.log(e)
+            return {success:false,data:null}
         }
     }
 }
