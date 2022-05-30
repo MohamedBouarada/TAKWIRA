@@ -39,6 +39,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: FieldsProvider(),
         ),
+        ChangeNotifierProvider.value(
+          value: Field(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Fields(),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -49,7 +55,8 @@ class MyApp extends StatelessWidget {
           //home: Details( imgUrl: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', placeName: 'hammamet', rating: 4.5,),
           //home: HelpContainer(),
           //home: ClientFieldScreen(),
-          home: RootApp(),
+          //home: RootApp(),
+          home: IndexPage(),
           routes: {
             LoginPage.routName: (ctx) => LoginPage(),
             SignupPage.routName: (ctx) => SignupPage(),
