@@ -23,8 +23,8 @@ class FieldsProvider with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url = "http://10.0.2.2:5000/field/search/all";
-    //var url = "http://10.0.2.2:5000/field/getByOwner/1";  
+    var url = "http://10.0.2.2:5000/field/search/all?perPage=10";
+    //var url = "http://10.0.2.2:5000/field/getByOwner/1";
     print(url);
     try {
       final response = await http.get(
@@ -32,7 +32,8 @@ class FieldsProvider with ChangeNotifier {
         headers: requestHeaders,
       );
       //print(response.body);
-      final extractedData = json.decode(response.body)['result']['data']['rows'] as List;
+      final extractedData =
+          json.decode(response.body)['result']['data']['rows'] as List;
       //print(extractedData);
       if (extractedData == null) {
         return;
@@ -54,7 +55,8 @@ class FieldsProvider with ChangeNotifier {
           userId: prodData['userId'],
           images: prodData['images'],
         ));
-      };
+      }
+      ;
       _items = loadedProducts;
       //print(_items);
       notifyListeners();
@@ -107,6 +109,7 @@ class FieldsProvider with ChangeNotifier {
       rethrow;
     }
   }
+
 
   Future<List> get() async {
     var url = "http://10.0.2.2:5000/field/getByOwner/1";

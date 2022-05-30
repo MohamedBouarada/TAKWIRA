@@ -392,7 +392,8 @@ class FieldCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var images = json.decode(fieldData.images);
-    // print(images[0]['name'].toString());
+    
+    //print(images[0]['name'].toString());
     // print(fieldData.price.toString());
     return GestureDetector(
       onTap: onTap,
@@ -423,9 +424,7 @@ class FieldCard extends StatelessWidget {
                   topRight: Radius.circular(18),
                 ),
                 image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/tennis2.jpeg',
-                  ),
+                  image: NetworkImage("http://10.0.2.2:5000/static/"+images[0]['name']),
                   fit: BoxFit.cover,
                 ),
               ),
