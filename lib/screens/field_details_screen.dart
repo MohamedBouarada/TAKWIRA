@@ -1,33 +1,29 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, import_of_legacy_library_into_null_safe, unused_import, prefer_const_constructors_in_immutables
-
+// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, import_of_legacy_library_into_null_safe, unused_import, prefer_const_constructors_in_immutables, annotate_overrides, unused_local_variable, avoid_print, no_logic_in_create_state, constant_identifier_names
+import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:takwira_mobile/widgets/helpContainer.dart';
+import '../providers/field/field.dart';
 import '../widgets/booking.dart';
+import '../providers/field/fields.dart';
 
 const d_green = Color(0xFF54D3C2);
 
-class Details extends StatefulWidget {
-  final String? imgUrl;
-  final String? placeName;
-  final double? rating;
-  Details(
-      {required this.rating, required this.imgUrl, required this.placeName});
-
-  @override
-  _DetailsState createState() => _DetailsState();
-}
-
-class _DetailsState extends State<Details> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class Details extends StatelessWidget {
+  static const routeName = '/Field-details';
 
   @override
   Widget build(BuildContext context) {
+    final fieldId = ModalRoute.of(context)!.settings.arguments as int;
+    print(fieldId); // is the id!
+    final loadedField = Provider.of<FieldsProvider>(
+      context,
+      listen: false,
+    ).findById(
+      fieldId,
+    );
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -127,7 +123,9 @@ class _DetailsState extends State<Details> {
                         ),
                       ),
                       child: SingleChildScrollView(
-                        child: InfoCard(),
+                        child: InfoCard(
+                          fieldData: loadedField,
+                        ),
                       ),
                     ),
                   ),
@@ -143,7 +141,11 @@ class _DetailsState extends State<Details> {
 }
 
 class InfoCard extends StatelessWidget {
-  const InfoCard({Key? key}) : super(key: key);
+  final FieldProvider fieldData;
+  const InfoCard({
+    Key? key,
+    required this.fieldData,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +161,7 @@ class InfoCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hammamet",
+                fieldData.name,
                 style: GoogleFonts.nunito(
                   color: Color.fromARGB(255, 64, 165, 152),
                   fontWeight: FontWeight.w800,
@@ -180,7 +182,7 @@ class InfoCard extends StatelessWidget {
                     width: 8,
                   ),
                   Text(
-                    "Koh Chang Tai, Thailand",
+                    fieldData.adresse,
                     style: GoogleFonts.nunito(
                       color: Color.fromARGB(179, 15, 14, 14),
                       fontWeight: FontWeight.w500,
@@ -234,27 +236,34 @@ class InfoCard extends StatelessWidget {
         SizedBox(
           height: 15,
         ),
-        CardBody(),
+        CardBody(
+          fieldBody: fieldData,
+        ),
       ],
     );
   }
 }
 
 class CardBody extends StatefulWidget {
-  const CardBody({Key? key}) : super(key: key);
+  final FieldProvider fieldBody;
+  const CardBody({Key? key, required this.fieldBody}) : super(key: key);
 
   @override
   State<CardBody> createState() => _CardBodyState();
 }
 
 class _CardBodyState extends State<CardBody> {
-  Widget view = InfoField();
+  late Widget view = InfoField(
+    fieldInfo: widget.fieldBody,
+  );
   String button = "infosfield";
-  
+
   void handleShow() {
     if (button == "infosfield") {
       setState(() {
-        view = InfoField();
+        view = InfoField(
+          fieldInfo: widget.fieldBody,
+        );
       });
     } else {
       setState(() {
@@ -282,7 +291,9 @@ class _CardBodyState extends State<CardBody> {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: (button=='infosfield') ?d_green:Colors.grey.shade300,
+                    color: (button == 'infosfield')
+                        ? d_green
+                        : Colors.grey.shade300,
                     width: 2,
                   ),
                 ),
@@ -290,7 +301,9 @@ class _CardBodyState extends State<CardBody> {
               child: TextButton(
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(10.0),
-                  primary: (button=='infosfield') ?Colors.black:Color.fromARGB(179, 15, 14, 14),
+                  primary: (button == 'infosfield')
+                      ? Colors.black
+                      : Color.fromARGB(179, 15, 14, 14),
                   textStyle: const TextStyle(
                     fontSize: 17,
                   ),
@@ -312,7 +325,7 @@ class _CardBodyState extends State<CardBody> {
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: (button=='') ?d_green:Colors.grey.shade300,
+                    color: (button == '') ? d_green : Colors.grey.shade300,
                     width: 2,
                   ),
                 ),
@@ -320,7 +333,9 @@ class _CardBodyState extends State<CardBody> {
               child: TextButton(
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(10.0),
-                  primary: (button=='') ?Colors.black:Color.fromARGB(179, 15, 14, 14),
+                  primary: (button == '')
+                      ? Colors.black
+                      : Color.fromARGB(179, 15, 14, 14),
                   textStyle: const TextStyle(
                     fontSize: 17,
                   ),
@@ -352,7 +367,8 @@ class _CardBodyState extends State<CardBody> {
 }
 
 class InfoField extends StatelessWidget {
-  const InfoField({Key? key}) : super(key: key);
+  final FieldProvider fieldInfo;
+  const InfoField({Key? key, required this.fieldInfo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -412,7 +428,8 @@ class InfoField extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 24),
           child: Text(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut scelerisque arcu quis eros auctor, eu dapibus urna congue. Nunc nisi diam, semper maximus risus dignissim, semper maximus nibh. Sed finibus ipsum eu erat finibus efficitur. ",
+            "taieb mhiri terrain mezyen yeser , s7i7 9dim chwaya ama jawou behi , yhez 12000 ,allah ghaleb heka 7adou, bo93tou mezyena yeser w 9rib lkol chay .thama parking w wifi w cafe w bar ba3d takwira -> jaw lkol mawjoud w disponible a tous moments ",
+            //fieldInfo.description,
             textAlign: TextAlign.start,
             style: TextStyle(
                 fontSize: 15,
@@ -429,7 +446,6 @@ class InfoField extends StatelessWidget {
     );
   }
 }
-
 
 // class DetailsCard extends StatelessWidget {
 //   final String? title;

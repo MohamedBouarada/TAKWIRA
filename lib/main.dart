@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,9 @@ import 'package:takwira_mobile/screens/signup.dart';
 import 'package:takwira_mobile/widgets/booking.dart';
 import 'package:takwira_mobile/widgets/helpContainer.dart';
 import './providers/auth.dart';
-import './providers/fields.dart';
+//import './providers/fields.dart';
+import './providers/field/fields.dart';
+import './providers/field/field.dart';
 import './screens//fields_screen.dart';
 import './screens/home_page.dart';
 import './screens//login.dart';
@@ -35,10 +37,7 @@ class MyApp extends StatelessWidget {
           value: Auth(),
         ),
         ChangeNotifierProvider.value(
-          value: Field(),
-        ),
-        ChangeNotifierProvider.value(
-          value: Fields(),
+          value: FieldsProvider(),
         ),
       ],
       child: Consumer<Auth>(
@@ -54,6 +53,8 @@ class MyApp extends StatelessWidget {
           routes: {
             LoginPage.routName: (ctx) => LoginPage(),
             SignupPage.routName: (ctx) => SignupPage(),
+            ClientFieldScreen.routeName: (context)=>ClientFieldScreen(),
+            Details.routeName:(context)=>Details(),
             EditFieldList.routeName: (context) => EditFieldList(),
             FieldsList.routeName:(ctx)=>FieldsList(),
             IndexPage.routName: (context) => IndexPage(),

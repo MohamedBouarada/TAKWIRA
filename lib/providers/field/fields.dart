@@ -1,25 +1,69 @@
-// ignore_for_file: avoid_print, prefer_final_fields
+// ignore_for_file: avoid_print, prefer_final_fields, use_rethrow_when_possible, unnecessary_null_comparison
 
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/field_model.dart';
-import "../models/http_exception.dart";
+import './field.dart';
+import "../../models/http_exception.dart";
 
-class Field with ChangeNotifier {
-  static List<FieldModel> _items = [];
+class FieldsProvider with ChangeNotifier {
+  static List<FieldProvider> _items = [];
 
-  List<FieldModel> get items {
+  List<FieldProvider> get items {
     return [..._items];
   }
-  
-  FieldModel findById(int id) {
+
+  FieldProvider findById(int id) {
     return _items.firstWhere((field) => field.id == id);
   }
 
-  Future<List<FieldModel>> getFields() async {
+  Future<void> fetchAndSetFields() async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    var url = "http://10.0.2.2:5000/field/search/all";
+    //var url = "http://10.0.2.2:5000/field/getByOwner/1";  
+    print(url);
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: requestHeaders,
+      );
+      //print(response.body);
+      final extractedData = json.decode(response.body)['result']['data']['rows'] as List;
+      //print(extractedData);
+      if (extractedData == null) {
+        return;
+      }
+      final List<FieldProvider> loadedProducts = [];
+      for (var prodData in extractedData) {
+        loadedProducts.add(FieldProvider(
+          id: prodData['id'],
+          name: prodData['name'],
+          adresse: prodData['adresse'],
+          type: prodData['type'],
+          isNotAvailable: prodData['isNotAvailable'],
+          services: prodData['services'],
+          price: double.parse(prodData['prix'].toString()),
+          period: prodData['period'],
+          surface: prodData['surface'],
+          description: prodData['description'],
+          localisation: prodData['localisation'],
+          userId: prodData['userId'],
+          images: prodData['images'],
+        ));
+      };
+      _items = loadedProducts;
+      //print(_items);
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<List<FieldProvider>> getFields() async {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
@@ -36,10 +80,10 @@ class Field with ChangeNotifier {
         return [];
       }
 
-      final List<FieldModel> loadedProducts = [];
+      final List<FieldProvider> loadedProducts = [];
 
       for (var i = 0; i < extractedData.length; i++) {
-        loadedProducts.add(FieldModel(
+        loadedProducts.add(FieldProvider(
           id: extractedData[i]['id'],
           name: extractedData[i]['name'],
           adresse: extractedData[i]['adresse'],
@@ -47,20 +91,23 @@ class Field with ChangeNotifier {
           services: extractedData[i]['services'],
           price: extractedData[i]['price'],
           description: extractedData[i]['description'],
-          idProprietaire: extractedData[i]['idProprietaire'],
+          userId: extractedData[i]['userId'],
           isNotAvailable: extractedData[i]['isNotAvailable'],
           surface: extractedData[i]['surface'],
           period: extractedData[i]['period'],
+          localisation: extractedData[i]['localisation'],
+          images: extractedData[i]['images'],
         ));
       }
       _items = loadedProducts;
+      notifyListeners();
       print(_items);
       return loadedProducts;
     } catch (error) {
       rethrow;
     }
   }
-  
+
   Future<List> get() async {
     var url = "http://10.0.2.2:5000/field/getByOwner/1";
     var response = await http.get(
@@ -160,7 +207,7 @@ class Field with ChangeNotifier {
             'period': period,
             'surface': surface,
             'description': description,
-            'userId': idProprietaire,
+            'idProprietaire': 1,
           },
         ),
       );
@@ -195,7 +242,6 @@ class Field with ChangeNotifier {
     }
   }
 
-  
   final _fieldType = [
     {'display': "Tennis", 'value': "TENNIS"},
     {'display': "Football", 'value': 'FOOTBALL'},

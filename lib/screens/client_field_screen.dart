@@ -1,14 +1,19 @@
-// ignore_for_file: prefer_const_constructors, annotate_overrides, unnecessary_new, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, constant_identifier_names, avoid_unnecessary_containers
-
+// ignore_for_file: prefer_const_constructors, annotate_overrides, unnecessary_new, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, constant_identifier_names, avoid_unnecessary_containers, unused_local_variable
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../providers/field/field.dart';
 import '../widgets/calendar.dart';
+import '../themes/color.dart';
+import 'field_details_screen.dart';
+import '../providers/field/fields.dart';
 
 const d_green = Color(0xFF54D3C2);
 
 class ClientFieldScreen extends StatelessWidget {
   const ClientFieldScreen({Key? key}) : super(key: key);
-
+  static const routeName = '/client-fieldsList';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +79,7 @@ class SearchSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[200],
+      color: appBgColor,
       padding: EdgeInsets.fromLTRB(10, 25, 10, 10),
       child: Column(
         children: [
@@ -111,7 +116,7 @@ class SearchSection extends StatelessWidget {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey,
+                      color: Colors.grey.shade400,
                       blurRadius: 4,
                       offset: Offset(0, 4),
                     )
@@ -139,7 +144,7 @@ class SearchSection extends StatelessWidget {
                     primary: d_green,
                   ),
                 ),
-              )
+              ),
             ],
           ),
           Row(
@@ -154,7 +159,7 @@ class SearchSection extends StatelessWidget {
                       'choose date',
                       style: GoogleFonts.nunito(
                         color: Colors.grey,
-                        fontSize: 15,
+                        fontSize: 16,
                       ),
                     ),
                     SizedBox(
@@ -170,6 +175,50 @@ class SearchSection extends StatelessWidget {
                   ],
                 ),
               ),
+              Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade300,
+                      blurRadius: 4,
+                      offset: Offset(0, 4),
+                    )
+                  ],
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(25),
+                  ),
+                ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CalendarPage();
+                      },
+                    );
+                  },
+                  child: Icon(
+                    Icons.calendar_month,
+                    size: 26,
+                    color: d_green,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(10),
+                    primary: white,
+                  ),
+                ),
+              ),
+              //       IconButton(
+              //   icon: Icon(
+              //     Icons.calendar_month,
+              //     color: d_green,
+              //     size: 30,
+              //   ),
+              //   onPressed: null,
+              // ),
             ],
           ),
         ],
@@ -178,7 +227,41 @@ class SearchSection extends StatelessWidget {
   }
 }
 
-class FieldsSection extends StatelessWidget {
+class FieldsSection extends StatefulWidget {
+  @override
+  State<FieldsSection> createState() => _FieldsSectionState();
+}
+
+class _FieldsSectionState extends State<FieldsSection> {
+  var _showOnlyFavorites = false;
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void initState() {
+    // Provider.of<Products>(context).fetchAndSetProducts(); // WON'T WORK!
+    // Future.delayed(Duration.zero).then((_) {
+    //   Provider.of<Products>(context).fetchAndSetProducts();
+    // });
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<FieldsProvider>(context).fetchAndSetFields().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   final List fieldsList = [
     {
       'title': 'juve',
@@ -187,6 +270,7 @@ class FieldsSection extends StatelessWidget {
       'review': 36,
       'picture': 'assets/images/tennis1.jpg',
       'price': '180',
+      "is_favorited": true,
     },
     {
       'title': 'aliance',
@@ -195,6 +279,7 @@ class FieldsSection extends StatelessWidget {
       'review': 12,
       'picture': 'assets/images/tennis3.jpg',
       'price': '100',
+      "is_favorited": false,
     },
     {
       'title': 'taktik',
@@ -203,6 +288,7 @@ class FieldsSection extends StatelessWidget {
       'review': 6,
       'picture': 'assets/images/tennis.jpg',
       'price': '80',
+      "is_favorited": false,
     },
     {
       'title': 'ka7la',
@@ -211,11 +297,14 @@ class FieldsSection extends StatelessWidget {
       'review': 16,
       'picture': 'assets/images/tennis2.jpeg',
       'price': '90',
+      "is_favorited": false,
     }
   ];
 
   @override
   Widget build(BuildContext context) {
+    final productsData = Provider.of<FieldsProvider>(context);
+    final products = productsData.items;
     return Container(
       padding: EdgeInsets.all(10),
       color: Colors.white,
@@ -227,7 +316,7 @@ class FieldsSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '4 fields founds',
+                  '4 fields found',
                   style: GoogleFonts.nunito(
                     color: Colors.black,
                     fontSize: 15,
@@ -256,9 +345,32 @@ class FieldsSection extends StatelessWidget {
             ),
           ),
           Column(
-            children: fieldsList.map((field) {
+            children: products.map((field) {
               return FieldCard(
                 fieldData: field,
+                onTap: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => Details(
+                  //       imgUrl:
+                  //           'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+                  //       placeName: 'hammamet',
+                  //       rating: 4.5,
+                  //     ),
+                  //   ),
+                  // );
+                  Navigator.of(context).pushNamed(
+                    Details.routeName,
+                    arguments: field.id,
+                  );
+                },
+                onTapFavorite: () {
+                  setState(() {
+                    field.isFavorite = !field.isFavorite;
+                    //field["is_favorited"] = !field["is_favorited"];
+                  });
+                },
               );
             }).toList(),
           )
@@ -269,174 +381,189 @@ class FieldsSection extends StatelessWidget {
 }
 
 class FieldCard extends StatelessWidget {
-  final Map fieldData;
-  const FieldCard({Key? key, required this.fieldData}) : super(key: key);
+  final FieldProvider fieldData;
+  //final Map fieldData;
+  final GestureTapCallback? onTapFavorite;
+  final GestureTapCallback? onTap;
+  const FieldCard(
+      {Key? key, required this.fieldData, this.onTapFavorite, this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10),
-      height: 230,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(18),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade200,
-              spreadRadius: 4,
-              blurRadius: 6,
-              offset: Offset(0, 3),
+    var images = json.decode(fieldData.images);
+    // print(images[0]['name'].toString());
+    // print(fieldData.price.toString());
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.all(10),
+        height: 230,
+        width: double.infinity,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(18),
             ),
-          ]),
-      child: Column(
-        children: [
-          Container(
-            height: 140,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(18),
-                topRight: Radius.circular(18),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade200,
+                spreadRadius: 4,
+                blurRadius: 6,
+                offset: Offset(0, 3),
               ),
-              image: DecorationImage(
-                image: AssetImage(
-                  fieldData['picture'],
+            ]),
+        child: Column(
+          children: [
+            Container(
+              height: 140,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(18),
+                  topRight: Radius.circular(18),
                 ),
-                fit: BoxFit.cover,
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/images/tennis2.jpeg',
+                  ),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 5,
-                  right: -15,
-                  child: MaterialButton(
-                    color: Colors.white,
-                    shape: CircleBorder(),
-                    onPressed: () {},
-                    child: Icon(
-                      Icons.favorite_outline_rounded,
-                      color: d_green,
-                      size: 20,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  fieldData['title'],
-                  style: GoogleFonts.nunito(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                Text(
-                  fieldData['price'] + 'DT',
-                  style: GoogleFonts.nunito(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  fieldData['place'],
-                  style: GoogleFonts.nunito(
-                    fontSize: 14,
-                    color: Colors.grey[500],
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.place,
-                      color: d_green,
-                      size: 14.0,
-                    ),
-                    Text(
-                      fieldData['distance'].toString() + ' km ',
-                      style: GoogleFonts.nunito(
-                        fontSize: 14,
-                        color: Colors.grey[500],
-                        fontWeight: FontWeight.w400,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 5,
+                    right: -15,
+                    child: MaterialButton(
+                      color: Colors.white,
+                      shape: CircleBorder(),
+                      onPressed: onTapFavorite,
+                      child: Icon(
+                        fieldData.isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_outline_rounded,
+                        color: fieldData.isFavorite ? actionColor : d_green,
+                        size: 20,
                       ),
                     ),
-                  ],
-                ),
-                Text(
-                  'per 1 hour',
-                  style: GoogleFonts.nunito(
-                    fontSize: 14,
-                    color: Colors.grey.shade800,
-                    fontWeight: FontWeight.w400,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.fromLTRB(10, 3, 10, 0),
-            child: Row(
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.star_rate,
-                      color: d_green,
-                      size: 14,
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    fieldData.name,
+                    style: GoogleFonts.nunito(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
                     ),
-                    Icon(
-                      Icons.star_rate,
-                      color: d_green,
-                      size: 14,
-                    ),
-                    Icon(
-                      Icons.star_rate,
-                      color: d_green,
-                      size: 14,
-                    ),
-                    Icon(
-                      Icons.star_rate,
-                      color: d_green,
-                      size: 14,
-                    ),
-                    Icon(
-                      Icons.star_border,
-                      color: d_green,
-                      size: 14.0,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Text(
-                  fieldData['review'].toString() + ' reviews',
-                  style: GoogleFonts.nunito(
-                    fontSize: 14,
-                    color: Colors.grey[500],
-                    fontWeight: FontWeight.w400,
                   ),
-                ),
-              ],
+                  Text(
+                    fieldData.price.toString() + 'DT',
+                    style: GoogleFonts.nunito(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    fieldData.adresse,
+                    style: GoogleFonts.nunito(
+                      fontSize: 14,
+                      color: Colors.grey[500],
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.place,
+                        color: d_green,
+                        size: 14.0,
+                      ),
+                      Text(
+                        //distance
+                        fieldData.price.toString() + ' km ',
+                        style: GoogleFonts.nunito(
+                          fontSize: 14,
+                          color: Colors.grey[500],
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    'per 1 hour',
+                    style: GoogleFonts.nunito(
+                      fontSize: 14,
+                      color: Colors.grey.shade800,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(10, 3, 10, 0),
+              child: Row(
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star_rate,
+                        color: d_green,
+                        size: 14,
+                      ),
+                      Icon(
+                        Icons.star_rate,
+                        color: d_green,
+                        size: 14,
+                      ),
+                      Icon(
+                        Icons.star_rate,
+                        color: d_green,
+                        size: 14,
+                      ),
+                      Icon(
+                        Icons.star_rate,
+                        color: d_green,
+                        size: 14,
+                      ),
+                      Icon(
+                        Icons.star_border,
+                        color: d_green,
+                        size: 14.0,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    //reviews
+                    fieldData.price.toString() + ' reviews',
+                    style: GoogleFonts.nunito(
+                      fontSize: 14,
+                      color: Colors.grey[500],
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
