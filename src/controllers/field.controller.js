@@ -14,7 +14,7 @@ class fieldController {
 
     async add (req,res) {
 
-        const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , userId,localisation}=req.body;
+        const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , userId,localisation,ouverture,fermeture}=req.body;
          let photos = ""
         if(req.files) {
             const files = req.files ;
@@ -63,7 +63,9 @@ class fieldController {
             description,
             userId,
             images:photos,
-            localisation
+            localisation,
+            ouverture,
+            fermeture
         }
         const saving = await  fieldDao.add(fieldToSave);
         if(saving.success===false){
@@ -97,7 +99,7 @@ class fieldController {
         return res.status(StatusCodes.OK).json({...field.data , images : photoString});
     }
     async update (req,res) {
-        const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , userId}=req.body;
+        const {name ,ouverture,fermeture, adresse , type , isNotAvailable,services , prix ,period,surface, description , userId}=req.body;
         const id = req.params.id;
 
         if(type!==FieldType.Tennis && type!==FieldType.Football && type!==FieldType.Basketball && type!==FieldType.Golf) {
@@ -140,6 +142,8 @@ class fieldController {
             surface,
             description,
             userId,
+            ouverture,
+            fermeture
         }
         const saving = await  fieldDao.update(fieldToUpdate,id);
         if(saving.success===false){

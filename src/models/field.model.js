@@ -60,6 +60,12 @@ field.init({
     localisation : {
         type : DataTypes.STRING,
         allowNull : false
+    } ,
+    ouverture : {
+        type : DataTypes.TIME
+    },
+    fermeture : {
+        type : DataTypes.TIME
     }
 
 }, {

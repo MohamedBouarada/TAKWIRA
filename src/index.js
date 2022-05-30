@@ -6,6 +6,7 @@ const sequelize = require("./database/connection");
 const {server} = development ;
 const userRouter = require("./routes/user.route");
 const adminRouter = require("./routes/admin.route");
+const reservationRouter = require("./routes/reservation.route")
 
 const cors = require('cors')
 
@@ -22,6 +23,7 @@ app.use(cors())
 app.use("/user" , userRouter);
 app.use("/admin" , adminRouter);
 app.use("/field", fieldRouter);
+app.use("/reservation" , reservationRouter)
 
 
 
