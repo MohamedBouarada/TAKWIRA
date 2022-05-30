@@ -123,7 +123,6 @@ class _IndexPageState extends State<IndexPage> {
     var unavailability = json.decode(item['isNotAvailable']);
     return GestureDetector(
       onTap: () {
-
         //Add a detail screen
 
         // Navigator.push(
@@ -149,12 +148,18 @@ class _IndexPageState extends State<IndexPage> {
       },
       child: Container(
         margin: EdgeInsets.all(10),
-        height: MediaQuery.of(context).size.height/5,
+        height: MediaQuery.of(context).size.height / 5,
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Color.fromARGB(48, 90, 193, 141), borderRadius: BorderRadius.circular(20),
-            boxShadow: const [BoxShadow(offset: Offset(1.0,1.0), color: Color.fromARGB(45, 90, 193, 141), )],
-            ),
+          color: Color.fromARGB(48, 90, 193, 141),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(
+              offset: Offset(1.0, 1.0),
+              color: Color.fromARGB(45, 90, 193, 141),
+            )
+          ],
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -162,16 +167,16 @@ class _IndexPageState extends State<IndexPage> {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                   bottomLeft: Radius.circular(20)),
-              child:  Container(
-                      width: MediaQuery.of(context).size.width/2.5,
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/tennis.jpg'),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ), 
+              child: Container(
+                width: MediaQuery.of(context).size.width / 2.5,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/tennis.jpg'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
             ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16),
@@ -200,83 +205,70 @@ class _IndexPageState extends State<IndexPage> {
                     height: 20,
                   ),
                   Text(
-                    "${item['prix']}DT" ,
+                    "${item['prix']}DT",
                     style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,),
-                  ),
-                     const SizedBox(
-                     height: 10,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
                   ),
                   
-                  
+                  Spacer(),
+  
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      
+                      GestureDetector(
+                        child: const Icon(Icons.edit),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FieldEdit(
+                                        id: item['id'],
+                                        name: item['name'],
+                                        type: item['type'],
+                                        address: item['adresse'],
+                                        prix: item['prix'].toString(),
+                                        unavailabilityStartDate:
+                                            unavailability['startDate']
+                                                .toString(),
+                                        unavailabilityFinishDate:
+                                            unavailability['finishDate']
+                                                .toString(),
+                                        description: item['description'],
+                                        services: item['services'],
+                                        period: item['period'],
+                                        surface: item['surface'],
+                                        opening: item['ouverture'],
+                                        closing: item['fermeture'],
+                                        location: item['localisation'],
+                                      )));
+                        },
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                        onTap: () async {
+                          await DeleteUser(item['id']);
+                          // onDelete!(model);
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-            Spacer(),
-             Align(
-               alignment: Alignment.bottomRight,
-               child: Container(
-                       margin: EdgeInsets.only(bottom: 8, right: 8),
-                        
-                       child: Row(
-                         mainAxisAlignment: MainAxisAlignment.end,
-                         children: [
-                           GestureDetector(
-                             child: const Icon(Icons.edit),
-                             onTap: () {
-                               Navigator.push(
-                                   context,
-                                   MaterialPageRoute(
-                                       builder: (context) => FieldEdit(
-                                             id: item['id'],
-                                             name: item['name'],
-                                             type: item['type'],
-                                             address: item['adresse'],
-                                             prix: item['prix'].toString(),
-                                             unavailabilityStartDate:
-                                                 unavailability['startDate']
-                                                     .toString(),
-                                             unavailabilityFinishDate:
-                                                 unavailability['finishDate']
-                                                     .toString(),
-                                             description: item['description'],
-                                             services: item['services'],
-                                             period: item['period'],
-                                             surface: item['surface'],
-                                           )));
-                             },
-                           ),
-                           SizedBox(width: 10,),
-                           GestureDetector(
-                             child: const Icon(
-                               Icons.delete,
-                               color: Colors.red,
-                             ),
-                             onTap: () async {
-                               await DeleteUser(item['id']);
-                               // onDelete!(model);
-                             },
-                           ),
-                         ],
-                       ),
-                     ),
-             )
-            
           ],
         ),
       ),
     );
-
-
-
-
-
-
-
-
-
 
     // return Card(
     //   elevation: 0,

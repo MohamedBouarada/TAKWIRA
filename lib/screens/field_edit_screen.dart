@@ -20,6 +20,10 @@ class FieldEdit extends StatefulWidget {
   final String surface;
   final String period;
   final String description;
+  final String opening;
+  final String closing;
+  final String location;
+
   const FieldEdit({
     Key? key,
     required this.id,
@@ -33,6 +37,9 @@ class FieldEdit extends StatefulWidget {
     required this.services,
     required this.period,
     required this.surface,
+    required this.opening,
+    required this.closing,
+    required this.location,
   }) : super(key: key);
   @override
   _FieldEditState createState() => _FieldEditState();
@@ -58,6 +65,9 @@ class _FieldEditState extends State<FieldEdit> {
       services: widget.services,
       period: widget.period,
       surface: widget.surface,
+      opening: widget.opening,
+      closing: widget.closing,
+      location: widget.location,
     );
   }
 }
@@ -74,20 +84,26 @@ class EditCard extends StatefulWidget {
   final String period;
   final String surface;
   final String description;
-  const EditCard(
-      {Key? key,
-      required this.id,
-      required this.name,
-      required this.type,
-      required this.address,
-      required this.prix,
-      required this.unavailabilityStartDate,
-      required this.unavailabilityFinishDate,
-      required this.description,
-      required this.services,
-      required this.period,
-      required this.surface})
-      : super(key: key);
+  final String opening;
+  final String closing;
+  final String location;
+  const EditCard({
+    Key? key,
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.address,
+    required this.prix,
+    required this.unavailabilityStartDate,
+    required this.unavailabilityFinishDate,
+    required this.description,
+    required this.services,
+    required this.period,
+    required this.surface,
+    required this.opening,
+    required this.closing,
+    required this.location,
+  }) : super(key: key);
 
   @override
   _EditCardState createState() => _EditCardState();
@@ -108,6 +124,10 @@ class _EditCardState extends State<EditCard> {
   late TextEditingController _descriptionController;
   late TextEditingController _servicesController;
   late TextEditingController _surfaceController;
+  late TextEditingController _openingController;
+  late TextEditingController _closingController;
+  late TextEditingController _locationController;
+
   final GlobalKey<FormState> _formKey = GlobalKey();
   Future<void> getFieldInformation() async {
     _nameController = TextEditingController(text: widget.name);
@@ -122,6 +142,9 @@ class _EditCardState extends State<EditCard> {
     _descriptionController = TextEditingController(text: widget.description);
     _servicesController = TextEditingController(text: widget.services);
     _surfaceController = TextEditingController(text: widget.surface);
+    _openingController = TextEditingController(text: widget.opening);
+    _closingController = TextEditingController(text: widget.closing);
+    _locationController = TextEditingController(text: widget.location);
   }
 
   void handleShowSurfaces() {
@@ -162,6 +185,9 @@ class _EditCardState extends State<EditCard> {
     _servicesController.clear();
     _surfaceController.clear();
     _periodController.clear();
+    _openingController.clear();
+    _closingController.clear();
+    _locationController.clear();
 
     _periodController.dispose();
     _nameController.dispose();
@@ -173,6 +199,9 @@ class _EditCardState extends State<EditCard> {
     _descriptionController.dispose();
     _servicesController.dispose();
     _surfaceController.dispose();
+    _openingController.dispose();
+    _closingController.dispose();
+    _locationController.dispose();
     super.dispose();
   }
 
@@ -213,8 +242,11 @@ class _EditCardState extends State<EditCard> {
         services: _servicesController.text.toString(),
         price: double.parse(_prixController.text.toString()),
         period: _periodController.text.toString(),
+        opening: _openingController.text.toString(),
+        closing: _closingController.text.toString(),
         surface: _surfaceController.text.toString(),
         description: _descriptionController.text.toString(),
+        location: _locationController.text.toString(),
         idProprietaire: 1,
       );
 
@@ -316,84 +348,6 @@ class _EditCardState extends State<EditCard> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        TextFormField(
-                          controller: _unavailabilityStartDateController,
-                          readOnly: true,
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 9, 77, 9),
-                            fontSize: 16,
-                          ),
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.calendar_today,
-                              color: Colors.white,
-                            ),
-                            fillColor: Colors.white,
-                            filled: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 0, horizontal: 10),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.grey[400]!),
-                                borderRadius: BorderRadius.circular(10)),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey[400]!),
-                            ),
-                          ),
-                          // validator: (value) {
-                          //   if (value!.isEmpty) {
-                          //     return 'Invalid isNotAvailable';
-                          //   }
-                          // },
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(
-                                    2000), //DateTime.now() - not to allow to choose before today.
-                                lastDate: DateTime(2101));
-
-                            if (pickedDate != null) {
-                              print(pickedDate
-                                  .year); //pickedDate output format => 2021-03-10 00:00:00.000
-                              String formattedDate =
-                                  DateFormat('yyyy-MM-dd').format(pickedDate);
-                              print(
-                                  formattedDate); //formatted date output using intl package =>  2021-03-16
-                              //you can implement different kind of Date Format here according to your requirement
-                              TimeOfDay? pickedTime = await showTimePicker(
-                                initialTime: TimeOfDay.now(),
-                                context: context,
-                              );
-
-                              if (pickedTime != null) {
-                                print(pickedTime
-                                    .format(context)); //output 10:51 PM
-                                DateTime parsedTime = DateFormat.jm().parse(
-                                    pickedTime.format(context).toString());
-                                //converting to DateTime so that we can further format on different pattern.
-                                print(
-                                    parsedTime); //output 1970-01-01 22:53:00.000
-                                String formattedTime =
-                                    DateFormat('HH:mm:ss').format(parsedTime);
-                                print(formattedTime);
-                              }
-                              final toUTC = DateTime(
-                                  pickedDate.year,
-                                  pickedDate.month,
-                                  pickedDate.day,
-                                  pickedTime!.hour,
-                                  pickedTime.minute);
-                              print(toUTC);
-                              setState(() {
-                                _unavailabilityStartDateController.text = toUTC
-                                    .toString(); //set output date to TextField value.
-                              });
-                            } else {
-                              print("Date is not selected");
-                            }
-                          },
-                        ),
                         Text('Name',
                             style: TextStyle(
                                 color: Colors.black87,
@@ -466,6 +420,42 @@ class _EditCardState extends State<EditCard> {
                         ),
                         TextFormField(
                           controller: _addressController,
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 9, 77, 9),
+                              fontSize: 16),
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            filled: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 10),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey[400]!),
+                                borderRadius: BorderRadius.circular(10)),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[400]!),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please provide a value.';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                         Text('Location',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16)),
+                        SizedBox(
+                          height: 3,
+                        ),
+                        TextFormField(
+                          controller: _locationController,
                           style: const TextStyle(
                               color: Color.fromARGB(255, 9, 77, 9),
                               fontSize: 16),
@@ -618,6 +608,130 @@ class _EditCardState extends State<EditCard> {
 
                               setState(() {
                                 _periodController.text =
+                                    formattedTime; //set the value of text field.
+                              });
+                            } else {
+                              print("Time is not selected");
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text('Opening',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16)),
+                        SizedBox(
+                          height: 3,
+                        ),
+                        TextFormField(
+                          controller: _openingController,
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 9, 77, 9),
+                              fontSize: 16),
+                          decoration: InputDecoration(
+                            icon: Icon(
+                              Icons.timer,
+                              color: Colors.white,
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 10),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey[400]!),
+                                borderRadius: BorderRadius.circular(10)),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[400]!),
+                            ),
+                          ),
+                          readOnly: true,
+                          onTap: () async {
+                            TimeOfDay? pickedTime = await showTimePicker(
+                              initialTime: TimeOfDay.now(),
+                              context: context,
+                            );
+
+                            if (pickedTime != null) {
+                              print(
+                                  pickedTime.format(context)); //output 10:51 PM
+                              DateTime parsedTime = DateFormat.jm()
+                                  .parse(pickedTime.format(context).toString());
+                              //converting to DateTime so that we can further format on different pattern.
+                              print(
+                                  parsedTime); //output 1970-01-01 22:53:00.000
+                              String formattedTime =
+                                  DateFormat('HH:mm:ss').format(parsedTime);
+                              print(formattedTime); //output 14:59:00
+                              //DateFormat() is from intl package, you can format the time on any pattern you need.
+
+                              setState(() {
+                                _openingController.text =
+                                    formattedTime; //set the value of text field.
+                              });
+                            } else {
+                              print("Time is not selected");
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text('Closing',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16)),
+                        SizedBox(
+                          height: 3,
+                        ),
+                        TextFormField(
+                          controller: _closingController,
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 9, 77, 9),
+                              fontSize: 16),
+                          decoration: InputDecoration(
+                            icon: Icon(
+                              Icons.timer,
+                              color: Colors.white,
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 10),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.grey[400]!),
+                                borderRadius: BorderRadius.circular(10)),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[400]!),
+                            ),
+                          ),
+                          readOnly: true,
+                          onTap: () async {
+                            TimeOfDay? pickedTime = await showTimePicker(
+                              initialTime: TimeOfDay.now(),
+                              context: context,
+                            );
+
+                            if (pickedTime != null) {
+                              print(
+                                  pickedTime.format(context)); //output 10:51 PM
+                              DateTime parsedTime = DateFormat.jm()
+                                  .parse(pickedTime.format(context).toString());
+                              //converting to DateTime so that we can further format on different pattern.
+                              print(
+                                  parsedTime); //output 1970-01-01 22:53:00.000
+                              String formattedTime =
+                                  DateFormat('HH:mm:ss').format(parsedTime);
+                              print(formattedTime); //output 14:59:00
+                              //DateFormat() is from intl package, you can format the time on any pattern you need.
+
+                              setState(() {
+                                _closingController.text =
                                     formattedTime; //set the value of text field.
                               });
                             } else {
@@ -987,7 +1101,6 @@ class _EditCardState extends State<EditCard> {
                               } else {
                                 print("Date is not selected");
                               }
-                              
                             },
                           ),
                         ),
