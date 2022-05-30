@@ -641,31 +641,80 @@ class _FieldCardState extends State<FieldCard> {
                   //     return 'Invalid isNotAvailable';
                   //   }
                   // },
+                  // onTap: () async {
+                  //   DateTime? pickedDate = await showDatePicker(
+                  //       context: context,
+                  //       initialDate: DateTime.now(),
+                  //       firstDate: DateTime(
+                  //           2000), //DateTime.now() - not to allow to choose before today.
+                  //       lastDate: DateTime(2101));
+
+                  //   if (pickedDate != null) {
+                  //     print(
+                  //         pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                  //     String formattedDate =
+                  //         DateFormat('yyyy-MM-dd').format(pickedDate);
+                  //     print(
+                  //         formattedDate); //formatted date output using intl package =>  2021-03-16
+                  //     //you can implement different kind of Date Format here according to your requirement
+
+                  //     setState(() {
+                  //       dateinputStart.text =
+                  //           formattedDate; //set output date to TextField value.
+                  //     });
+                  //   } else {
+                  //     print("Date is not selected");
+                  //   }
+                  // },
                   onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(
-                            2000), //DateTime.now() - not to allow to choose before today.
-                        lastDate: DateTime(2101));
+                              DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(
+                                      2000), //DateTime.now() - not to allow to choose before today.
+                                  lastDate: DateTime(2101));
 
-                    if (pickedDate != null) {
-                      print(
-                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                      String formattedDate =
-                          DateFormat('yyyy-MM-dd').format(pickedDate);
-                      print(
-                          formattedDate); //formatted date output using intl package =>  2021-03-16
-                      //you can implement different kind of Date Format here according to your requirement
+                              if (pickedDate != null) {
+                                print(pickedDate
+                                    .year); //pickedDate output format => 2021-03-10 00:00:00.000
+                                String formattedDate =
+                                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                                print(
+                                    formattedDate); //formatted date output using intl package =>  2021-03-16
+                                //you can implement different kind of Date Format here according to your requirement
+                                TimeOfDay? pickedTime = await showTimePicker(
+                                  initialTime: TimeOfDay.now(),
+                                  context: context,
+                                );
 
-                      setState(() {
-                        dateinputStart.text =
-                            formattedDate; //set output date to TextField value.
-                      });
-                    } else {
-                      print("Date is not selected");
-                    }
-                  },
+                                if (pickedTime != null) {
+                                  print(pickedTime
+                                      .format(context)); //output 10:51 PM
+                                  DateTime parsedTime = DateFormat.jm().parse(
+                                      pickedTime.format(context).toString());
+                                  //converting to DateTime so that we can further format on different pattern.
+                                  print(
+                                      parsedTime); //output 1970-01-01 22:53:00.000
+                                  String formattedTime =
+                                      DateFormat('HH:mm:ss').format(parsedTime);
+                                  print(formattedTime);
+                                }
+                                final toUTC = DateTime(
+                                    pickedDate.year,
+                                    pickedDate.month,
+                                    pickedDate.day,
+                                    pickedTime!.hour,
+                                    pickedTime.minute);
+                                print(toUTC);
+                                setState(() {
+                                  dateinputStart.text = toUTC
+                                      .toString(); //set output date to TextField value.
+                                });
+                              } else {
+                                print("Date is not selected");
+                              }
+                              
+                            },
                   onSaved: (newValue) {
                     print(newValue.toString());
                     _dates['startDate'] = newValue.toString();
@@ -710,31 +759,80 @@ class _FieldCardState extends State<FieldCard> {
                   //     return 'Invalid isNotAvailable';
                   //   }
                   // },
+                  // onTap: () async {
+                  //   DateTime? pickedDate = await showDatePicker(
+                  //       context: context,
+                  //       initialDate: DateTime.now(),
+                  //       firstDate: DateTime
+                  //           .now(), //DateTime.now() - not to allow to choose before today.
+                  //       lastDate: DateTime(2101));
+
+                  //   if (pickedDate != null) {
+                  //     print(
+                  //         pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                  //     String formattedDate =
+                  //         DateFormat('yyyy-MM-dd').format(pickedDate);
+                  //     print(
+                  //         formattedDate); //formatted date output using intl package =>  2021-03-16
+                  //     //you can implement different kind of Date Format here according to your requirement
+
+                  //     setState(() {
+                  //       dateinputFinish.text =
+                  //           formattedDate; //set output date to TextField value.
+                  //     });
+                  //   } else {
+                  //     print("Date is not selected");
+                  //   }
+                  // },
                   onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime
-                            .now(), //DateTime.now() - not to allow to choose before today.
-                        lastDate: DateTime(2101));
+                              DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(
+                                      2000), //DateTime.now() - not to allow to choose before today.
+                                  lastDate: DateTime(2101));
 
-                    if (pickedDate != null) {
-                      print(
-                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                      String formattedDate =
-                          DateFormat('yyyy-MM-dd').format(pickedDate);
-                      print(
-                          formattedDate); //formatted date output using intl package =>  2021-03-16
-                      //you can implement different kind of Date Format here according to your requirement
+                              if (pickedDate != null) {
+                                print(pickedDate
+                                    .year); //pickedDate output format => 2021-03-10 00:00:00.000
+                                String formattedDate =
+                                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                                print(
+                                    formattedDate); //formatted date output using intl package =>  2021-03-16
+                                //you can implement different kind of Date Format here according to your requirement
+                                TimeOfDay? pickedTime = await showTimePicker(
+                                  initialTime: TimeOfDay.now(),
+                                  context: context,
+                                );
 
-                      setState(() {
-                        dateinputFinish.text =
-                            formattedDate; //set output date to TextField value.
-                      });
-                    } else {
-                      print("Date is not selected");
-                    }
-                  },
+                                if (pickedTime != null) {
+                                  print(pickedTime
+                                      .format(context)); //output 10:51 PM
+                                  DateTime parsedTime = DateFormat.jm().parse(
+                                      pickedTime.format(context).toString());
+                                  //converting to DateTime so that we can further format on different pattern.
+                                  print(
+                                      parsedTime); //output 1970-01-01 22:53:00.000
+                                  String formattedTime =
+                                      DateFormat('HH:mm:ss').format(parsedTime);
+                                  print(formattedTime);
+                                }
+                                final toUTC = DateTime(
+                                    pickedDate.year,
+                                    pickedDate.month,
+                                    pickedDate.day,
+                                    pickedTime!.hour,
+                                    pickedTime.minute);
+                                print(toUTC);
+                                setState(() {
+                                  dateinputFinish.text = toUTC
+                                      .toString(); //set output date to TextField value.
+                                });
+                              } else {
+                                print("Date is not selected");
+                              }
+                              
+                            },
                   onSaved: (newValue) {
                     _dates['finishDate'] = newValue.toString();
                   },
