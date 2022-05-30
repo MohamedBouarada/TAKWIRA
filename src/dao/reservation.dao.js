@@ -1,6 +1,7 @@
 const reservationModel = require("../models/reservation.model")
 const {Op} = require("sequelize");
 
+
 class ReservationDao {
     async add(reservation){
         try{
@@ -24,6 +25,28 @@ class ReservationDao {
                 }
             })
             return {success:true,data:reservationList}
+        }catch (e) {
+console.log(e)
+            return {success:false,data:null}
+        }
+    }
+    async getFieldReservationInfos(fieldId,date,endDate){
+        try{
+            const reservationList = await reservationModel.findAll({
+                where :{
+                    fieldId,
+                    startDate : {
+                        [Op.gte] : date
+                    } ,
+                    endDate : {
+                        [Op.lte] :endDate
+                    }
+
+                },
+
+
+            })
+            return {success:true , data:reservationList}
         }catch (e) {
 console.log(e)
             return {success:false,data:null}
