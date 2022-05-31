@@ -1,9 +1,19 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, deprecated_member_use, missing_return, prefer_final_fields, avoid_print, import_of_legacy_library_into_null_safe, unused_import
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, deprecated_member_use, missing_return, prefer_final_fields, avoid_print, import_of_legacy_library_into_null_safe, unused_import, unused_element
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:provider/provider.dart';
+
+// import 'dart:io';
+// import 'dart:convert';
+// import 'package:http/http.dart' as http;
+// import 'package:image_picker/image_picker.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:takwira_mobile/animation/FadeAnimation.dart';
 import 'package:takwira_mobile/models/http_exception.dart';
 import 'package:takwira_mobile/providers/field.dart';
@@ -111,6 +121,7 @@ class _FieldCardState extends State<FieldCard> {
   List<Map<String, String>> surfaces = [];
   final List<Map<String, String>> fieldTypes = [];
 
+  // File? _file;
   final Map<String, dynamic> _dates = {"startDate": "", "finishDate": ""};
   // Map<String, String> dates = {"startDate": "aa", "finishDate": "bb"};
   bool _displayNewTextField = false;
@@ -131,10 +142,34 @@ class _FieldCardState extends State<FieldCard> {
     'opening': '',
     'closing': '',
     'surface': '',
-    'location':'',
+    'location': '',
     'description': 'filed description',
     'idProprietaire': 1,
   };
+
+  List<XFile>? _imageFileList;
+
+  void _setImageFileListFromFile(XFile? value) {
+    _imageFileList = value == null ? null : <XFile>[value];
+    if (_imageFileList!.length > 0) {
+        fieldImages.add(File(_imageFileList![0].path));
+      }
+      print(fieldImages[0].path);
+      print(fieldImages);
+  }
+
+  dynamic _pickImageError;
+  bool isVideo = false;
+
+  // VideoPlayerController? _controller;
+  // VideoPlayerController? _toBeDisposed;
+  String? _retrieveDataError;
+
+  final ImagePicker _picker = ImagePicker();
+  final TextEditingController maxWidthController = TextEditingController();
+  final TextEditingController maxHeightController = TextEditingController();
+  final TextEditingController qualityController = TextEditingController();
+
   @override
   void initState() {
     timeinput.text = "";
@@ -204,6 +239,7 @@ class _FieldCardState extends State<FieldCard> {
         location: _authData['location']!,
         description: _authData['description']!,
         idProprietaire: _authData['idProprietaire']!,
+        fieldImages: fieldImages,
       );
       print(_authData);
       Navigator.push(
@@ -219,6 +255,173 @@ class _FieldCardState extends State<FieldCard> {
     }
   }
 
+  Future<void> _onImageButtonPressed(ImageSource source,
+      {BuildContext? context, bool isMultiImage = false}) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+        maxWidth: 500,
+        maxHeight: 500,
+        imageQuality: 100,
+      );
+      setState(() {
+        _setImageFileListFromFile(pickedFile);
+      });
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    //_disposeVideoController();
+    maxWidthController.dispose();
+    maxHeightController.dispose();
+    qualityController.dispose();
+    super.dispose();
+  }
+
+  List<File> fieldImages = [];
+
+  Widget _previewImages() {
+    final Text? retrieveError = _getRetrieveErrorWidget();
+    if (retrieveError != null) {
+      return retrieveError;
+    }
+    if (_imageFileList != null) {
+      
+      return Semantics(
+        label: 'image_picker_example_picked_images',
+        child: ListView.builder(
+          key: UniqueKey(),
+          itemBuilder: (BuildContext context, int index) {
+            return Semantics(
+              label: 'image_picker_example_picked_image',
+              child: kIsWeb
+                  ? Image.network(_imageFileList![index].path)
+                  : Image.file(File(_imageFileList![index].path)),
+            );
+          },
+          itemCount: _imageFileList!.length,
+        ),
+      );
+    } else if (_pickImageError != null) {
+      return Text(
+        'Pick image error: $_pickImageError',
+        textAlign: TextAlign.center,
+      );
+    } else {
+      return Container(
+        width: double.infinity,
+        height: 200,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/tennis.jpg'),
+            fit: BoxFit.fill,
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget _handlePreview() {
+    if (isVideo) {
+      return Container();
+    } else {
+      return _previewImages();
+    }
+  }
+
+  Future<void> retrieveLostData() async {
+    final LostDataResponse response = await _picker.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      if (response.type == RetrieveType.image) {
+        isVideo = false;
+        setState(() {
+          if (response.files == null) {
+            _setImageFileListFromFile(response.file);
+          } else {
+            _imageFileList = response.files;
+          }
+        });
+      }
+    } else {
+      _retrieveDataError = response.exception!.code;
+    }
+  }
+
+  Text? _getRetrieveErrorWidget() {
+    if (_retrieveDataError != null) {
+      final Text result = Text(_retrieveDataError!);
+      _retrieveDataError = null;
+      return result;
+    }
+    return null;
+  }
+
+  Future<void> _displayPickImageDialog(
+      BuildContext context, OnPickImageCallback onPick) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Add optional parameters'),
+            content: Column(
+              children: <Widget>[
+                TextField(
+                  controller: maxWidthController,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: const InputDecoration(
+                      hintText: 'Enter maxWidth if desired'),
+                ),
+                TextField(
+                  controller: maxHeightController,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: const InputDecoration(
+                      hintText: 'Enter maxHeight if desired'),
+                ),
+                TextField(
+                  controller: qualityController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                      hintText: 'Enter quality if desired'),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('CANCEL'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                  child: const Text('PICK'),
+                  onPressed: () {
+                    final double? width = maxWidthController.text.isNotEmpty
+                        ? double.parse(maxWidthController.text)
+                        : null;
+                    final double? height = maxHeightController.text.isNotEmpty
+                        ? double.parse(maxHeightController.text)
+                        : null;
+                    final int? quality = qualityController.text.isNotEmpty
+                        ? int.parse(qualityController.text)
+                        : null;
+                    onPick(width, height, quality);
+                    Navigator.of(context).pop();
+                  }),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -227,6 +430,57 @@ class _FieldCardState extends State<FieldCard> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              Center(
+                child:
+                    !kIsWeb && defaultTargetPlatform == TargetPlatform.android
+                        ? FutureBuilder<void>(
+                            future: retrieveLostData(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<void> snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.none:
+                                case ConnectionState.waiting:
+                                  return const Text(
+                                    'You have not yet picked an image.',
+                                    textAlign: TextAlign.center,
+                                  );
+                                case ConnectionState.done:
+                                  return Container(
+                                    width: double.infinity,
+                                    height: 200,
+                                    child: _handlePreview(),
+                                  );
+
+                                default:
+                                  if (snapshot.hasError) {
+                                    return Text(
+                                      'Pick image/video error: ${snapshot.error}}',
+                                      textAlign: TextAlign.center,
+                                    );
+                                  } else {
+                                    return const Text(
+                                      'You have not yet picked an image.',
+                                      textAlign: TextAlign.center,
+                                    );
+                                  }
+                              }
+                            },
+                          )
+                        : _handlePreview(),
+              ),
+              Semantics(
+                label: 'image_picker_example_from_gallery',
+                child: MaterialButton(
+                  onPressed: () {
+                    isVideo = false;
+                    _onImageButtonPressed(ImageSource.gallery,
+                        context: context);
+                  },
+                  // heroTag: 'image0',
+                  // tooltip: 'Pick Image from gallery',
+                  child: const Icon(Icons.photo),
+                ),
+              ),
               FadeAnimation(
                 1.3,
                 TextFormField(
@@ -370,7 +624,7 @@ class _FieldCardState extends State<FieldCard> {
                   ),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Location';
+                      return 'Invalid Location';
                     }
                   },
                   onSaved: (newValue) {
@@ -1072,3 +1326,6 @@ class _FieldCardState extends State<FieldCard> {
     );
   }
 }
+
+typedef OnPickImageCallback = void Function(
+    double? maxWidth, double? maxHeight, int? quality);

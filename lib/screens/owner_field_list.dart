@@ -48,6 +48,7 @@ class _IndexPageState extends State<IndexPage> {
     // print(response.body);
     if (response.statusCode == 200) {
       var items = json.decode(response.body);
+      print(items);
       setState(() {
         fields = items;
         isLoading = false;
@@ -212,13 +213,12 @@ class _IndexPageState extends State<IndexPage> {
                       color: Colors.black,
                     ),
                   ),
-                  
+
                   Spacer(),
-  
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      
                       GestureDetector(
                         child: const Icon(Icons.edit),
                         onTap: () {

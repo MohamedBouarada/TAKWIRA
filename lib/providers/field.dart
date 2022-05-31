@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, prefer_final_fields
+// ignore_for_file: avoid_print, prefer_final_fields, unnecessary_new
 
 import 'dart:convert';
 import 'dart:io';
@@ -14,7 +14,7 @@ class Field with ChangeNotifier {
   List<FieldModel> get items {
     return [..._items];
   }
-  
+
   FieldModel findById(int id) {
     return _items.firstWhere((field) => field.id == id);
   }
@@ -60,7 +60,7 @@ class Field with ChangeNotifier {
       rethrow;
     }
   }
-  
+
   Future<List> get() async {
     var url = "http://10.0.2.2:5000/field/getByOwner/1";
     var response = await http.get(
@@ -92,38 +92,69 @@ class Field with ChangeNotifier {
     required String surface,
     required String description,
     required int idProprietaire,
+    required List<File> fieldImages,
   }) async {
     const url = 'http://10.0.2.2:5000/field/add';
     print(url);
+    print("*****************************");
+    print(fieldImages);
+    print("*****************************");
+    print(fieldImages[0]);
+
     try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
-        },
-        body: json.encode(
-          {
-            'name': name,
-            'adresse': adresse,
-            'type': type,
-            'isNotAvailable': isNotAvailable,
-            'services': services,
-            'prix': price,
-            'period': period,
-            'ouverture':opening,
-            'fermeture':closing,
-            'localisation': location,
-            'surface': surface,
-            'description': description,
-            'userId': 1,
-          },
-        ),
+      var request = new http.MultipartRequest("POST", Uri.parse(url));
+      request.fields['name'] = name;
+      request.fields['adresse'] = adresse;
+      request.fields['type'] = type;
+      request.fields['isNotAvailable'] = isNotAvailable.toString();
+      request.fields['services'] = services;
+      request.fields['prix'] = price.toString();
+      request.fields['period'] = period;
+      request.fields['ouverture'] = opening;
+      request.fields['fermeture'] = closing;
+      request.fields['localisation'] = location;
+      request.fields['surface'] = surface;
+      request.fields['description'] = description;
+      request.fields['userId'] = '1';
+      http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+        'files',
+        fieldImages[0].path,
       );
-      final responseData = json.decode(response.body);
-      print(responseData);
-      if (response.statusCode != HttpStatus.created) {
-        throw HttpException(responseData);
-      }
+
+      request.files.add(multipartFile);
+
+      await request.send().then((response) {
+        if (response.statusCode == 200) notifyListeners();
+      });
+      // final response = await http.post(
+      //   Uri.parse(url),
+      //   headers: {
+      //     HttpHeaders.contentTypeHeader: 'application/json',
+      //   },
+      //   body: json.encode(
+      //     {
+      //       'name': name,
+      //       'adresse': adresse,
+      //       'type': type,
+      //       'isNotAvailable': isNotAvailable,
+      //       'services': services,
+      //       'prix': price,
+      //       'period': period,
+      //       'ouverture': opening,
+      //       'fermeture': closing,
+      //       'localisation': location,
+      //       'surface': surface,
+      //       'description': description,
+      //       'userId': 1,
+      //       'files': fieldImages,
+      //     },
+      //   ),
+      // );
+      // final responseData = json.decode(response.body);
+      // print(responseData);
+      // if (response.statusCode != HttpStatus.created) {
+      //   throw HttpException(responseData);
+      // }
       notifyListeners();
     } catch (error) {
       print("**************");
@@ -171,7 +202,7 @@ class Field with ChangeNotifier {
             'fermeture': closing,
             'surface': surface,
             'description': description,
-            'localisation':location,
+            'localisation': location,
             'userId': idProprietaire,
           },
         ),
@@ -207,7 +238,6 @@ class Field with ChangeNotifier {
     }
   }
 
-  
   final _fieldType = [
     {'display': "Tennis", 'value': "TENNIS"},
     {'display': "Football", 'value': 'FOOTBALL'},

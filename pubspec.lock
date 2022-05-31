@@ -235,6 +235,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_uploader:
+    dependency: "direct main"
+    description:
+      name: flutter_uploader
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -276,12 +283,12 @@ packages:
     source: hosted
     version: "4.0.0"
   image_picker:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.5"
+    version: "0.8.5+3"
   image_picker_android:
     dependency: transitive
     description:
