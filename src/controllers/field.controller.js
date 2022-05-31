@@ -207,7 +207,7 @@ class fieldController {
         const photoList = convertUtility.convertStringToJson(field.data.images)
         const filteredPhotos = photoList.filter((element)=> element.name !== imageName)
          field.data.images = convertUtility.convertJsonToString(filteredPhotos);
-        const updateResult =await fieldDao.update(field.data , fieldId);
+        const updateResult =await fieldDao.addImage(fieldId , field.data.images);
         if(updateResult.success){
             return  res.status(StatusCodes.OK).json("image deleted successfully")
         }
@@ -233,7 +233,7 @@ class fieldController {
         }
         const newList = imageList.concat([{name: req.file.filename}]);
         data.images = convertUtility.convertJsonToString(newList);
-        const updateResult = await fieldDao.update(data,fieldId);
+        const updateResult = await fieldDao.addImage(fieldId,data.images);
         if(updateResult.success===false){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error in updating")
         }

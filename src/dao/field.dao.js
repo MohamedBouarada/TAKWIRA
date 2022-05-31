@@ -26,6 +26,20 @@ class fieldDao {
         }
 
     }
+    async addImage(fieldId,imageList) {
+        try{
+           const fieldToUpdate=  await fieldModel.findOne({where:{"id":fieldId}})
+            if(!fieldToUpdate) {
+                return {success:true,data:null}
+            }
+            fieldToUpdate.images = imageList;
+           const updated= await fieldToUpdate.save()
+            return {success:true , data:updated}
+        }catch (e) {
+console.log(e)
+            return {success:false,data:null}
+        }
+    }
 
    async getAllFieldsPaginatedAndSorted (orderBy,sort , limit , offset,searchValue,type,surface) {
             try{
