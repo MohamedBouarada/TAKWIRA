@@ -162,13 +162,97 @@ class Field with ChangeNotifier {
       rethrow;
     }
   }
+  Future<void> addImage({
+    required int id,
+    required List<File> fieldImages,
+  }) async {
+    var url = 'http://10.0.2.2:5000/field/image/add/'+ id.toString();
+    // print(url);
+    // print("**********eeeeeeeeeeeeeeeeeeeeeeee*******************");
+    // print(fieldImages);
+    // print("*****************************");
+    // print(fieldImages[0]);
+
+    try {
+      var request = new http.MultipartRequest("POST", Uri.parse(url));
+      
+      
+      http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+        'files',
+        fieldImages[0].path,
+      );
+
+      request.files.add(multipartFile);
+
+      await request.send().then((response) {
+        if (response.statusCode == 200) notifyListeners();
+      });
+      // final response = await http.post(
+      //   Uri.parse(url),
+      //   headers: {
+      //     HttpHeaders.contentTypeHeader: 'application/json',
+      //   },
+      //   body: json.encode(
+      //     {
+      //       'name': name,
+      //       'adresse': adresse,
+      //       'type': type,
+      //       'isNotAvailable': isNotAvailable,
+      //       'services': services,
+      //       'prix': price,
+      //       'period': period,
+      //       'ouverture': opening,
+      //       'fermeture': closing,
+      //       'localisation': location,
+      //       'surface': surface,
+      //       'description': description,
+      //       'userId': 1,
+      //       'files': fieldImages,
+      //     },
+      //   ),
+      // );
+      // final responseData = json.decode(response.body);
+      // print(responseData);
+      // if (response.statusCode != HttpStatus.created) {
+      //   throw HttpException(responseData);
+      // }
+      notifyListeners();
+    } catch (error) {
+      print("**************");
+      print(error.toString());
+      rethrow;
+    }
+  }
+  Future<void> deleteImage({
+    required int id,
+    required String imageName,
+  }) async {
+    var url = 'http://10.0.2.2:5000/field/image/delete/'+ id.toString()+'/'+imageName;
+    print(url);
+    print("*****************************");
+    print(imageName);
+    print("*****************************");
+    
+     final response = await http.delete(
+     Uri.parse(url),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+    notifyListeners();
+    print(json.decode(response.body));
+    if (response.statusCode >= 400) {
+      notifyListeners();
+      throw HttpException('Could not delete image.');
+    }
+}
 
   Future<void> update({
     required int id,
     required String name,
     required String adresse,
     required String type,
-    required Map<String, dynamic> isNotAvailable,
+    required Map<String, String> isNotAvailable,
     required String services,
     required double price,
     required String period,

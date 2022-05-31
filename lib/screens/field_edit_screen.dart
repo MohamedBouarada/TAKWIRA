@@ -1,7 +1,15 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe, use_key_in_widget_constructors, avoid_unnecessary_containers, prefer_const_constructors, deprecated_member_use, prefer_const_literals_to_create_immutables, avoid_print, unused_field
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:takwira_mobile/providers/field.dart';
 import 'package:takwira_mobile/models/http_exception.dart';
@@ -23,6 +31,7 @@ class FieldEdit extends StatefulWidget {
   final String opening;
   final String closing;
   final String location;
+  final String images;
 
   const FieldEdit({
     Key? key,
@@ -40,6 +49,7 @@ class FieldEdit extends StatefulWidget {
     required this.opening,
     required this.closing,
     required this.location,
+    required this.images,
   }) : super(key: key);
   @override
   _FieldEditState createState() => _FieldEditState();
@@ -68,6 +78,7 @@ class _FieldEditState extends State<FieldEdit> {
       opening: widget.opening,
       closing: widget.closing,
       location: widget.location,
+      images: widget.images,
     );
   }
 }
@@ -87,6 +98,8 @@ class EditCard extends StatefulWidget {
   final String opening;
   final String closing;
   final String location;
+  final String images;
+
   const EditCard({
     Key? key,
     required this.id,
@@ -103,6 +116,7 @@ class EditCard extends StatefulWidget {
     required this.opening,
     required this.closing,
     required this.location,
+    required this.images,
   }) : super(key: key);
 
   @override
@@ -110,8 +124,67 @@ class EditCard extends StatefulWidget {
 }
 
 class _EditCardState extends State<EditCard> {
+  List<XFile>? _imageFileList;
+  void _setImageFileListFromFile(XFile? value) {
+    _imageFileList = value == null ? null : <XFile>[value];
+    if (_imageFileList!.length > 0) {
+      fieldImages.add(File(_imageFileList![0].path));
+    }
+    print(fieldImages[0].path);
+    print(fieldImages);
+  }
+
+  dynamic _pickImageError;
+  bool isVideo = false;
+
+  // VideoPlayerController? _controller;
+  // VideoPlayerController? _toBeDisposed;
+  String? _retrieveDataError;
+
+  final ImagePicker _picker = ImagePicker();
+  final TextEditingController maxWidthController = TextEditingController();
+  final TextEditingController maxHeightController = TextEditingController();
+  final TextEditingController qualityController = TextEditingController();
+
+  Future<void> _onImageButtonPressed(ImageSource source,
+      {bool isMultiImage = false}) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+        maxWidth: 500,
+        maxHeight: 500,
+        imageQuality: 100,
+      );
+      setState(() {
+        _setImageFileListFromFile(pickedFile);
+        // print("eezzzzzdzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+        // print(fieldImages);
+      });
+
+      try {
+        await Provider.of<Field>(context, listen: false).addImage(
+          id: widget.id,
+          fieldImages: fieldImages,
+        );
+        setState(() {
+                                                      
+                                                      fetchImages();
+                                                    });
+      } on HttpException catch (error) {
+        _showErrorDialog(error.toString());
+      } catch (error) {
+        print(error.toString());
+        _showErrorDialog(error.toString());
+      }
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+      });
+    }
+  }
+
   List surfaces = [];
-  final Map<String, dynamic> _dates = {"startDate": "", "finishDate": ""};
+  final Map<String, String> _dates = {"startDate": "", "finishDate": ""};
   bool _displayAvailibilityFields = false;
 
   late TextEditingController _nameController;
@@ -166,6 +239,8 @@ class _EditCardState extends State<EditCard> {
   @override
   void initState() {
     super.initState();
+    this.fetchImages();
+    print(photos);
     getFieldInformation();
     handleShowSurfaces();
     print(widget.unavailabilityStartDate);
@@ -175,6 +250,10 @@ class _EditCardState extends State<EditCard> {
 
   @override
   void dispose() {
+    maxWidthController.dispose();
+    maxHeightController.dispose();
+    qualityController.dispose();
+
     _nameController.clear();
     _typeController.clear();
     _addressController.clear();
@@ -205,6 +284,7 @@ class _EditCardState extends State<EditCard> {
     super.dispose();
   }
 
+  List<File> fieldImages = [];
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -264,8 +344,188 @@ class _EditCardState extends State<EditCard> {
     }
   }
 
+  Widget _previewImages() {
+    final Text? retrieveError = _getRetrieveErrorWidget();
+    if (retrieveError != null) {
+      return retrieveError;
+    }
+    if (_imageFileList != null) {
+      return Semantics(
+        label: 'image_picker_example_picked_images',
+        child: ListView.builder(
+          key: UniqueKey(),
+          itemBuilder: (BuildContext context, int index) {
+            return Semantics(
+              label: 'image_picker_example_picked_image',
+              child: kIsWeb
+                  ? Image.network(_imageFileList![index].path)
+                  : Image.file(File(_imageFileList![index].path)),
+            );
+          },
+          itemCount: _imageFileList!.length,
+        ),
+      );
+    } else if (_pickImageError != null) {
+      return Text(
+        'Pick image error: $_pickImageError',
+        textAlign: TextAlign.center,
+      );
+    } else {
+      return Container(
+        width: double.infinity,
+        height: 200,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/tennis.jpg'),
+            fit: BoxFit.fill,
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget _handlePreview() {
+    if (isVideo) {
+      return Container();
+    } else {
+      return _previewImages();
+    }
+  }
+
+  Future<void> retrieveLostData() async {
+    final LostDataResponse response = await _picker.retrieveLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      if (response.type == RetrieveType.image) {
+        isVideo = false;
+        setState(() {
+          if (response.files == null) {
+            _setImageFileListFromFile(response.file);
+          } else {
+            _imageFileList = response.files;
+          }
+        });
+      }
+    } else {
+      _retrieveDataError = response.exception!.code;
+    }
+  }
+
+  Text? _getRetrieveErrorWidget() {
+    if (_retrieveDataError != null) {
+      final Text result = Text(_retrieveDataError!);
+      _retrieveDataError = null;
+      return result;
+    }
+    return null;
+  }
+
+  Future<void> _displayPickImageDialog(
+      BuildContext context, OnPickImageCallback onPick) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Add optional parameters'),
+            content: Column(
+              children: <Widget>[
+                TextField(
+                  controller: maxWidthController,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: const InputDecoration(
+                      hintText: 'Enter maxWidth if desired'),
+                ),
+                TextField(
+                  controller: maxHeightController,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  decoration: const InputDecoration(
+                      hintText: 'Enter maxHeight if desired'),
+                ),
+                TextField(
+                  controller: qualityController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                      hintText: 'Enter quality if desired'),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('CANCEL'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                  child: const Text('PICK'),
+                  onPressed: () {
+                    final double? width = maxWidthController.text.isNotEmpty
+                        ? double.parse(maxWidthController.text)
+                        : null;
+                    final double? height = maxHeightController.text.isNotEmpty
+                        ? double.parse(maxHeightController.text)
+                        : null;
+                    final int? quality = qualityController.text.isNotEmpty
+                        ? int.parse(qualityController.text)
+                        : null;
+                    onPick(width, height, quality);
+                    Navigator.of(context).pop();
+                  }),
+            ],
+          );
+        });
+  }
+
+  List<String> photos = [];
+  fetchImages() async {
+    var url = "http://10.0.2.2:5000/field/" + widget.id.toString();
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    // print(response.body);
+    if (response.statusCode == 200) {
+      var field = json.decode(response.body);
+
+      var img = field['images'];
+      print(img);
+      List<String> i = [];
+      for (var im in img) {
+        i.add(im['name']);
+        ;
+        print("********");
+      }
+
+      setState(() {
+        photos = i;
+        print(photos);
+      });
+    } else {}
+  }
+
   @override
   Widget build(BuildContext context) {
+    // var images = json.decode(widget.images);
+    // List<String> photos = [];
+    // for (var image in images) {
+    //   photos.add(image['name'].toString());
+    //   print(image);
+    //   print("********");
+    // }
+    // print(photos);
+    // print("****** photos**");
+
+    // var map = images.map((i) => {print(i['name']), photos.add(i['name'])});
+    // print(images[0]['name']);
+    // print(photos);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
@@ -317,24 +577,151 @@ class _EditCardState extends State<EditCard> {
             children: <Widget>[
               Column(
                 children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 3,
-                    width: double.infinity,
-                    child: Carousel(
-                      dotSize: 6.0,
-                      dotSpacing: 15.0,
-                      dotPosition: DotPosition.bottomCenter,
-                      autoplay: false,
-                      images: [
-                        Image.asset('assets/images/tennis1.jpg',
-                            fit: BoxFit.cover),
-                        Image.asset('assets/images/tennis2.jpeg',
-                            fit: BoxFit.cover),
-                        Image.asset('assets/images/tennis3.jpg',
-                            fit: BoxFit.cover),
-                      ],
-                    ),
-                  )
+                  // SizedBox(
+                  //   height: MediaQuery.of(context).size.height / 3,
+                  //   width: double.infinity,
+                  //   child: Carousel(
+                  //     dotSize: 6.0,
+                  //     dotSpacing: 15.0,
+                  //     dotPosition: DotPosition.bottomCenter,
+                  //     autoplay: false,
+                  //     images: [
+                  //       Image.asset('assets/images/tennis1.jpg',
+                  //           fit: BoxFit.cover),
+                  //       Image.asset('assets/images/tennis2.jpeg',
+                  //           fit: BoxFit.cover),
+                  //       Image.asset('assets/images/tennis3.jpg',
+                  //           fit: BoxFit.cover),
+                  //     ],
+                  //   ),
+                  // )
+
+                  // photos.length>2? Container(
+                  //   height: 345.0,
+                  //   child: CarouselSlider(
+                  //     items: photos.map((i) {
+                  //       print(i);
+                  //       return Builder(
+                  //         builder: (BuildContext context) {
+                  //           print("********");
+
+                  //           print(i);
+                  //           return Container(
+                  //               width: MediaQuery.of(context).size.width,
+                  //               margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  //               decoration: BoxDecoration(color: Colors.amber),
+                  //               child: GestureDetector(
+                  //                   child: Image.network(
+                  //                       "http://10.0.2.2:5000/static/" + i,
+                  //                       fit: BoxFit.fill),
+                  //                   onTap: () {}));
+                  //         },
+                  //       );
+                  //     }).toList(),
+                  //     options: CarouselOptions(height: 400),
+                  //   ),
+                  // ):
+                  photos.length > 0
+                      ? SizedBox(
+                          height: MediaQuery.of(context).size.height / 3,
+                          width: double.infinity,
+                          child: Carousel(
+                            dotSize: 6.0,
+                            dotSpacing: 15.0,
+                            dotPosition: DotPosition.bottomCenter,
+                            autoplay: false,
+                            images: photos.map((i) {
+                              print(i);
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  print("******** hedhi l i");
+
+                                  print(i);
+                                  return Stack(children: [
+                                    Container(
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              3,
+                                      width: MediaQuery.of(context).size.width,
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5.0),
+                                      decoration:
+                                          BoxDecoration(color: Colors.amber),
+                                      child: Container(
+                                        child: GestureDetector(
+                                            child: Image.network(
+                                                "http://10.0.2.2:5000/static/" +
+                                                    i,
+                                                fit: BoxFit.fill),
+                                            onTap: () {}),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 90,
+                                      color: Colors.transparent,
+                                      padding: EdgeInsets.only(top: 30),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.only(
+                                              left: 24,
+                                              right: 24,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Semantics(
+                                                  label:
+                                                      'image_picker_example_from_gallery',
+                                                  child: MaterialButton(
+                                                    onPressed: () {
+                                                      isVideo = false;
+                                                      _onImageButtonPressed(
+                                                        ImageSource.gallery,
+                                                      );
+                                                    },
+                                                    // heroTag: 'image0',
+                                                    // tooltip: 'Pick Image from gallery',
+                                                    child:
+                                                        const Icon(Icons.photo),
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                IconButton(
+                                                  icon: Icon(
+                                                    Icons.delete,
+                                                    color: Colors.white,
+                                                    size: 25,
+                                                  ),
+                                                  onPressed: () async {
+                                                    print(i);
+                                                    await Provider.of<Field>(
+                                                            context,
+                                                            listen: false)
+                                                        .deleteImage(
+                                                            id: widget.id,
+                                                            imageName: i);
+
+                                                    setState(() {
+                                                      photos.remove(i);
+                                                      fetchImages();
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ]);
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
               SizedBox(
@@ -446,7 +833,7 @@ class _EditCardState extends State<EditCard> {
                         SizedBox(
                           height: 30,
                         ),
-                         Text('Location',
+                        Text('Location',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w500,
@@ -1207,3 +1594,6 @@ class _EditCardState extends State<EditCard> {
     );
   }
 }
+
+typedef OnPickImageCallback = void Function(
+    double? maxWidth, double? maxHeight, int? quality);

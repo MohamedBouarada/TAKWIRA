@@ -122,6 +122,8 @@ class _IndexPageState extends State<IndexPage> {
     // var profileUrl = item['picture']['large'];
 
     var unavailability = json.decode(item['isNotAvailable']);
+    var images = json.decode(item['images']);
+    print(images[0]['name']);
     return GestureDetector(
       onTap: () {
         //Add a detail screen
@@ -173,7 +175,7 @@ class _IndexPageState extends State<IndexPage> {
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/tennis.jpg'),
+                    image: NetworkImage("http://10.0.2.2:5000/static/"+images[0]['name']),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -244,6 +246,7 @@ class _IndexPageState extends State<IndexPage> {
                                         opening: item['ouverture'],
                                         closing: item['fermeture'],
                                         location: item['localisation'],
+                                        images: item['images'],
                                       )));
                         },
                       ),

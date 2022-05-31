@@ -62,19 +62,19 @@ class FieldAdd extends StatelessWidget {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  FadeAnimation(
-                    1,
-                    Container(
-                      width: double.infinity,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/tennis.jpg'),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // FadeAnimation(
+                  //   1,
+                  //   Container(
+                  //     width: double.infinity,
+                  //     height: 150,
+                  //     decoration: BoxDecoration(
+                  //       image: DecorationImage(
+                  //         image: AssetImage('assets/images/tennis.jpg'),
+                  //         fit: BoxFit.fill,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 10,
                   ),
