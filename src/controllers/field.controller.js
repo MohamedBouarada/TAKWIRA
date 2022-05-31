@@ -18,6 +18,7 @@ class fieldController {
          let photos = ""
         if(req.files) {
             const files = req.files ;
+
             const photoList = files.map((element) => { return {name: element.filename}});
             photos = convertUtility.convertJsonToString(photoList);
         }
@@ -47,7 +48,7 @@ class fieldController {
         if(fieldExists.data) {
             return  res.status(StatusCodes.BAD_REQUEST).json("this field already added")
         }
-        if(ownerExists.data["role"] !==UserType.Owner) {
+        if(ownerExists.data["role"] !==UserType.Owner && ownerExists.data["role"] !==UserType.OwnerRequest) {
             return  res.status(StatusCodes.NOT_FOUND).json("not a field owner")
         }
 

@@ -66,7 +66,7 @@ class AdminController {
         if(updateProcess.success===false){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error")
         }
-        return res.status(StatusCodes.OK).json("account successfully activated")
+        return res.status(StatusCodes.OK).json({msg:"account successfully activated",id})
 
     }
 
