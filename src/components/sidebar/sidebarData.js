@@ -5,37 +5,44 @@ export const sidebarData= [
     {
         id:1,
         icon :faGripHorizontal,
-        title : "Dashboard"
+        title : "Dashboard",
+        linked : "/"
     },
     {
         id:2,
         icon :faUserGroup,
-        title : "Users"
+        title : "Users",
+        linked: "/"
     },
     {
         id:3,
         icon :faBuildingUser,
-        title : "Owners"
+        title : "Fields",
+        linked: "/fields/list"
     },
     {
         id:4,
         icon :faHandHoldingDollar,
-        title : "Income"
+        title : "Add user",
+        linked: "/user/add"
     },
     {
         id:5,
         icon :faChartColumn,
-        title : "Statistics"
+        title : "Statistics",
+        linked: "#"
     },
     {
         id:6,
         icon :faSliders,
-        title : "Settings"
+        title : "Profile" ,
+        linked: "#"
     },
     {
         id:7,
         icon :faArrowRightFromBracket,
-        title : "Logout"
+        title : "Logout",
+        linked: "#"
     }
 
 ]

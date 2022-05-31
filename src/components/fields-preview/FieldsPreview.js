@@ -1,9 +1,13 @@
 
 import styles from "./fliedsPreview.module.css"
+import {changeFieldId} from "../../pages/field-form-page/fieldInfoSlice";
+import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 
-export const FieldsPreview= ({image,fieldName,address,createdAt})=> {
-
+export const FieldsPreview= ({id,image,fieldName,address,createdAt})=> {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
 
     return(
@@ -22,7 +26,7 @@ export const FieldsPreview= ({image,fieldName,address,createdAt})=> {
                 <div>createdAt</div>
                 <div> { new Date(createdAt).toLocaleString()}</div>
             </div>
-            <div className={styles.viewMore}>view more</div>
+            <div className={styles.viewMore} onClick={()=>{dispatch(changeFieldId(id)) ;navigate("/fields/details")}}>view more</div>
         </div>
 
         </>

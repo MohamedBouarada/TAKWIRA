@@ -21,6 +21,7 @@ import {
 import {OwnerPreview} from "../../components/owner-preview/OwnerPreview";
 import {OwnerRelatedToField} from "../../components/owner-related-to-field/OwnerRelatedToField";
 import {Options} from "../../components/shared/options/Options";
+import {FieldOptions} from "../../components/shared/field-options/FieldOptions";
 
 
 export const FieldDetailsPage = ()=> {
@@ -49,7 +50,7 @@ console.log(id)
     return (
         <>
             <div className={`${styles.container} ${styles.displayRow}`}>
-                <div className={styles.closeMark} onClick={()=>navigate("/")}> <FontAwesomeIcon icon={faXmarkCircle}/></div>
+                <div className={styles.closeMark} onClick={()=>navigate("/fields/list")}> <FontAwesomeIcon icon={faXmarkCircle}/></div>
                 <div  className={`${styles.displayColumn}`}
                 >
 
@@ -70,7 +71,7 @@ console.log(id)
                     </div>
                 </div>
                 <div className={styles.options}>
-                    <Options/>
+                    <FieldOptions/>
                 </div>
 
 

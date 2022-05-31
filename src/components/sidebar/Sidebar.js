@@ -16,7 +16,7 @@ export  const Sidebar = ()=>{
         <nav className={styles.navbar} onMouseEnter={()=>dispatch(hovering())} onMouseLeave={()=>dispatch(notHovering())}>
             <ul className={styles.navbarNav}>
             <SidebarLogo  />
-                {sidebarData.map((element,index)=> <SidebarElement  index={index} key={element.id}  icon={element.icon} title={element.title}/>)}
+                {sidebarData.map((element,index)=> <SidebarElement  index={index} linked={element.linked} key={element.id}  icon={element.icon} title={element.title}/>)}
 
             </ul>
 

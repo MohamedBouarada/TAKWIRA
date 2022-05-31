@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styles from "./sidebarElement.module.css"
 import {useDispatch, useSelector} from "react-redux";
 import {clicking, selectSideBarClicking, selectSideBarHovering} from "../sidebar/sidebarSlice";
-export const SidebarElement = ({index,icon,title})=> {
+export const SidebarElement = ({index,icon,title,linked})=> {
 
     const hover =useSelector(selectSideBarHovering);
     const clickIndex = useSelector(selectSideBarClicking)
@@ -15,7 +15,7 @@ export const SidebarElement = ({index,icon,title})=> {
     return (
         <>
 <li className={styles.navItem} onClick={()=>dispatch(clicking(index))}>
-    <a  href='#' className={navLinkClassName}>
+    <a  href={`${linked}`} className={navLinkClassName}>
             <FontAwesomeIcon icon={icon } />
         {!hover && (<span>{title}</span>)}
     </a>
