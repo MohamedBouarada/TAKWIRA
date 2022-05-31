@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:takwira_mobile/screens/field_add_screen.dart';
 import 'package:takwira_mobile/screens/field_edit_screen.dart';
@@ -73,10 +74,11 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         elevation: 0,
         brightness: Brightness.light,
-        backgroundColor: Color(0x665ac18e),
+        backgroundColor: Color.fromARGB(145, 44, 222, 20),
         leading: IconButton(
           onPressed: () {},
           icon: Icon(
@@ -87,14 +89,27 @@ class _IndexPageState extends State<IndexPage> {
         ),
         actions: [
           TextButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FieldAdd()));
-              },
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FieldAdd(),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 10.0),
               child: Text(
-                'Add Field    ',
-                style: TextStyle(fontSize: 16, color: Colors.black),
-              ))
+                'Add Field',
+                style: GoogleFonts.montserrat(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+                //TextStyle(fontSize: 20, color: Colors.black, fontStyle: GoogleFonts.),
+              ),
+            ),
+          )
         ],
       ),
       body: getBody(),
@@ -109,12 +124,13 @@ class _IndexPageState extends State<IndexPage> {
       ));
     }
     return ListView.builder(
-        shrinkWrap: true,
-        physics: ClampingScrollPhysics(),
-        itemCount: fields.length,
-        itemBuilder: (context, index) {
-          return getCard(fields[index]);
-        });
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      itemCount: fields.length,
+      itemBuilder: (context, index) {
+        return getCard(fields[index]);
+      },
+    );
   }
 
   Widget getCard(item) {
@@ -122,6 +138,8 @@ class _IndexPageState extends State<IndexPage> {
     // var profileUrl = item['picture']['large'];
 
     var unavailability = json.decode(item['isNotAvailable']);
+    var images = json.decode(item['images']);
+    print(images[0]['name']);
     return GestureDetector(
       onTap: () {
         //Add a detail screen
@@ -149,126 +167,135 @@ class _IndexPageState extends State<IndexPage> {
       },
       child: Container(
         margin: EdgeInsets.all(10),
-        height: MediaQuery.of(context).size.height / 5,
+        height: MediaQuery.of(context).size.height / 2,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Color.fromARGB(48, 90, 193, 141),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
+          color: Color.fromARGB(236, 247, 249, 247),
+          boxShadow: [
             BoxShadow(
-              offset: Offset(1.0, 1.0),
-              color: Color.fromARGB(45, 90, 193, 141),
-            )
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 3,
+              blurRadius: 7,
+              offset: Offset(0, 3),
+            ),
           ],
+          // color: inActiveColor,
+          border:
+              Border.all(color: Color.fromARGB(145, 188, 190, 188), width: 4),
+          borderRadius: BorderRadius.circular(20),
         ),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  bottomLeft: Radius.circular(20)),
-              child: Container(
-                width: MediaQuery.of(context).size.width / 2.5,
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/tennis.jpg'),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
-            ),
+            // ClipRRect(
+            //   borderRadius: BorderRadius.only(
+            //     topLeft: Radius.circular(20),
+            //     bottomLeft: Radius.circular(20),
+            //   ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              margin: EdgeInsets.all(5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item['name'],
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Color.fromARGB(255, 0, 0, 0)),
-                  ),
-                  // SizedBox(
-                  //   height: 3,
-                  // ),
-                  // Text(
-                  //   desc,
-                  //   style: TextStyle(
-                  //       fontSize: 13,
-                  //       fontWeight: FontWeight.w400,
-                  //       color: Color(0xff89A097)),
-                  // ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "${item['prix']}DT",
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
-            ),
-            Spacer(),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                margin: EdgeInsets.only(bottom: 8, right: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      child: const Icon(Icons.edit),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FieldEdit(
-                                      id: item['id'],
-                                      name: item['name'],
-                                      type: item['type'],
-                                      address: item['adresse'],
-                                      prix: item['prix'].toString(),
-                                      unavailabilityStartDate:
-                                          unavailability['startDate']
-                                              .toString(),
-                                      unavailabilityFinishDate:
-                                          unavailability['finishDate']
-                                              .toString(),
-                                      description: item['description'],
-                                      services: item['services'],
-                                      period: item['period'],
-                                      surface: item['surface'],
-                                    )));
-                      },
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    GestureDetector(
-                      child: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      onTap: () async {
-                        await DeleteUser(item['id']);
-                        // onDelete!(model);
-                      },
-                    ),
-                  ],
+              // margin: EdgeInsets.only(top: 10),
+              width: MediaQuery.of(context).size.width * 0.95,
+              height: MediaQuery.of(context).size.height / 3.2,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Color.fromARGB(255, 250, 249, 249).withOpacity(0.5),
+                //     spreadRadius: 2,
+                //     blurRadius: 2,
+                //     offset: Offset(0, 5),
+                //   ),
+                // ],
+                image: DecorationImage(
+                  image: NetworkImage(
+                      "http://10.0.2.2:5000/static/" + images[0]['name']),
+                  fit: BoxFit.fill,
                 ),
               ),
-            )
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              item['name'],
+              style: GoogleFonts.robotoMono(
+                color: Colors.black,
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Text(
+              "${item['adresse']}",
+              // style: TextStyle(
+              //   fontSize: 17,
+              //   fontWeight: FontWeight.w600,
+              //   color: Colors.black,
+              // ),
+              style: GoogleFonts.nunito(
+                fontSize: 18,
+                color: Color.fromARGB(255, 127, 127, 127),
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  child: const Icon(Icons.edit),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FieldEdit(
+                          id: item['id'],
+                          name: item['name'],
+                          type: item['type'],
+                          address: item['adresse'],
+                          prix: item['prix'].toString(),
+                          unavailabilityStartDate:
+                              unavailability['startDate'].toString(),
+                          unavailabilityFinishDate:
+                              unavailability['finishDate'].toString(),
+                          description: item['description'],
+                          services: item['services'],
+                          period: item['period'],
+                          surface: item['surface'],
+                          opening: item['ouverture'],
+                          closing: item['fermeture'],
+                          location: item['localisation'],
+                          images: item['images'],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                GestureDetector(
+                  //focusColor: Colors.grey,
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                  onTap: () async {
+                    await DeleteUser(item['id']);
+                    // onDelete!(model);
+                  },
+                ),
+              ],
+            ),
+            //  ),
           ],
         ),
       ),

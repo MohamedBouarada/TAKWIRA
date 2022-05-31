@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, prefer_final_fields
+// ignore_for_file: avoid_print, prefer_final_fields, unnecessary_new
 
 import 'dart:convert';
 import 'dart:io';
@@ -86,38 +86,75 @@ class Field with ChangeNotifier {
     required String services,
     required double price,
     required String period,
+    required String opening,
+    required String closing,
+    required String location,
     required String surface,
     required String description,
     required int idProprietaire,
+    required List<File> fieldImages,
   }) async {
     const url = 'http://10.0.2.2:5000/field/add';
     print(url);
+    print("*****************************");
+    print(fieldImages);
+    print("*****************************");
+    print(fieldImages[0]);
+
     try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
-        },
-        body: json.encode(
-          {
-            'name': name,
-            'adresse': adresse,
-            'type': type,
-            'isNotAvailable': isNotAvailable,
-            'services': services,
-            'prix': price,
-            'period': period,
-            'surface': surface,
-            'description': description,
-            'idProprietaire': 1,
-          },
-        ),
+      var request = new http.MultipartRequest("POST", Uri.parse(url));
+      request.fields['name'] = name;
+      request.fields['adresse'] = adresse;
+      request.fields['type'] = type;
+      request.fields['isNotAvailable'] = isNotAvailable.toString();
+      request.fields['services'] = services;
+      request.fields['prix'] = price.toString();
+      request.fields['period'] = period;
+      request.fields['ouverture'] = opening;
+      request.fields['fermeture'] = closing;
+      request.fields['localisation'] = location;
+      request.fields['surface'] = surface;
+      request.fields['description'] = description;
+      request.fields['userId'] = '1';
+      http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+        'files',
+        fieldImages[0].path,
       );
-      final responseData = json.decode(response.body);
-      print(responseData);
-      if (response.statusCode != HttpStatus.created) {
-        throw HttpException(responseData);
-      }
+
+      request.files.add(multipartFile);
+
+      await request.send().then((response) {
+        if (response.statusCode == 200) notifyListeners();
+      });
+      // final response = await http.post(
+      //   Uri.parse(url),
+      //   headers: {
+      //     HttpHeaders.contentTypeHeader: 'application/json',
+      //   },
+      //   body: json.encode(
+      //     {
+      //       'name': name,
+      //       'adresse': adresse,
+      //       'type': type,
+      //       'isNotAvailable': isNotAvailable,
+      //       'services': services,
+      //       'prix': price,
+      //       'period': period,
+      //       'ouverture': opening,
+      //       'fermeture': closing,
+      //       'localisation': location,
+      //       'surface': surface,
+      //       'description': description,
+      //       'userId': 1,
+      //       'files': fieldImages,
+      //     },
+      //   ),
+      // );
+      // final responseData = json.decode(response.body);
+      // print(responseData);
+      // if (response.statusCode != HttpStatus.created) {
+      //   throw HttpException(responseData);
+      // }
       notifyListeners();
     } catch (error) {
       print("**************");
@@ -126,17 +163,108 @@ class Field with ChangeNotifier {
     }
   }
 
+  Future<void> addImage({
+    required int id,
+    required List<File> fieldImages,
+  }) async {
+    var url = 'http://10.0.2.2:5000/field/image/add/' + id.toString();
+    // print(url);
+    // print("**********eeeeeeeeeeeeeeeeeeeeeeee*******************");
+    // print(fieldImages);
+    // print("*****************************");
+    // print(fieldImages[0]);
+
+    try {
+      var request = new http.MultipartRequest("POST", Uri.parse(url));
+
+      http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+        'files',
+        fieldImages[0].path,
+      );
+
+      request.files.add(multipartFile);
+
+      await request.send().then((response) {
+        if (response.statusCode == 200) notifyListeners();
+      });
+      // final response = await http.post(
+      //   Uri.parse(url),
+      //   headers: {
+      //     HttpHeaders.contentTypeHeader: 'application/json',
+      //   },
+      //   body: json.encode(
+      //     {
+      //       'name': name,
+      //       'adresse': adresse,
+      //       'type': type,
+      //       'isNotAvailable': isNotAvailable,
+      //       'services': services,
+      //       'prix': price,
+      //       'period': period,
+      //       'ouverture': opening,
+      //       'fermeture': closing,
+      //       'localisation': location,
+      //       'surface': surface,
+      //       'description': description,
+      //       'userId': 1,
+      //       'files': fieldImages,
+      //     },
+      //   ),
+      // );
+      // final responseData = json.decode(response.body);
+      // print(responseData);
+      // if (response.statusCode != HttpStatus.created) {
+      //   throw HttpException(responseData);
+      // }
+      notifyListeners();
+    } catch (error) {
+      print("**************");
+      print(error.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> deleteImage({
+    required int id,
+    required String imageName,
+  }) async {
+    var url = 'http://10.0.2.2:5000/field/image/delete/' +
+        id.toString() +
+        '/' +
+        imageName;
+    print(url);
+    print("*****************************");
+    print(imageName);
+    print("*****************************");
+
+    final response = await http.delete(
+      Uri.parse(url),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+    notifyListeners();
+    print(json.decode(response.body));
+    if (response.statusCode >= 400) {
+      notifyListeners();
+      throw HttpException('Could not delete image.');
+    }
+  }
+
   Future<void> update({
     required int id,
     required String name,
     required String adresse,
     required String type,
-    required Map<String, dynamic> isNotAvailable,
+    required Map<String, String> isNotAvailable,
     required String services,
     required double price,
     required String period,
+    required String opening,
+    required String closing,
     required String surface,
     required String description,
+    required String location,
     required int idProprietaire,
   }) async {
     var url = 'http://10.0.2.2:5000/field/' + id.toString();
@@ -158,8 +286,11 @@ class Field with ChangeNotifier {
             'services': services,
             'prix': price,
             'period': period,
+            'ouverture': opening,
+            'fermeture': closing,
             'surface': surface,
             'description': description,
+            'localisation': location,
             'userId': idProprietaire,
           },
         ),
