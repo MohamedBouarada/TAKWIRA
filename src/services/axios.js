@@ -95,3 +95,16 @@ console.log(e)
         return {success : false , data:e.response.data}
     }
 }
+
+export const activateOwnerRequestAccount = async (id)=> {
+    try{
+        const response = await axios({
+            method: "put",
+            url :`/admin/activateAccount/${id}`
+        })
+        return {success:true , data : response.data}
+    }catch (e) {
+        console.log(e)
+        return {success : false , data:e.response.data}
+    }
+}

@@ -3,7 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faBan, faEdit, faTrashCan, faUserShield} from "@fortawesome/free-solid-svg-icons";
 import styles from "./options.module.css"
 import {useDispatch, useSelector} from "react-redux";
-import {changeUserEdit, changeUserId, selectInfoRole,selectInfoId} from "../../../pages/userFormPage/userInfoSlice";
+import {
+    changeUserEdit,
+    changeUserId,
+    selectInfoRole,
+    selectInfoId,
+    activateOwnerAcc
+} from "../../../pages/userFormPage/userInfoSlice";
 import {useNavigate} from "react-router-dom";
 export const Options = ()=>{
 
@@ -20,7 +26,15 @@ export const Options = ()=>{
         <div className={`${display} ${styles.global}`}>
             <div className={styles.edit} onClick={()=>{dispatch(changeUserId(id));dispatch(changeUserEdit(true));navigate("/user/add")}}><FontAwesomeIcon icon={faEdit}/> Edit</div>
             <div className={styles.delete}><FontAwesomeIcon icon={faTrashCan}/> Delete</div>
-            <div className={styles.ban}> <FontAwesomeIcon icon={icon }/> {banOptionText}</div>
+            {role=="OWNER_REQUEST" && (
+                <div className={styles.ban} onClick={()=>dispatch(activateOwnerAcc())} > <FontAwesomeIcon icon={icon }/> {banOptionText}</div>
+            )}
+            {
+                role!=="OWNER_REQUEST" && (
+                    <div className={styles.ban} > <FontAwesomeIcon icon={icon }/> {banOptionText}</div>
+                )
+            }
+
         </div>
 
         </>
