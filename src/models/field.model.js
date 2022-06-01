@@ -67,6 +67,9 @@ field.init({
     fermeture : {
         type : DataTypes.TIME
     },
+    isUpdated : {
+        type : DataTypes.SMALLINT
+    },
 
 
 }, {

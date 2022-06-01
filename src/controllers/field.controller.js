@@ -68,7 +68,8 @@ class fieldController {
             images:photos,
             localisation,
             ouverture,
-            fermeture
+            fermeture,
+            isUpdated:0
         }
         const saving = await  fieldDao.add(fieldToSave);
         if(saving.success===false){
@@ -98,12 +99,22 @@ class fieldController {
         if(fields.success ===false){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error");
         }
+        
         //return res.json(fields.data)
         const formattedList = fields.data.map((element)=>{
-            const avString = convertUtility.convertStringToJson(element.dataValues.isNotAvailable) ;
-            const notAvailable={'startDate':avString.startDate,'finishDate':avString.finishDate}
+            if(element.dataValues.isUpdated == 0){
+                const avString =  convertUtility.convertStringToJson(element.dataValues.isNotAvailable) ;
+            const av2 = JSON.parse(element.dataValues.isNotAvailable)
+            const firstVal = av2.indexOf(":")
+            const notAvailable={'startDate':av2.substring(av2.indexOf(":")+1,av2.indexOf(",")),'finishDate':av2.substring(av2.indexOf("finishDate:",av2.indexOf(":"+1))+12,av2.indexOf("}"))}
             const str=convertUtility.convertJsonToString(notAvailable);
-            return {...element.dataValues,isNotAvailable:str}
+            //console.log( av2.indexOf(","))
+            delete element.dataValues.isUpdated;
+            return {...element.dataValues,isNotAvailable: str}
+            }
+            delete element.dataValues.isUpdated;
+            return {...element.dataValues}
+            
         })
         //return res.json(fields.data)
       // const photoString = convertUtility.convertStringToJson(fields.dataValues.images)
@@ -124,7 +135,8 @@ class fieldController {
         return res.status(StatusCodes.OK).json({...field.data , images : photoString});
     }
     async update (req,res) {
-        const {name ,ouverture,fermeture, adresse , type , isNotAvailable,services , prix ,period,surface, description , userId}=req.body;
+        const {name ,ouverture,fermeture, adresse , type ,localisation, isNotAvailable,services , prix ,period,surface, description }=req.body;
+        const userId=req.infos.authId;
         const id = req.params.id;
 
         if(type!==FieldType.Tennis && type!==FieldType.Football && type!==FieldType.Basketball && type!==FieldType.Golf) {
@@ -153,7 +165,7 @@ class fieldController {
         if(fieldExists.data===null) {
             return  res.status(StatusCodes.BAD_REQUEST).json("field not found")
         }
-        if(ownerExists.data["role"] !==UserType.Owner) {
+        if(ownerExists.data["role"] !==UserType.Owner && ownerExists.data["role"] !==UserType.OwnerRequest ) {
             return  res.status(StatusCodes.NOT_FOUND).json("not a field owner")
         }
         const fieldToUpdate = {
@@ -166,9 +178,10 @@ class fieldController {
             period,
             surface,
             description,
-            userId,
+            localisation,
             ouverture,
-            fermeture
+            fermeture,
+            isUpdated:1
         }
         const saving = await  fieldDao.update(fieldToUpdate,id);
         if(saving.success===false){

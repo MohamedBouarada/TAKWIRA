@@ -9,7 +9,7 @@ const ownerAndOwnerRequestGuard = require("../guards/ownerAndRequestOwner.guard"
 router.post("/add" ,[upload.array("files",5),jwtHandling.jwtVerify([UserType.Owner,UserType.OwnerRequest]),ownerAndOwnerRequestGuard], fieldController.add)
 router.get("/getByOwner" ,[jwtHandling.jwtVerify([UserType.Owner,UserType.OwnerRequest]),ownerAndOwnerRequestGuard], fieldController.getByOwner)
 router.get("/:id" , fieldController.getById)
-router.put("/:id" , fieldController.update)
+router.put("/:id" , [jwtHandling.jwtVerify([UserType.Owner,UserType.OwnerRequest]),ownerAndOwnerRequestGuard],fieldController.update)
 router.delete("/:id" , fieldController.delete)
 router.get("/search/all" , fieldController.searchForFields)
 router.delete("/image/delete/:fieldId/:imageName" , fieldController.deleteImage)
