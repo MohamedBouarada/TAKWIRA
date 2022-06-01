@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, deprecated_member_use, missing_return, prefer_final_fields
 
+import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:takwira_mobile/animation/FadeAnimation.dart';
@@ -135,9 +136,11 @@ class _AuthCardState extends State<AuthCard> {
   Map<String, String> _authData = {
     'email': '',
     'password': '',
+    'repeatPassword':'',
     'firstName': '',
     'lastName': '',
     'phoneNumber': '',
+    'role':'CLIENT',
   };
   void _showErrorDialog(String message) {
     showDialog(
@@ -171,6 +174,9 @@ class _AuthCardState extends State<AuthCard> {
         lastName: _authData['lastName']!,
         phoneNumber: _authData['phoneNumber']!,
         password: _authData['password']!,
+        repeatPassword: _authData['repeatPassword']!,
+        role: _authData['role']!,
+        
       );
       Navigator.push(
         context,
@@ -184,6 +190,12 @@ class _AuthCardState extends State<AuthCard> {
       _showErrorDialog("oops! something went wrong , please try again");
     }
   }
+
+  final roles = [
+    {'display': "owner", 'value': "OWNER_REQUEST"},
+    {'display': "client", 'value': "CLIENT"},
+    
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -378,10 +390,80 @@ class _AuthCardState extends State<AuthCard> {
                 ),
               ),
               SizedBox(
-                height: 30,
+                height: 20,
               ),
               FadeAnimation(
                 1.5,
+                TextFormField(
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 9, 77, 9), fontSize: 16),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    labelText: 'Repeat password',
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 10,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey[400]!),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey[400]!,
+                      ),
+                    ),
+                  ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  obscureText: true,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Password is incorrect';
+                    }
+                  },
+                  onSaved: (newValue) {
+                    _authData['repeatPassword'] = newValue!;
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              FadeAnimation(
+                1.6,
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: null,
+                    color: Colors.white,
+                  ),
+                  child: DropDownFormField(
+                    filled: true,
+                    titleText: 'role',
+                    hintText: 'Please choose one',
+                    value: _authData['role'],
+                    onSaved: (value) {
+                      setState(() {
+                        _authData['role'] = value;
+                      });
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        _authData['role'] = value;
+                      });
+                    },
+                    dataSource: roles,
+                    textField: 'display',
+                    valueField: 'value',
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              FadeAnimation(
+                1.7,
                 Container(
                   padding: const EdgeInsets.only(top: 3, left: 3),
                   decoration: BoxDecoration(

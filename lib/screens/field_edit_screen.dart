@@ -168,9 +168,8 @@ class _EditCardState extends State<EditCard> {
           fieldImages: fieldImages,
         );
         setState(() {
-                                                      
-                                                      fetchImages();
-                                                    });
+          fetchImages();
+        });
       } on HttpException catch (error) {
         _showErrorDialog(error.toString());
       } catch (error) {
@@ -328,7 +327,7 @@ class _EditCardState extends State<EditCard> {
         surface: _surfaceController.text.toString(),
         description: _descriptionController.text.toString(),
         location: _locationController.text.toString(),
-        idProprietaire: 1,
+        
       );
 
       Navigator.push(

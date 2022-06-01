@@ -144,7 +144,6 @@ class _FieldCardState extends State<FieldCard> {
     'surface': '',
     'location': '',
     'description': 'filed description',
-    'idProprietaire': 1,
   };
 
   List<XFile>? _imageFileList;
@@ -242,7 +241,6 @@ class _FieldCardState extends State<FieldCard> {
         surface: _authData['surface']!,
         location: _authData['location']!,
         description: _authData['description']!,
-        idProprietaire: _authData['idProprietaire']!,
         fieldImages: fieldImages,
       );
       print(_authData);
@@ -971,33 +969,34 @@ class _FieldCardState extends State<FieldCard> {
               //   height: 20,
               // ),
               FadeAnimation(
-                  1.9,
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: null,
-                      color: Colors.white,
-                    ),
-                    child: DropDownFormField(
-                      filled: true,
-                      titleText: 'Surface',
-                      hintText: 'Please choose one',
-                      value: _authData['surface'],
-                      onSaved: (value) {
-                        setState(() {
-                          _authData['surface'] = value;
-                        });
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          _authData['surface'] = value;
-                        });
-                      },
-                      dataSource: surfaces,
-                      textField: 'display',
-                      valueField: 'value',
-                    ),
-                  )),
+                1.9,
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: null,
+                    color: Colors.white,
+                  ),
+                  child: DropDownFormField(
+                    filled: true,
+                    titleText: 'Surface',
+                    hintText: 'Please choose one',
+                    value: _authData['surface'],
+                    onSaved: (value) {
+                      setState(() {
+                        _authData['surface'] = value;
+                      });
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        _authData['surface'] = value;
+                      });
+                    },
+                    dataSource: surfaces,
+                    textField: 'display',
+                    valueField: 'value',
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 20,
               ),

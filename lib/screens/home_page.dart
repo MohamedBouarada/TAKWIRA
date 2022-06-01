@@ -4,12 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:takwira_mobile/providers/storage_service.dart';
 import 'package:takwira_mobile/screens/fields_screen.dart';
+import 'package:takwira_mobile/screens/owner_field_list.dart';
+import 'package:takwira_mobile/screens/root_app.dart';
 import '../animation/FadeAnimation.dart';
 import '../screens/login.dart';
 import '../screens/signup.dart';
 
 class HomePage extends StatefulWidget {
+  static const routeName = '/home';
   static bool isAuth = false;
+  static bool isClient = false;
+
   const HomePage({Key? key}) : super(key: key);
   @override
   HomePageState createState() => HomePageState();
@@ -18,6 +23,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   final StorageService _storageService = StorageService();
   String _token = "";
+  String _role = "";
 
   @override
   void initState() {
@@ -28,14 +34,16 @@ class HomePageState extends State<HomePage> {
 
   void readToken() async {
     _token = (await _storageService.readSecureData('token'))!;
+    _role = (await _storageService.readSecureData('role'))!;
     setState(() {});
     HomePage.isAuth = _token.isNotEmpty;
+    HomePage.isClient = (_role == "CLIENT");
   }
 
   @override
   Widget build(BuildContext context) {
     return HomePage.isAuth
-        ? FieldsScreen()
+        ? HomePage.isClient?RootApp():IndexPage()
         : Scaffold(
             resizeToAvoidBottomInset: false,
             body: Center(

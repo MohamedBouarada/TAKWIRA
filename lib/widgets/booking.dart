@@ -206,7 +206,6 @@ class _BookingState extends State<Booking> {
     try {
       await Provider.of<FieldsProvider>(context, listen: false).addBooking(
         fieldId: id,
-        userId: 2,
         startDate: bookingDateTime,
       );
       setState(() {

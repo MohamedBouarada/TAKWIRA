@@ -2,7 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:takwira_mobile/screens/home_page.dart';
 import '../themes/color.dart';
 //import '../utils/data.dart';
 import '../widgets/custom_image.dart';
@@ -10,6 +12,7 @@ import '../widgets/icon_box.dart';
 import '../widgets/setting_item.dart';
 
 const d_green = Color(0xFF54D3C2);
+
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
 
@@ -62,10 +65,10 @@ class _SettingPageState extends State<SettingPage> {
           ),
           IconBox(
             child: Icon(
-                  Icons.edit,
-                  color: dark_d_green,
-                  size: 26.0,
-                ),
+              Icons.edit,
+              color: dark_d_green,
+              size: 26.0,
+            ),
             bgColor: appBgColor,
           ),
         ],
@@ -158,7 +161,16 @@ class _SettingPageState extends State<SettingPage> {
         message: Text("Would you like to log out?"),
         actions: [
           CupertinoActionSheetAction(
-            onPressed: () {},
+            onPressed: () async {
+              final storage = new FlutterSecureStorage();
+              await storage.deleteAll();
+              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );
+            },
             child: Text(
               "Log Out",
               style: TextStyle(color: actionColor),

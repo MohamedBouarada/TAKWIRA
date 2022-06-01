@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
+import '../storage_service.dart';
 import './field.dart';
 import "../../models/http_exception.dart";
 
 class FieldsProvider with ChangeNotifier {
+  final StorageService _storageService = StorageService();
+  String _token = "";
   static List<FieldProvider> _items = [];
 
   List<FieldProvider> get items {
@@ -56,21 +59,21 @@ class FieldsProvider with ChangeNotifier {
 
   Future<void> addBooking({
     required int fieldId,
-    required int userId,
     required String startDate,
   }) async {
     const url = 'http://10.0.2.2:5000/reservation/add';
+    _token = (await _storageService.readSecureData('token'))!;
     print(url);
     try {
       final response = await http.post(
         Uri.parse(url),
         headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': "bearer ${_token}",
         },
         body: json.encode(
           {
             "fieldId": fieldId,
-            "userId": userId,
             "startDate": startDate,
           },
         ),

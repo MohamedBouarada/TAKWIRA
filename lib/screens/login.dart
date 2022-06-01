@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:takwira_mobile/models/http_exception.dart';
 import 'package:takwira_mobile/providers/auth.dart';
 import 'package:takwira_mobile/animation/FadeAnimation.dart';
+//import 'package:takwira_mobile/screens/fields_screen.dart';
 import 'package:takwira_mobile/screens/home_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -207,7 +208,8 @@ class _LoginCardState extends State<LoginCard> {
         email: _authData['email']!,
         password: _authData['password']!,
       );
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
     } on HttpException catch (error) {
       _showErrorDialog(error.toString());
     } catch (error) {

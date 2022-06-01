@@ -18,9 +18,10 @@ import './providers/field/field.dart';
 import './screens//fields_screen.dart';
 import './screens/home_page.dart';
 import './screens//login.dart';
-import 'screens/field_edit_screen.dart';
-import 'pages/field_list.dart';
 import 'pages/field_edit.dart';
+import 'pages/field_list.dart';
+import 'screens/field_edit_screen.dart';
+
 import 'screens/owner_field_list.dart';
 
 Future main() async {
@@ -58,8 +59,9 @@ class MyApp extends StatelessWidget {
           //home: Details( imgUrl: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', placeName: 'hammamet', rating: 4.5,),
           //home: HelpContainer(),
           //home: ClientFieldScreen(),
-          home: RootApp(),
+          //home: RootApp(),
           //home: Booking(),
+          home: HomePage(),
           //home: IndexPage(),
           routes: {
             LoginPage.routName: (ctx) => LoginPage(),
@@ -68,6 +70,7 @@ class MyApp extends StatelessWidget {
             Details.routeName: (context) => Details(),
             EditFieldList.routeName: (context) => EditFieldList(),
             FieldsList.routeName: (ctx) => FieldsList(),
+            HomePage.routeName:(ctx)=> HomePage(),
             IndexPage.routName: (context) => IndexPage(),
             // '/edit-Field': (context) => const FieldAdd(),
           },

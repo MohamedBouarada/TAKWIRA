@@ -17,6 +17,9 @@ class Auth with ChangeNotifier {
     required String lastName,
     required String phoneNumber,
     required String password,
+    required String repeatPassword,
+    required String role,
+
   }) async {
     const url = 'http://10.0.2.2:5000/user/add';
     try {
@@ -32,7 +35,8 @@ class Auth with ChangeNotifier {
             'lastName': lastName,
             'phoneNumber': phoneNumber,
             'password': password,
-            'role':"CLIENT"
+            'repeatPassword':repeatPassword,
+            'role':role,
           },
         ),
       );
@@ -72,8 +76,10 @@ class Auth with ChangeNotifier {
 
 // Save an integer value to 'counter' key.
       final StorageService _storageService = StorageService();
-      final StorageItem storageItem = StorageItem('token', responseData);
+      final StorageItem storageItem = StorageItem('token', responseData['token']);
+      final StorageItem roleItem = StorageItem('role', responseData['role']);
       _storageService.writeSecureData(storageItem);
+      _storageService.writeSecureData(roleItem);
       notifyListeners();
     } catch (error) {
       print(error.toString());

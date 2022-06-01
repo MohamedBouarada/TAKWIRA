@@ -1,5 +1,5 @@
 // ignore_for_file: avoid_print, prefer_final_fields, unnecessary_new
-
+import 'package:takwira_mobile/providers/storage_service.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -11,7 +11,8 @@ import "../models/http_exception.dart";
 
 class Field with ChangeNotifier {
   static List<FieldModel> _items = [];
-
+  final StorageService _storageService = StorageService();
+  String _token = "";
   List<FieldModel> get items {
     return [..._items];
   }
@@ -92,10 +93,10 @@ class Field with ChangeNotifier {
     required String location,
     required String surface,
     required String description,
-    required int idProprietaire,
     required List<File> fieldImages,
   }) async {
     var url = 'http://${dotenv.env['addressIp']}:5000/field/add';
+     _token = (await _storageService.readSecureData('token'))!;
     print(url);
     print("*****************************");
     print(fieldImages);
@@ -116,12 +117,15 @@ class Field with ChangeNotifier {
       request.fields['localisation'] = location;
       request.fields['surface'] = surface;
       request.fields['description'] = description;
-      request.fields['userId'] = '1';
       http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
         'files',
         fieldImages[0].path,
       );
-
+      Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Authorization':"bearer ${_token}",
+  };
+      request.headers.addAll(headers);
       request.files.add(multipartFile);
 
       await request.send().then((response) {
@@ -163,11 +167,12 @@ class Field with ChangeNotifier {
       rethrow;
     }
   }
+
   Future<void> addImage({
     required int id,
     required List<File> fieldImages,
   }) async {
-    var url = 'http://10.0.2.2:5000/field/image/add/'+ id.toString();
+    var url = 'http://10.0.2.2:5000/field/image/add/' + id.toString();
     // print(url);
     // print("**********eeeeeeeeeeeeeeeeeeeeeeee*******************");
     // print(fieldImages);
@@ -176,8 +181,7 @@ class Field with ChangeNotifier {
 
     try {
       var request = new http.MultipartRequest("POST", Uri.parse(url));
-      
-      
+
       http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
         'files',
         fieldImages[0].path,
@@ -224,18 +228,22 @@ class Field with ChangeNotifier {
       rethrow;
     }
   }
+
   Future<void> deleteImage({
     required int id,
     required String imageName,
   }) async {
-    var url = 'http://10.0.2.2:5000/field/image/delete/'+ id.toString()+'/'+imageName;
+    var url = 'http://10.0.2.2:5000/field/image/delete/' +
+        id.toString() +
+        '/' +
+        imageName;
     print(url);
     print("*****************************");
     print(imageName);
     print("*****************************");
-    
-     final response = await http.delete(
-     Uri.parse(url),
+
+    final response = await http.delete(
+      Uri.parse(url),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
       },
@@ -246,7 +254,7 @@ class Field with ChangeNotifier {
       notifyListeners();
       throw HttpException('Could not delete image.');
     }
-}
+  }
 
   Future<void> update({
     required int id,
@@ -262,18 +270,19 @@ class Field with ChangeNotifier {
     required String surface,
     required String description,
     required String location,
-    required int idProprietaire,
+    
   }) async {
     var url = 'http://${dotenv.env['addressIp']}:5000/field/' + id.toString();
     print(url);
     try {
       print(type);
-
+      _token = (await _storageService.readSecureData('token'))!;
       final response = await http.put(
         Uri.parse(url),
-        headers: {
-          HttpHeaders.contentTypeHeader: 'application/json',
-        },
+         headers: {
+    'Content-Type': 'application/json',
+    'Authorization':'bearer ${_token}',
+  },
         body: json.encode(
           {
             'name': name,
@@ -288,7 +297,7 @@ class Field with ChangeNotifier {
             'surface': surface,
             'description': description,
             'localisation': location,
-            'userId': idProprietaire,
+            
           },
         ),
       );
