@@ -13,8 +13,10 @@ const path = require("path");
 class fieldController {
 
     async add (req,res) {
-
+            console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
         const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , userId,localisation,ouverture,fermeture}=req.body;
+        console.log(isNotAvailable);
+        
          let photos = ""
         if(req.files) {
             const files = req.files ;
@@ -51,12 +53,12 @@ class fieldController {
         if(ownerExists.data["role"] !==UserType.Owner && ownerExists.data["role"] !==UserType.OwnerRequest) {
             return  res.status(StatusCodes.NOT_FOUND).json("not a field owner")
         }
-
+        console.log(isNotAvailable);
         const fieldToSave = {
             name,
             adresse,
             type,
-            isNotAvailable,
+            isNotAvailable:convertUtility.convertStringToJson(convertUtility.convertJsonToString(isNotAvailable)), 
             services,
             prix,
             period,
@@ -75,6 +77,18 @@ class fieldController {
         return  res.status(StatusCodes.CREATED).json("new field created successfully")
         
     }
+    // async getByOwner(req,res){
+    //     const id = req.params.id;
+    //     const fields = await fieldDao.findByIdPropietaire(id);
+    //     console.log(JSON.stringify(fields.data[0]['isNotAvailable']['startDate']));
+    //     console.log(fields.dataValues)
+    //     if(fields.success ===false){
+    //         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error");
+    //     }
+    //    // const photoString = convertUtility.convertStringToJson(fields.dataValues.images)
+    //    // return res.status(StatusCodes.OK).json({...fields.data , images : photoString});
+    //     return res.status(StatusCodes.OK).json(fields.data);
+    // }
     async getByOwner(req,res){
         const id = req.params.id;
         const fields = await fieldDao.findByIdPropietaire(id);
@@ -83,9 +97,18 @@ class fieldController {
         if(fields.success ===false){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error");
         }
-       // const photoString = convertUtility.convertStringToJson(fields.dataValues.images)
+        //return res.json(fields.data)
+        const formattedList = fields.data.map((element)=>{
+            const avString = convertUtility.convertStringToJson(element.dataValues.isNotAvailable) ;
+            const notAvailable={'startDate':avString.startDate,'finishDate':avString.finishDate}
+            const str=convertUtility.convertJsonToString(notAvailable);
+            return {...element.dataValues,isNotAvailable:str}
+        })
+        //return res.json(fields.data)
+      // const photoString = convertUtility.convertStringToJson(fields.dataValues.images)
+       // fields.data
        // return res.status(StatusCodes.OK).json({...fields.data , images : photoString});
-        return res.status(StatusCodes.OK).json(fields.data);
+        return res.status(StatusCodes.OK).json(formattedList);
     }
     async getById(req,res){
         const id = req.params.id;
