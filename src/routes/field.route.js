@@ -2,9 +2,12 @@ const express = require("express");
 const  router = express.Router();
 const fieldController = require("../controllers/field.controller")
 const upload = require("../services/uploadService")
+const jwtHandling = require("../services/jwtHandling");
+const UserType = require("../enums/userTypes");
+const ownerAndOwnerRequestGuard = require("../guards/ownerAndRequestOwner.guard")
 
 router.post("/add" ,upload.array("files",5), fieldController.add)
-router.get("/getByOwner/:id" , fieldController.getByOwner)
+router.get("/getByOwner" ,[jwtHandling.jwtVerify([UserType.Owner,UserType.OwnerRequest]),ownerAndOwnerRequestGuard], fieldController.getByOwner)
 router.get("/:id" , fieldController.getById)
 router.put("/:id" , fieldController.update)
 router.delete("/:id" , fieldController.delete)
