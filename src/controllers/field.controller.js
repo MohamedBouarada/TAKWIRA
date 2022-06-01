@@ -91,9 +91,10 @@ class fieldController {
     // }
     async getByOwner(req,res){
         const id = req.infos.authId;
+        console.log(id);
         const fields = await fieldDao.findByIdPropietaire(id);
-        console.log(JSON.stringify(fields.data[0]['isNotAvailable']['startDate']));
-        console.log(fields.dataValues)
+        // console.log(JSON.stringify(fields.data[0]['isNotAvailable']['startDate']));
+        // console.log(fields.dataValues)
         if(fields.success ===false){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error");
         }
