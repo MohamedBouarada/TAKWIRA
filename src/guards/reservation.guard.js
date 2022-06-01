@@ -29,3 +29,6 @@ async function reservationGuard(req,res,next) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("errorrr")
     }
 }
+
+
+module.exports = reservationGuard
