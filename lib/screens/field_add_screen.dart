@@ -122,7 +122,7 @@ class _FieldCardState extends State<FieldCard> {
   final List<Map<String, String>> fieldTypes = [];
 
   // File? _file;
-  final Map<String, dynamic> _dates = {"startDate": "", "finishDate": ""};
+  final Map<String, String> _dates = {"startDate": "", "finishDate": ""};
   // Map<String, String> dates = {"startDate": "aa", "finishDate": "bb"};
   bool _displayNewTextField = false;
   TextEditingController timeinput = TextEditingController();
@@ -152,10 +152,10 @@ class _FieldCardState extends State<FieldCard> {
   void _setImageFileListFromFile(XFile? value) {
     _imageFileList = value == null ? null : <XFile>[value];
     if (_imageFileList!.length > 0) {
-        fieldImages.add(File(_imageFileList![0].path));
-      }
-      print(fieldImages[0].path);
-      print(fieldImages);
+      fieldImages.add(File(_imageFileList![0].path));
+    }
+    print(fieldImages[0].path);
+    print(fieldImages);
   }
 
   dynamic _pickImageError;
@@ -223,7 +223,11 @@ class _FieldCardState extends State<FieldCard> {
       return;
     }
     _formKey!.currentState!.save();
+    print("heyyyyyyyyyyyyyyyyyyyyyyy");
     print(_dates);
+    print(_dates.toString());
+    print(_dates.runtimeType);
+
     try {
       await Provider.of<Field>(context, listen: false).add(
         name: _authData['name']!,
@@ -291,7 +295,6 @@ class _FieldCardState extends State<FieldCard> {
       return retrieveError;
     }
     if (_imageFileList != null) {
-      
       return Semantics(
         label: 'image_picker_example_picked_images',
         child: ListView.builder(
@@ -764,14 +767,14 @@ class _FieldCardState extends State<FieldCard> {
                     );
 
                     if (pickedTime != null) {
-                      print(pickedTime.format(context)); //output 10:51 PM
+                      //print(pickedTime.format(context)); //output 10:51 PM
                       DateTime parsedTime = DateFormat.jm()
                           .parse(pickedTime.format(context).toString());
                       //converting to DateTime so that we can further format on different pattern.
                       print(parsedTime); //output 1970-01-01 22:53:00.000
                       String formattedTime =
                           DateFormat('HH:mm:ss').format(parsedTime);
-                      print(formattedTime); //output 14:59:00
+                      //print(formattedTime); //output 14:59:00
                       //DateFormat() is from intl package, you can format the time on any pattern you need.
 
                       setState(() {
@@ -781,6 +784,9 @@ class _FieldCardState extends State<FieldCard> {
                     } else {
                       print("Time is not selected");
                     }
+                  },
+                  onChanged: (val) {
+                    print(val.runtimeType);
                   },
                   onSaved: (newValue) {
                     _authData['period'] = newValue!;
@@ -871,7 +877,7 @@ class _FieldCardState extends State<FieldCard> {
                     ),
                     fillColor: Colors.white,
                     filled: true,
-                    labelText: 'period',
+                    labelText: 'closing',
                     contentPadding: const EdgeInsets.symmetric(
                       vertical: 0,
                       horizontal: 10,
@@ -1266,6 +1272,7 @@ class _FieldCardState extends State<FieldCard> {
                     }
                   },
                   onSaved: (newValue) {
+                    print(newValue);
                     _dates['finishDate'] = newValue.toString();
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,

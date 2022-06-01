@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/field_model.dart';
@@ -62,7 +63,7 @@ class Field with ChangeNotifier {
   }
 
   Future<List> get() async {
-    var url = "http://10.0.2.2:5000/field/getByOwner/1";
+    var url = "http://${dotenv.env['addressIp']}:5000/field/getByOwner/1";
     var response = await http.get(
       Uri.parse(url),
       headers: {
@@ -94,7 +95,7 @@ class Field with ChangeNotifier {
     required int idProprietaire,
     required List<File> fieldImages,
   }) async {
-    const url = 'http://10.0.2.2:5000/field/add';
+    var url = 'http://${dotenv.env['addressIp']}:5000/field/add';
     print(url);
     print("*****************************");
     print(fieldImages);
@@ -263,7 +264,7 @@ class Field with ChangeNotifier {
     required String location,
     required int idProprietaire,
   }) async {
-    var url = 'http://10.0.2.2:5000/field/' + id.toString();
+    var url = 'http://${dotenv.env['addressIp']}:5000/field/' + id.toString();
     print(url);
     try {
       print(type);
@@ -308,7 +309,7 @@ class Field with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url = 'http://10.0.2.2:5000/field/' + id.toString();
+    var url = 'http://${dotenv.env['addressIp']}:5000/field/' + id.toString();
 
     final response = await http.delete(
       Uri.parse(url),

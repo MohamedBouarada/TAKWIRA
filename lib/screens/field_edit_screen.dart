@@ -1,6 +1,7 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe, use_key_in_widget_constructors, avoid_unnecessary_containers, prefer_const_constructors, deprecated_member_use, prefer_const_literals_to_create_immutables, avoid_print, unused_field
 
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:io';
@@ -482,7 +483,7 @@ class _EditCardState extends State<EditCard> {
 
   List<String> photos = [];
   fetchImages() async {
-    var url = "http://10.0.2.2:5000/field/" + widget.id.toString();
+    var url = "http://${dotenv.env['addressIp']}:5000/field/" + widget.id.toString();
     var response = await http.get(
       Uri.parse(url),
       headers: {
@@ -650,7 +651,7 @@ class _EditCardState extends State<EditCard> {
                                       child: Container(
                                         child: GestureDetector(
                                             child: Image.network(
-                                                "http://10.0.2.2:5000/static/" +
+                                                "http://${dotenv.env['addressIp']}:5000/static/" +
                                                     i,
                                                 fit: BoxFit.fill),
                                             onTap: () {}),

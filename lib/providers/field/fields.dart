@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import './field.dart';
@@ -86,7 +87,7 @@ class FieldsProvider with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url = "http://10.0.2.2:5000/field/search/all?perPage=10";
+    var url = "http://${dotenv.env['addressIp']}:5000/field/search/all?perPage=10";
     //var url = "http://10.0.2.2:5000/field/getByOwner/1";
     print(url);
     try {

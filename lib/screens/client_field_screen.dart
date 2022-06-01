@@ -399,7 +399,7 @@ class FieldCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.all(10),
-        height: 230,
+        height: 250,
         width: double.infinity,
         decoration: BoxDecoration(
             color: Colors.white,
@@ -424,7 +424,7 @@ class FieldCard extends StatelessWidget {
                   topRight: Radius.circular(18),
                 ),
                 image: DecorationImage(
-                  image: NetworkImage("http://10.0.2.2:5000/static/"+images[0]['name']),
+                  image: NetworkImage("http://192.168.1.13:5000/static/"+images[0]['name']),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -474,7 +474,7 @@ class FieldCard extends StatelessWidget {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     fieldData.adresse,
@@ -483,6 +483,9 @@ class FieldCard extends StatelessWidget {
                       color: Colors.grey[500],
                       fontWeight: FontWeight.w400,
                     ),
+                  ),
+                  SizedBox(
+                    width: 20,
                   ),
                   Row(
                     children: [
@@ -502,14 +505,7 @@ class FieldCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Text(
-                    'per 1 hour',
-                    style: GoogleFonts.nunito(
-                      fontSize: 14,
-                      color: Colors.grey.shade800,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
+                  
                 ],
               ),
             ),
@@ -555,6 +551,16 @@ class FieldCard extends StatelessWidget {
                     style: GoogleFonts.nunito(
                       fontSize: 14,
                       color: Colors.grey[500],
+                      fontWeight: FontWeight.w400,
+                    ),
+                    
+                  ),
+                  Spacer(),
+                  Text(
+                    'per 1 hour',
+                    style: GoogleFonts.nunito(
+                      fontSize: 14,
+                      color: Colors.grey.shade800,
                       fontWeight: FontWeight.w400,
                     ),
                   ),

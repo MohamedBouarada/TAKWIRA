@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:takwira_mobile/screens/field_add_screen.dart';
 import 'package:takwira_mobile/screens/field_edit_screen.dart';
@@ -39,7 +40,7 @@ class _IndexPageState extends State<IndexPage> {
     setState(() {
       isLoading = true;
     });
-    var url = "http://10.0.2.2:5000/field/getByOwner/1";
+    var url = "http://${dotenv.env['addressIp']}:5000/field/getByOwner/1";
     var response = await http.get(
       Uri.parse(url),
       headers: requestHeaders,
@@ -175,7 +176,7 @@ class _IndexPageState extends State<IndexPage> {
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage("http://10.0.2.2:5000/static/"+images[0]['name']),
+                    image: NetworkImage("http://${dotenv.env['addressIp']}:5000/static/"+images[0]['name']),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -190,7 +191,7 @@ class _IndexPageState extends State<IndexPage> {
                   Text(
                     item['name'],
                     style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: Color.fromARGB(255, 0, 0, 0)),
                   ),

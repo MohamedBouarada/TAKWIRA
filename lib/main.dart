@@ -1,5 +1,5 @@
 // ignore_for_file: unused_import, prefer_const_constructors
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:takwira_mobile/providers/field.dart';
@@ -23,14 +23,17 @@ import 'pages/field_list.dart';
 import 'pages/field_edit.dart';
 import 'screens/owner_field_list.dart';
 
-void main() => runApp(const MyApp());
+Future main() async {
+  await dotenv.load(fileName: ".env");
+  print(dotenv.env['addressIp']);
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
@@ -55,16 +58,16 @@ class MyApp extends StatelessWidget {
           //home: Details( imgUrl: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', placeName: 'hammamet', rating: 4.5,),
           //home: HelpContainer(),
           //home: ClientFieldScreen(),
-          home: RootApp(),
+          //home: RootApp(),
           //home: Booking(),
-          //home: IndexPage(),
+          home: IndexPage(),
           routes: {
             LoginPage.routName: (ctx) => LoginPage(),
             SignupPage.routName: (ctx) => SignupPage(),
-            ClientFieldScreen.routeName: (context)=>ClientFieldScreen(),
-            Details.routeName:(context)=>Details(),
+            ClientFieldScreen.routeName: (context) => ClientFieldScreen(),
+            Details.routeName: (context) => Details(),
             EditFieldList.routeName: (context) => EditFieldList(),
-            FieldsList.routeName:(ctx)=>FieldsList(),
+            FieldsList.routeName: (ctx) => FieldsList(),
             IndexPage.routName: (context) => IndexPage(),
             // '/edit-Field': (context) => const FieldAdd(),
           },
