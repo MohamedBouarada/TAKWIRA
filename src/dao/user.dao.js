@@ -170,7 +170,15 @@ class UserDao {
         }
     }
 
-
+async deleteUserById(id){
+        try{
+            const deletedUsr = await userModel.destroy({where: {id}})
+return {success:true}
+        }catch (e) {
+console.log(e)
+            return {success:false}
+        }
+}
 
 }
 

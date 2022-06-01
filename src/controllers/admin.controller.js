@@ -116,6 +116,13 @@ class AdminController {
         return res.status(StatusCodes.OK).json(user.data)
     }
 
+    async deleteOneUser(req,res) {
+      const result = await userDao.deleteUserById(req.params.id)
+        if(result.success===true)  {
+            return res.status(StatusCodes.OK).json("user deleted successfully")
+        }
+        return  res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error in deleting user")
+    }
 
 }
 
