@@ -83,9 +83,16 @@ class fieldController {
         if(fields.success ===false){
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json("error");
         }
-       // const photoString = convertUtility.convertStringToJson(fields.dataValues.images)
+        //return res.json(fields.data)
+        const formattedList = fields.data.map((element)=>{
+            const avString = convertUtility.convertStringToJson(element.dataValues.isNotAvailable) ;
+            return {...element.dataValues,isNotAvailable:avString}
+        })
+        //return res.json(fields.data)
+      // const photoString = convertUtility.convertStringToJson(fields.dataValues.images)
+       // fields.data
        // return res.status(StatusCodes.OK).json({...fields.data , images : photoString});
-        return res.status(StatusCodes.OK).json(fields.data);
+        return res.status(StatusCodes.OK).json(formattedList);
     }
     async getById(req,res){
         const id = req.params.id;
