@@ -6,7 +6,7 @@ const jwtHandling = require("../services/jwtHandling");
 const UserType = require("../enums/userTypes");
 const ownerAndOwnerRequestGuard = require("../guards/ownerAndRequestOwner.guard")
 
-router.post("/add" ,upload.array("files",5), fieldController.add)
+router.post("/add" ,[upload.array("files",5),jwtHandling.jwtVerify([UserType.Owner,UserType.OwnerRequest]),ownerAndOwnerRequestGuard], fieldController.add)
 router.get("/getByOwner" ,[jwtHandling.jwtVerify([UserType.Owner,UserType.OwnerRequest]),ownerAndOwnerRequestGuard], fieldController.getByOwner)
 router.get("/:id" , fieldController.getById)
 router.put("/:id" , fieldController.update)

@@ -8,7 +8,8 @@ const moment = require("moment");
 class ReservationController{
 
     async add(req,res){
-        const {userId,fieldId,startDate} = req.body;
+        const {fieldId,startDate} = req.body;
+        const userId =req.infos.authId;
        // return res.json( new Date(startDate).toLocaleTimeString())
        // return res.json(moment("2022-05-31T16:26:30.000Z").isBetween(moment("2022-05-31T16:15:30.000Z"),moment("2022-05-31T17:26:30.000Z")))
         const userExists = await userDao.findById(userId);

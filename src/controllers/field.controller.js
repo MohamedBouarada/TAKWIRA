@@ -13,10 +13,10 @@ const path = require("path");
 class fieldController {
 
     async add (req,res) {
-            console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-        const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description , userId,localisation,ouverture,fermeture}=req.body;
+        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        const {name , adresse , type , isNotAvailable,services , prix ,period,surface, description ,localisation,ouverture,fermeture}=req.body;
         console.log(isNotAvailable);
-        
+        const userId = req.infos.authId;
          let photos = ""
         if(req.files) {
             const files = req.files ;
