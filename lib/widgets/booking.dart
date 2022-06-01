@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/field/fields.dart';
 import '../utils/date_utils.dart' as date_util;
 import '../utils/colors_utils.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,7 +10,8 @@ import 'package:google_fonts/google_fonts.dart';
 const d_green = Color(0xFF54D3C2);
 
 class Booking extends StatefulWidget {
-  const Booking({Key? key}) : super(key: key);
+  final int fieldId;
+  const Booking({Key? key, required this.fieldId}) : super(key: key);
 
   @override
   State<Booking> createState() => _BookingState();
@@ -17,21 +20,27 @@ class Booking extends StatefulWidget {
 class _BookingState extends State<Booking> {
   double width = 0.0;
   double height = 0.0;
+  int id = -1;
   late ScrollController scrollController;
   List<DateTime> currentMonthList = List.empty();
   DateTime currentDateTime = DateTime.now();
   DateTime currentDayOfMonth = DateTime.now();
   List<String> todos = <String>[];
   TextEditingController controller = TextEditingController();
-
+  var dates;
+  String bookingDate = '';
   @override
   void initState() {
     currentMonthList = date_util.DateUtils.daysInMonth(currentDateTime);
     currentMonthList.sort((a, b) => a.day.compareTo(b.day));
     currentMonthList = currentMonthList.toSet().toList();
     scrollController =
-        ScrollController(initialScrollOffset: 100.0 * currentDateTime.day);
+        ScrollController(initialScrollOffset: 2.0 * currentDateTime.day);
+
     super.initState();
+    bookingDate = currentDateTime.toString().split(' ').first;
+    id = widget.fieldId;
+    getAvailableDates();
   }
 
   Widget titleView() {
@@ -72,13 +81,15 @@ class _BookingState extends State<Booking> {
         padding: const EdgeInsets.fromLTRB(8, 0, 0, 8),
         child: GestureDetector(
           onTap: () {
-            if (index < currentDayOfMonth.day - 1) {
-              
-            } else {
-              setState(() {
-                currentDateTime = currentMonthList[index];
-              });
-            }
+            // if (index < currentDayOfMonth.day - 1) {
+            // } else {
+            setState(() {
+              currentDateTime = currentMonthList[index];
+              bookingDate = currentDateTime.toString().split(' ').first;
+              getAvailableDates();
+              todoList();
+            });
+            //}
           },
           child: Container(
             width: 80,
@@ -178,41 +189,67 @@ class _BookingState extends State<Booking> {
     );
   }
 
+  void getAvailableDates() async {
+    var datesList = await Provider.of<FieldsProvider>(context, listen: false)
+        .getAvailabale(id, bookingDate);
+
+    setState(() {
+      dates = datesList;
+      print(dates.runtimeType);
+    });
+  }
+
   Widget todoList() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(10, height * 0.38, 10, 10),
-      width: width,
-      height: height * 0.60,
-      child: ListView.builder(
-          itemCount: todos.length,
+    if (dates != null) {
+      //print(dates[0].toString());
+
+      return Container(
+        width: MediaQuery.of(context).size.width / 2,
+        height: MediaQuery.of(context).size.height,
+        color: Colors.white,
+        //child: Text(currentDateTime.toString()),
+        child: ListView.builder(
+          itemCount: dates.length,
           padding: EdgeInsets.zero,
           itemBuilder: (BuildContext context, int index) {
-            return Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 15),
-              width: width - 20,
-              height: 70,
-              decoration: BoxDecoration(
-                  color: Colors.white54,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.white12,
-                        blurRadius: 2,
-                        offset: Offset(2, 2),
-                        spreadRadius: 3)
-                  ]),
-              child: Center(
-                child: Text(
-                  todos[index],
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+            return GestureDetector(
+              onTap: () {},
+              child: Container(
+                margin: EdgeInsets.all(10),
+                height: 50,
+                width: MediaQuery.of(context).size.width / 2,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(18),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade200,
+                        spreadRadius: 4,
+                        blurRadius: 6,
+                        offset: Offset(0, 3),
+                      ),
+                    ]),
+                child: Center(
+                  child: Text(
+                    dates[index].toString(),
+                    style: GoogleFonts.nunito(
+                      color: Color.fromARGB(255, 64, 165, 152),
+                      fontWeight: FontWeight.w800,
+                      fontSize: 23,
+                    ),
+                  ),
                 ),
               ),
             );
-          }),
-    );
+            //Text(dates[index].toString());
+          },
+        ),
+      );
+    } else {
+      return Text(currentDateTime.toString());
+    }
   }
 
   @override
@@ -222,8 +259,22 @@ class _BookingState extends State<Booking> {
     return Column(
       children: <Widget>[
         topView(),
-
-        //todoList(),
+        SizedBox(
+          height: 30,
+        ),
+        //Text(bookingDate),
+        Text(
+          "choose your time from the list",
+          style: GoogleFonts.nunito(
+            color: Color.fromARGB(255, 4, 5, 5),
+            fontWeight: FontWeight.w800,
+            fontSize: 18,
+          ),
+        ),
+        todoList(),
+        SizedBox(
+          height: 30,
+        ),
       ],
     );
   }

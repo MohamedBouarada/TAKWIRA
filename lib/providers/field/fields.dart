@@ -15,8 +15,71 @@ class FieldsProvider with ChangeNotifier {
     return [..._items];
   }
 
+  List<String?> _availabale = [];
+
+  List<String?> get availabale {
+    return [..._availabale];
+  }
+
   FieldProvider findById(int id) {
     return _items.firstWhere((field) => field.id == id);
+  }
+
+  Future<List<String?>> fetchImages(int id) async {
+    var url = "http://10.0.2.2:5000/field/" + id.toString();
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+    );
+
+    // print(response.body);
+    if (response.statusCode == 200) {
+      var field = json.decode(response.body);
+
+      var img = field['images'];
+      print(img);
+      List<String?> i = [];
+      for (var im in img) {
+        i.add(im['name']);
+        ;
+        print("********");
+      }
+
+      return i;
+    } else {
+      return [];
+    }
+  }
+
+  Future<List<String?>> getAvailabale(int id, String date) async {
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+    };
+    var url =
+        "http://10.0.2.2:5000/reservation/free/" + id.toString() + "/" + date;
+    print(url);
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: requestHeaders,
+      );
+      //print(response.body);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      print(extractedData.length);
+      //print(extractedData);
+      if (extractedData == null) {}
+      final List<String?> loadedDates = [];
+      for (var i = 0; i < extractedData.length; i++) {
+        loadedDates.add(extractedData[i.toString()]);
+      }
+
+      _availabale = loadedDates;
+      return loadedDates;
+    } catch (error) {
+      throw (error);
+    }
   }
 
   Future<void> fetchAndSetFields() async {
@@ -109,7 +172,6 @@ class FieldsProvider with ChangeNotifier {
       rethrow;
     }
   }
-
 
   Future<List> get() async {
     var url = "http://10.0.2.2:5000/field/getByOwner/1";

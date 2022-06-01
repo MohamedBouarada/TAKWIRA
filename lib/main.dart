@@ -55,8 +55,9 @@ class MyApp extends StatelessWidget {
           //home: Details( imgUrl: 'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', placeName: 'hammamet', rating: 4.5,),
           //home: HelpContainer(),
           //home: ClientFieldScreen(),
-          //home: RootApp(),
-          home: IndexPage(),
+          home: RootApp(),
+          //home: Booking(),
+          //home: IndexPage(),
           routes: {
             LoginPage.routName: (ctx) => LoginPage(),
             SignupPage.routName: (ctx) => SignupPage(),

@@ -1,4 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, import_of_legacy_library_into_null_safe, unused_import, prefer_const_constructors_in_immutables, annotate_overrides, unused_local_variable, avoid_print, no_logic_in_create_state, constant_identifier_names
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
@@ -11,8 +14,23 @@ import '../providers/field/fields.dart';
 
 const d_green = Color(0xFF54D3C2);
 
-class Details extends StatelessWidget {
+class Details extends StatefulWidget {
   static const routeName = '/Field-details';
+
+  @override
+  State<Details> createState() => _DetailsState();
+}
+
+class _DetailsState extends State<Details> {
+  // var photoss;
+  // void getAvailableDates() async {
+  //   var datesList = Provider.of<FieldsProvider>(context, listen: false)
+  //       .fetchImages(fieldId);
+
+  //   setState(() {
+  //     photoss = datesList;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +42,15 @@ class Details extends StatelessWidget {
     ).findById(
       fieldId,
     );
+    var allImages = json.decode(loadedField.images);
+
+    List<String> photos = [];
+    for (var im in allImages) {
+      photos.add(im['name']);
+      ;
+      print("********");
+    }
+    print(photos);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -43,20 +70,39 @@ class Details extends StatelessWidget {
                       dotSpacing: 15.0,
                       dotPosition: DotPosition.bottomCenter,
                       autoplay: false,
-                      images: [
-                        Image.network(
-                          "https://media.istockphoto.com/photos/tennis-playing-court-picture-id671277978?k=20&m=671277978&s=612x612&w=0&h=0p20LIrZereRi1Y6sLqunUPbt3Y6IINAm02KU4PuWZM=",
-                          height: 300,
-                          width: MediaQuery.of(context).size.width,
-                          fit: BoxFit.cover,
-                        ),
-                        Image.asset('assets/images/tennis1.jpg',
-                            fit: BoxFit.cover),
-                        Image.asset('assets/images/tennis2.jpeg',
-                            fit: BoxFit.cover),
-                        Image.asset('assets/images/tennis3.jpg',
-                            fit: BoxFit.cover),
-                      ],
+                      images: photos.map((i) {
+                        print(i);
+                        return Builder(
+                          builder: (BuildContext context) {
+                            print("******** hedhi l i");
+
+                            print(i);
+                            return Container(
+                              
+                                child: GestureDetector(
+                                    child: Image.network(
+                                        "http://10.0.2.2:5000/static/" + i,
+                                        fit: BoxFit.fill),
+                                    onTap: () {}),
+                              
+                            );
+                          },
+                        );
+                      }).toList(),
+                      // [
+                      //   Image.network(
+                      //     "https://media.istockphoto.com/photos/tennis-playing-court-picture-id671277978?k=20&m=671277978&s=612x612&w=0&h=0p20LIrZereRi1Y6sLqunUPbt3Y6IINAm02KU4PuWZM=",
+                      //     height: 300,
+                      //     width: MediaQuery.of(context).size.width,
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      //   Image.asset('assets/images/tennis1.jpg',
+                      //       fit: BoxFit.cover),
+                      //   Image.asset('assets/images/tennis2.jpeg',
+                      //       fit: BoxFit.cover),
+                      //   Image.asset('assets/images/tennis3.jpg',
+                      //       fit: BoxFit.cover),
+                      // ],
                     ),
                   ),
                   Container(
@@ -267,7 +313,9 @@ class _CardBodyState extends State<CardBody> {
       });
     } else {
       setState(() {
-        view = Booking();
+        view = Booking(
+          fieldId: widget.fieldBody.id,
+        );
       });
     }
   }
