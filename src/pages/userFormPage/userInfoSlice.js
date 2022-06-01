@@ -1,5 +1,11 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {activateOwnerRequestAccount, addNewUser, getOneUser, updateUserGeneralInfos} from "../../services/axios";
+import {
+    activateOwnerRequestAccount,
+    addNewUser,
+    deleteOneUser,
+    getOneUser,
+    updateUserGeneralInfos
+} from "../../services/axios";
 
 const  initialState = {
     firstName :"",
@@ -25,6 +31,14 @@ export const getSingleUser = createAsyncThunk(
         const {id} =info ;
         return await getOneUser(id)
 
+    }
+)
+export const deleteUser = createAsyncThunk(
+    "info/deleteUser",
+    async(idd,{getState})=>{
+       const {info}= getState();
+        const{id} = info;
+        return await deleteOneUser(idd)
     }
 )
 
@@ -153,6 +167,7 @@ export const infoSlice = createSlice({
             .addCase(updateUser.fulfilled ,(state,action)=>{
                 if(action.payload.success===true){
                     state.id=action.payload.data
+                    state.edit=false;
                 }else {
 
                 }
@@ -160,6 +175,11 @@ export const infoSlice = createSlice({
             .addCase(activateOwnerAcc.fulfilled , (state,action)=>{
                 if(action.payload.success===true) {
                     state.id = action.payload.data.id;
+                }
+            })
+            .addCase(deleteUser.fulfilled , (state,action)=>{
+                if(action.payload.success) {
+                   // state.id = 1;
                 }
             })
     })

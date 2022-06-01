@@ -1,9 +1,9 @@
 import axios from "axios"
 
-axios.defaults.baseURL = "http://localhost:5000" ;
+axios.defaults.baseURL = "http://192.168.49.148:5000" ;
 
 
-axios.defaults.headers.common["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZpcnN0QWRtaW5AZ21haWwuY29tIiwidXNlclR5cGUiOiJBRE1JTiIsImlkIjo1LCJpYXQiOjE2NTAyOTc4MzksImV4cCI6MTY1MDU1NzAzOX0.fk_zNQS1MzRBQRvkLnpgAZPmnDPtuTT81VLF9SAiwlc"
+axios.defaults.headers.common["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZpcnN0QWRtaW5AZ21haWwuY29tIiwidXNlclR5cGUiOiJBRE1JTiIsImlkIjo1LCJpYXQiOjE2NTQwODQ2MTAsImV4cCI6MTY1NDM0MzgxMH0.ZBB7nRbvRg2-oXWD46qOQaNFv85P4PRV9ba1gRoM288"
 
 export const getAllUsers =  async (orderBy="id",sort="ASC",perPage=5,page=1,searchValue="",role="*")=>{
 
@@ -106,5 +106,19 @@ export const activateOwnerRequestAccount = async (id)=> {
     }catch (e) {
         console.log(e)
         return {success : false , data:e.response.data}
+    }
+}
+
+export const deleteOneUser = async (id)=> {
+    try{
+        const response = await axios({
+            method:"delete",
+            url : `/admin/users/delete/${id}`
+        })
+        console.log(response)
+        return {success:true }
+    }catch (e) {
+console.log(e)
+        return {success:false}
     }
 }

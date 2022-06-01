@@ -47,6 +47,7 @@ export const UserFormPage = ()=> {
         const handleSubmit=() => {
 if(infoEdit) {
     dispatch(updateUser())
+    navigate("/")
 }else {
     dispatch(addOneUser())
     navigate("/details")

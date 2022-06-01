@@ -5,7 +5,7 @@ import {faEdit, faEllipsis, faInfoCircle, faXmark} from "@fortawesome/free-solid
 import styles from "./userRow.module.css"
 import {useState} from "react";
 import {useDispatch} from "react-redux";
-import {changeUserEdit, changeUserId} from "../../pages/userFormPage/userInfoSlice";
+import {changeUserEdit, changeUserId, deleteUser} from "../../pages/userFormPage/userInfoSlice";
 import {useNavigate} from "react-router-dom";
 
 export const UserRow =({id,name,image,phoneNumber,email,createdAt})=> {
@@ -24,7 +24,9 @@ const [actionClicked,setActionClicked] = useState(false)
             <td> <span>{   new Date(createdAt).toLocaleDateString()}</span> </td>
             <td> <span>{email}</span> </td>
             <td> <span>{phoneNumber}</span> </td>
-            <td><div onClick={()=>console.log("&&&&")}> <Button buttonText={'delete'} backgroundColor={'#DC3545'} width={"70px"} height={"22px"}  /> </div> </td>
+            <td><div onClick={()=> {
+                  dispatch(deleteUser(id)) ; navigate("/")
+            }}> <Button buttonText={'delete'} backgroundColor={'#DC3545'} width={"70px"} height={"22px"}  /> </div> </td>
             <td >
                 {!actionClicked &&(
                 <div className={styles.actionsButton} onClick={showActionsMenu}>
