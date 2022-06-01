@@ -54,6 +54,40 @@ class FieldsProvider with ChangeNotifier {
     }
   }
 
+  Future<void> addBooking({
+    required int fieldId,
+    required int userId,
+    required String startDate,
+  }) async {
+    const url = 'http://10.0.2.2:5000/reservation/add';
+    print(url);
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          HttpHeaders.contentTypeHeader: 'application/json',
+        },
+        body: json.encode(
+          {
+            "fieldId": fieldId,
+            "userId": userId,
+            "startDate": startDate,
+          },
+        ),
+      );
+      final responseData = json.decode(response.body);
+      print(responseData);
+      if (response.statusCode != HttpStatus.created) {
+        throw HttpException(responseData);
+      }
+      notifyListeners();
+    } catch (error) {
+      print("**************");
+      print(error.toString());
+      rethrow;
+    }
+  }
+
   Future<List<String?>> getAvailabale(int id, String date) async {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
@@ -87,7 +121,8 @@ class FieldsProvider with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url = "http://${dotenv.env['addressIp']}:5000/field/search/all?perPage=10";
+    var url =
+        "http://${dotenv.env['addressIp']}:5000/field/search/all?perPage=10";
     //var url = "http://10.0.2.2:5000/field/getByOwner/1";
     print(url);
     try {

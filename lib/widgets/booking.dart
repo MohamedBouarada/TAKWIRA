@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_element, avoid_print
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +6,7 @@ import '../providers/field/fields.dart';
 import '../utils/date_utils.dart' as date_util;
 import '../utils/colors_utils.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../themes/color.dart';
 
 const d_green = Color(0xFF54D3C2);
 
@@ -189,6 +190,7 @@ class _BookingState extends State<Booking> {
     );
   }
 
+  String bookingDateTime = '';
   void getAvailableDates() async {
     var datesList = await Provider.of<FieldsProvider>(context, listen: false)
         .getAvailabale(id, bookingDate);
@@ -197,6 +199,146 @@ class _BookingState extends State<Booking> {
       dates = datesList;
       print(dates.runtimeType);
     });
+  }
+
+  void bookField() async {
+    print(bookingDateTime);
+    try {
+      await Provider.of<FieldsProvider>(context, listen: false).addBooking(
+        fieldId: id,
+        userId: 2,
+        startDate: bookingDateTime,
+      );
+      setState(() {
+        getAvailableDates();
+      });
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
+  void _showValidationDialog(int index) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('An Error Occurred!'),
+        content: Text("booking validation"),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () async {
+              setState(() {
+                bookingDateTime = bookingDate + ' ' + dates[index].toString();
+                bookField();
+              });
+              Navigator.of(ctx).pop();
+            },
+          ),
+          FlatButton(
+            child: Text('cancel'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  void showAlertDialog(int index) {
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Container(
+                child: Column(
+                  children: [
+                    Text(
+                      'Booking validation',
+                      textScaleFactor: 1.7,
+                      style: GoogleFonts.nunito(
+                        color: d_green,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "date : ${bookingDate}",
+                        style: GoogleFonts.nunito(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "time : ${dates[index].toString()}",
+                        style: GoogleFonts.nunito(
+                          color: Colors.black,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: TextButton(
+                        onPressed: () async {
+                          setState(() {
+                            bookingDateTime =
+                                bookingDate + ' ' + dates[index].toString();
+                            bookField();
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'Book',
+                          style: TextStyle(color: d_green),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(color: d_green),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  boxShadow: [
+                    BoxShadow(color: d_green, spreadRadius: 3),
+                  ],
+                ),
+                width: MediaQuery.of(context).size.width * (4 / 5),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget todoList() {
@@ -213,7 +355,9 @@ class _BookingState extends State<Booking> {
           padding: EdgeInsets.zero,
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              onTap: () {},
+              onTap: () async {
+                showAlertDialog(index);
+              },
               child: Container(
                 margin: EdgeInsets.all(10),
                 height: 50,
