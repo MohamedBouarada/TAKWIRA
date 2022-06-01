@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:takwira_mobile/screens/home_page.dart';
+import '../models/storage_item.dart';
+import '../providers/storage_service.dart';
 import '../themes/color.dart';
 //import '../utils/data.dart';
 import '../widgets/custom_image.dart';
@@ -162,14 +164,19 @@ class _SettingPageState extends State<SettingPage> {
         actions: [
           CupertinoActionSheetAction(
             onPressed: () async {
-              final storage = new FlutterSecureStorage();
-              await storage.deleteAll();
-              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomePage(),
-                                  ),
-                                );
+              final storage = StorageService();
+
+                final StorageItem storageItem = StorageItem('token', "");
+                final StorageItem roleItem = StorageItem('role', "");
+                storage.writeSecureData(storageItem);
+                storage.writeSecureData(roleItem);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                );
             },
             child: Text(
               "Log Out",

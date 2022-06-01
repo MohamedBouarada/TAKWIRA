@@ -20,6 +20,7 @@ import 'package:takwira_mobile/providers/field.dart';
 
 import 'package:takwira_mobile/screens/login.dart';
 import 'package:takwira_mobile/screens/owner_field_list.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class FieldAdd extends StatelessWidget {
   static const routName = '/field-add';
@@ -767,7 +768,7 @@ class _FieldCardState extends State<FieldCard> {
                     if (pickedTime != null) {
                       //print(pickedTime.format(context)); //output 10:51 PM
                       DateTime parsedTime = DateFormat.jm()
-                          .parse(pickedTime.format(context).toString());
+                      .parse(pickedTime.format(context).toString());
                       //converting to DateTime so that we can further format on different pattern.
                       print(parsedTime); //output 1970-01-01 22:53:00.000
                       String formattedTime =

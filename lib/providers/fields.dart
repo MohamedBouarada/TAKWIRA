@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/http_exception.dart';
@@ -73,7 +74,7 @@ class Fields with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url = "http://10.0.2.2:5000/field/getByOwner/1";
+    var url = "http://${dotenv.env['addressIp']}:5000/field/getByOwner/1";
     print(url);
     try {
       final response = await http.get(
@@ -115,7 +116,7 @@ class Fields with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url = "http://10.0.2.2:5000/field/getByOwner/1";
+    var url = "http://${dotenv.env['addressIp']}:5000/field/getByOwner/1";
     print(url);
     try {
       final response = await http.get(
@@ -195,7 +196,7 @@ class Fields with ChangeNotifier {
   Future<void> updateField(int id, FieldModel newField) async {
     final fieldIndex = _items.indexWhere((field) => field.id == id);
     if (fieldIndex >= 0) {
-      final url = 'http://10.0.2.2:5000/field/' + id.toString();
+      final url = 'http://${dotenv.env['addressIp']}:5000/field/' + id.toString();
       final response = await http.put(Uri.parse(url),
           headers: {
             HttpHeaders.contentTypeHeader: 'application/json',
@@ -224,7 +225,7 @@ class Fields with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url = 'http://10.0.2.2:5000/field/' + id.toString();
+    var url = 'http://${dotenv.env['addressIp']}:5000/field/' + id.toString();
 
     final existingFieldIndex = _items.indexWhere((field) => field.id == id);
 

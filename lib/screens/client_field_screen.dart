@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, annotate_overrides, unnecessary_new, use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, constant_identifier_names, avoid_unnecessary_containers, unused_local_variable
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../providers/field/field.dart';
@@ -424,7 +425,7 @@ class FieldCard extends StatelessWidget {
                   topRight: Radius.circular(18),
                 ),
                 image: DecorationImage(
-                  image: NetworkImage("http://192.168.1.13:5000/static/"+images[0]['name']),
+                  image: NetworkImage("http://${dotenv.env['addressIp']}:5000/static/"+images[0]['name']),
                   fit: BoxFit.cover,
                 ),
               ),

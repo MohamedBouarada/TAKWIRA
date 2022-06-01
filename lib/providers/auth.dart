@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/widgets.dart';
@@ -21,7 +22,7 @@ class Auth with ChangeNotifier {
     required String role,
 
   }) async {
-    const url = 'http://10.0.2.2:5000/user/add';
+    var url = 'http://${dotenv.env['addressIp']}:5000/user/add';
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -55,7 +56,7 @@ class Auth with ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    const url = 'http://10.0.2.2:5000/user/login';
+    var url = 'http://${dotenv.env['addressIp']}:5000/user/login';
     try {
       final response = await http.post(
         Uri.parse(url),

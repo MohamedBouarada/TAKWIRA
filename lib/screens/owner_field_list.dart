@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_is_empty, unnecessary_new, unnecessary_this, deprecated_member_use, unnecessary_brace_in_string_interps
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:takwira_mobile/providers/storage_service.dart';
 import 'dart:convert';
@@ -46,7 +47,7 @@ class _IndexPageState extends State<IndexPage> {
     setState(() {
       isLoading = true;
     });
-    var url = "http://10.0.2.2:5000/field/getByOwner";
+    var url = "http://${dotenv.env['addressIp']}:5000/field/getByOwner";
     _token = (await _storageService.readSecureData('token'))!;
     var response = await http.get(
       Uri.parse(url),
@@ -120,46 +121,28 @@ class _IndexPageState extends State<IndexPage> {
               ),
             ),
           ),
-          TextButton(
-            onPressed: () async {
-              final storage = new FlutterSecureStorage();
-              await storage.deleteAll();
-              Navigator.of(context).pushNamed(HomePage.routeName);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: Text(
-                'Logout ',
-                style: GoogleFonts.montserrat(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-                //TextStyle(fontSize: 20, color: Colors.black, fontStyle: GoogleFonts.),
-              ),
-            ),
-          ),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [getBody(),
-           TextButton(
+          children: [
+            getBody(),
+            TextButton(
               onPressed: () async {
-              final storage = StorageService();
+                final storage = StorageService();
 
-               final StorageItem storageItem = StorageItem('token', "");
-      final StorageItem roleItem = StorageItem('role', "");
-      storage.writeSecureData(storageItem);
-      storage.writeSecureData(roleItem);
-              
-              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HomePage(),
-                                  ),
-                                );
-            },
+                final StorageItem storageItem = StorageItem('token', "");
+                final StorageItem roleItem = StorageItem('role', "");
+                storage.writeSecureData(storageItem);
+                storage.writeSecureData(roleItem);
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                );
+              },
               child: Padding(
                 padding: const EdgeInsets.only(right: 10.0),
                 child: Text(
@@ -172,7 +155,8 @@ class _IndexPageState extends State<IndexPage> {
                   //TextStyle(fontSize: 20, color: Colors.black, fontStyle: GoogleFonts.),
                 ),
               ),
-            ),]
+            ),
+          ],
         ),
       ),
     );
@@ -273,7 +257,8 @@ class _IndexPageState extends State<IndexPage> {
                 // ],
                 image: DecorationImage(
                   image: NetworkImage(
-                      "http://10.0.2.2:5000/static/" + images[0]['name']),
+                      "http://${dotenv.env['addressIp']}:5000/static/" +
+                          images[0]['name']),
                   fit: BoxFit.fill,
                 ),
               ),

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors, import_of_legacy_library_into_null_safe, unused_import, prefer_const_constructors_in_immutables, annotate_overrides, unused_local_variable, avoid_print, no_logic_in_create_state, constant_identifier_names
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -78,13 +79,12 @@ class _DetailsState extends State<Details> {
 
                             print(i);
                             return Container(
-                              
-                                child: GestureDetector(
-                                    child: Image.network(
-                                        "http://10.0.2.2:5000/static/" + i,
-                                        fit: BoxFit.fill),
-                                    onTap: () {}),
-                              
+                              child: GestureDetector(
+                                  child: Image.network(
+                                      "http://${dotenv.env['addressIp']}:5000/static/" +
+                                          i,
+                                      fit: BoxFit.fill),
+                                  onTap: () {}),
                             );
                           },
                         );
@@ -423,11 +423,14 @@ class InfoField extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 90,
+          height: 120,
           width: MediaQuery.of(context).size.width,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: <Widget>[
+              SizedBox(
+          height: 12,
+        ),
               FeaturesTile(
                 icon: Icon(Icons.car_repair, color: Color(0xff5A6C64)),
                 label: "Parking",
@@ -476,8 +479,8 @@ class InfoField extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 24),
           child: Text(
-            "taieb mhiri terrain mezyen yeser , s7i7 9dim chwaya ama jawou behi , yhez 12000 ,allah ghaleb heka 7adou, bo93tou mezyena yeser w 9rib lkol chay .thama parking w wifi w cafe w bar ba3d takwira -> jaw lkol mawjoud w disponible a tous moments ",
-            //fieldInfo.description,
+            //"taieb mhiri terrain mezyen yeser , s7i7 9dim chwaya ama jawou behi , yhez 12000 ,allah ghaleb heka 7adou, bo93tou mezyena yeser w 9rib lkol chay .thama parking w wifi w cafe w bar ba3d takwira -> jaw lkol mawjoud w disponible a tous moments ",
+            fieldInfo.description,
             textAlign: TextAlign.start,
             style: TextStyle(
                 fontSize: 15,

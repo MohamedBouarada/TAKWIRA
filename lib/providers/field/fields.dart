@@ -30,7 +30,7 @@ class FieldsProvider with ChangeNotifier {
   }
 
   Future<List<String?>> fetchImages(int id) async {
-    var url = "http://10.0.2.2:5000/field/" + id.toString();
+    var url = "http://${dotenv.env['addressIp']}:5000/field/" + id.toString();
     var response = await http.get(
       Uri.parse(url),
       headers: {
@@ -61,7 +61,7 @@ class FieldsProvider with ChangeNotifier {
     required int fieldId,
     required String startDate,
   }) async {
-    const url = 'http://10.0.2.2:5000/reservation/add';
+    var url = 'http://${dotenv.env['addressIp']}:5000/reservation/add';
     _token = (await _storageService.readSecureData('token'))!;
     print(url);
     try {
@@ -96,7 +96,7 @@ class FieldsProvider with ChangeNotifier {
       'Content-Type': 'application/json',
     };
     var url =
-        "http://10.0.2.2:5000/reservation/free/" + id.toString() + "/" + date;
+        "http://${dotenv.env['addressIp']}:5000/reservation/free/" + id.toString() + "/" + date;
     print(url);
     try {
       final response = await http.get(
@@ -171,7 +171,7 @@ class FieldsProvider with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url = "http://10.0.2.2:5000/field/getByOwner/1";
+    var url = "http://${dotenv.env['addressIp']}:5000/field/getByOwner";
     print(url);
     try {
       final response = await http.get(
@@ -213,7 +213,7 @@ class FieldsProvider with ChangeNotifier {
   }
 
   Future<List> get() async {
-    var url = "http://10.0.2.2:5000/field/getByOwner/1";
+    var url = "http://${dotenv.env['addressIp']}:5000/field/getByOwner/";
     var response = await http.get(
       Uri.parse(url),
       headers: {
@@ -241,7 +241,7 @@ class FieldsProvider with ChangeNotifier {
     required String description,
     required int idProprietaire,
   }) async {
-    const url = 'http://10.0.2.2:5000/field/add';
+    var url = 'http://${dotenv.env['addressIp']}:5000/field/add';
     print(url);
     try {
       final response = await http.post(
@@ -290,7 +290,7 @@ class FieldsProvider with ChangeNotifier {
     required String description,
     required int idProprietaire,
   }) async {
-    var url = 'http://10.0.2.2:5000/field/' + id.toString();
+    var url = 'http://${dotenv.env['addressIp']}:5000/field/' + id.toString();
     print(url);
     try {
       print(type);
@@ -332,7 +332,7 @@ class FieldsProvider with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url = 'http://10.0.2.2:5000/field/' + id.toString();
+    var url = 'http://${dotenv.env['addressIp']}:5000/field/' + id.toString();
 
     final response = await http.delete(
       Uri.parse(url),

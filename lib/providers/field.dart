@@ -25,7 +25,7 @@ class Field with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url = "http://10.0.2.2:5000/field/getByOwner/1";
+    var url = "http://${dotenv.env['addressIp']}:5000/field/getByOwner/1";
     print(url);
     try {
       final response = await http.get(
@@ -172,7 +172,7 @@ class Field with ChangeNotifier {
     required int id,
     required List<File> fieldImages,
   }) async {
-    var url = 'http://10.0.2.2:5000/field/image/add/' + id.toString();
+    var url = 'http://${dotenv.env['addressIp']}:5000/field/image/add/' + id.toString();
     // print(url);
     // print("**********eeeeeeeeeeeeeeeeeeeeeeee*******************");
     // print(fieldImages);
@@ -233,7 +233,7 @@ class Field with ChangeNotifier {
     required int id,
     required String imageName,
   }) async {
-    var url = 'http://10.0.2.2:5000/field/image/delete/' +
+    var url = 'http://${dotenv.env['addressIp']}:5000/field/image/delete/' +
         id.toString() +
         '/' +
         imageName;
