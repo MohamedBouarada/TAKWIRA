@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:takwira_mobile/screens/field_add_screen.dart';
 import 'package:takwira_mobile/screens/field_edit_screen.dart';
+import 'package:takwira_mobile/screens/owner_booking_screen.dart';
 import '../models/storage_item.dart';
 import '../providers/field.dart';
 import '../themes/color.dart';
@@ -89,13 +90,13 @@ class _IndexPageState extends State<IndexPage> {
       appBar: AppBar(
         elevation: 0,
         brightness: Brightness.light,
-        backgroundColor: Color.fromARGB(145, 44, 222, 20),
+        backgroundColor: dark_d_green,
         leading: IconButton(
           onPressed: () {},
           icon: Icon(
             Icons.arrow_back_ios,
             size: 20,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
         actions: [
@@ -113,7 +114,7 @@ class _IndexPageState extends State<IndexPage> {
               child: Text(
                 'Add Field',
                 style: GoogleFonts.montserrat(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),
@@ -127,7 +128,9 @@ class _IndexPageState extends State<IndexPage> {
         child: Column(
           children: [
             getBody(),
-            TextButton(
+            SizedBox(height: 20,),
+            Row(children: [
+              TextButton(
               onPressed: () async {
                 final storage = StorageService();
 
@@ -148,7 +151,7 @@ class _IndexPageState extends State<IndexPage> {
                 child: Text(
                   'Logout ',
                   style: GoogleFonts.montserrat(
-                    color: Colors.black,
+                    color: d_green,
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                   ),
@@ -156,6 +159,27 @@ class _IndexPageState extends State<IndexPage> {
                 ),
               ),
             ),
+            Spacer(),
+            TextButton(
+              onPressed: () async {
+                
+                Navigator.of(context).pushNamed(OwnerBookingScreen.routeName);
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: Text(
+                  'Bookings ',
+                  style: GoogleFonts.montserrat(
+                    color: d_green,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  //TextStyle(fontSize: 20, color: Colors.black, fontStyle: GoogleFonts.),
+                ),
+              ),
+            ),
+            ],),
+            SizedBox(height: 20,),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, prefer_final_fields, use_rethrow_when_possible, unnecessary_null_comparison
 
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -95,8 +96,10 @@ class FieldsProvider with ChangeNotifier {
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
     };
-    var url =
-        "http://${dotenv.env['addressIp']}:5000/reservation/free/" + id.toString() + "/" + date;
+    var url = "http://${dotenv.env['addressIp']}:5000/reservation/free/" +
+        id.toString() +
+        "/" +
+        date;
     print(url);
     try {
       final response = await http.get(
@@ -325,6 +328,91 @@ class FieldsProvider with ChangeNotifier {
       print("**************");
       print(error.toString());
       rethrow;
+    }
+  }
+
+  Future<List> getClientBookings() async {
+    var url = "http://${dotenv.env['addressIp']}:5000/reservation/client";
+
+    print(url);
+    _token = (await _storageService.readSecureData('token'))!;
+    try {
+      Map<String, String> requestHeaders = {
+        'Content-Type': 'application/json',
+        'Authorization': "bearer ${_token}",
+      };
+      final response = await http.get(
+        Uri.parse(url),
+        headers: requestHeaders,
+      );
+      //print(response.body);
+      final extractedData = json.decode(response.body) as List<dynamic>;
+      print(extractedData.length);
+      print(extractedData);
+      if (extractedData == null) {}
+      final List<Map<String, dynamic>> loadedDates = [];
+      for (var i = 0; i < extractedData.length; i++) {
+        loadedDates.add(extractedData[i]);
+      }
+
+      return loadedDates;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
+  Future<List> getOwnerBookings() async {
+    var url = "http://${dotenv.env['addressIp']}:5000/reservation/owner";
+
+    print(url);
+    _token = (await _storageService.readSecureData('token'))!;
+    try {
+      Map<String, String> requestHeaders = {
+        'Content-Type': 'application/json',
+        'Authorization': "bearer ${_token}",
+      };
+      final response = await http.get(
+        Uri.parse(url),
+        headers: requestHeaders,
+      );
+      //print(response.body);
+      final extractedData = json.decode(response.body) as List<dynamic>;
+      print(extractedData.length);
+      print(extractedData);
+      if (extractedData == null) {}
+      final List<Map<String, dynamic>> loadedDates = [];
+      for (var i = 0; i < extractedData.length; i++) {
+        loadedDates.add(extractedData[i]);
+      }
+
+      return loadedDates;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<void> cancelBookingClient(int id) async {
+    var url = "http://${dotenv.env['addressIp']}:5000/reservation/"+id.toString();
+
+    print(url);
+    
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          //'Authorization': "bearer ${_token}",
+        },
+      );
+      final responseData = json.decode(response.body);
+      print(responseData);
+      if (response.statusCode != HttpStatus.ok) {
+        throw HttpException(responseData);
+      }
+      notifyListeners();
+    } catch (error) {
+      throw (error);
     }
   }
 

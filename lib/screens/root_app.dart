@@ -9,7 +9,7 @@ import './client_field_screen.dart';
 
 class RootApp extends StatefulWidget {
   const RootApp({Key? key}) : super(key: key);
-
+  static const routeName = '/client-screen';
   @override
   _RootAppState createState() => _RootAppState();
 }

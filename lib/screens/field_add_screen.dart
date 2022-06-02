@@ -423,7 +423,12 @@ class _FieldCardState extends State<FieldCard> {
           );
         });
   }
-
+   final types = [
+    {'display': "Tennis", 'value': "TENNIS"},
+    {'display': "Football", 'value': "FOOTBALL"},
+    {'display': "BasketBall", 'value': "FOOTBALL"},
+    
+  ];
   @override
   Widget build(BuildContext context) {
     return Container(

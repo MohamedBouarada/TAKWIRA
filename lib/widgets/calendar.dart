@@ -3,11 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../themes/color.dart';
 
 DateTime kNow = DateTime.now();
 DateTime kFirstDay = DateTime(kNow.year, kNow.month - 3, kNow.day);
 DateTime kLastDay = DateTime(kNow.year, kNow.month + 3, kNow.day);
-const d_green = Color(0xFF54D3C2);
+//const d_green = Color(0xFF54D3C2);
 
 class CalendarPage extends StatelessWidget {
   const CalendarPage({Key? key}) : super(key: key);

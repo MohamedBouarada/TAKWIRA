@@ -82,15 +82,15 @@ class _BookingState extends State<Booking> {
         padding: const EdgeInsets.fromLTRB(8, 0, 0, 8),
         child: GestureDetector(
           onTap: () {
-            // if (index < currentDayOfMonth.day - 1) {
-            // } else {
+            if (index < currentDayOfMonth.day - 1) {
+            } else {
             setState(() {
               currentDateTime = currentMonthList[index];
               bookingDate = currentDateTime.toString().split(' ').first;
               getAvailableDates();
               todoList();
             });
-            //}
+            }
           },
           child: Container(
             width: 80,

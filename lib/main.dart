@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:takwira_mobile/providers/field.dart';
 import 'package:takwira_mobile/providers/fields.dart';
+import 'package:takwira_mobile/screens/bookings_screen.dart';
 import 'package:takwira_mobile/screens/client_field_screen.dart';
 import 'package:takwira_mobile/screens/field_details_screen.dart';
+import 'package:takwira_mobile/screens/owner_booking_screen.dart';
 import 'package:takwira_mobile/screens/root_app.dart';
 import 'package:takwira_mobile/screens/setting.dart';
 import 'package:takwira_mobile/screens/signup.dart';
@@ -71,7 +73,11 @@ class MyApp extends StatelessWidget {
             EditFieldList.routeName: (context) => EditFieldList(),
             FieldsList.routeName: (ctx) => FieldsList(),
             HomePage.routeName:(ctx)=> HomePage(),
+            RootApp.routeName:(ctx)=>RootApp(),
             IndexPage.routName: (context) => IndexPage(),
+            BookingsScreen.routeName: (context) => BookingsScreen(),
+            OwnerBookingScreen.routeName: (context) => OwnerBookingScreen(),
+
             // '/edit-Field': (context) => const FieldAdd(),
           },
         ),

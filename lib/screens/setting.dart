@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:takwira_mobile/screens/bookings_screen.dart';
 import 'package:takwira_mobile/screens/home_page.dart';
 import '../models/storage_item.dart';
 import '../providers/storage_service.dart';
@@ -13,7 +14,7 @@ import '../widgets/custom_image.dart';
 import '../widgets/icon_box.dart';
 import '../widgets/setting_item.dart';
 
-const d_green = Color(0xFF54D3C2);
+//const d_green = Color(0xFF54D3C2);
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -128,7 +129,9 @@ class _SettingPageState extends State<SettingPage> {
               title: "Bookings",
               leadingIcon: Icons.bookmark_border,
               leadingIconColor: blue,
-              onTap: () {}),
+              onTap: () {
+                Navigator.of(context).pushNamed(BookingsScreen.routeName);
+              }),
           SizedBox(height: 10),
           SettingItem(
               title: "Favorites",
@@ -166,17 +169,17 @@ class _SettingPageState extends State<SettingPage> {
             onPressed: () async {
               final storage = StorageService();
 
-                final StorageItem storageItem = StorageItem('token', "");
-                final StorageItem roleItem = StorageItem('role', "");
-                storage.writeSecureData(storageItem);
-                storage.writeSecureData(roleItem);
+              final StorageItem storageItem = StorageItem('token', "");
+              final StorageItem roleItem = StorageItem('role', "");
+              storage.writeSecureData(storageItem);
+              storage.writeSecureData(roleItem);
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
-                );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              );
             },
             child: Text(
               "Log Out",
