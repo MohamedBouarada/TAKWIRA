@@ -129,7 +129,7 @@ class FieldsProvider with ChangeNotifier {
     };
     var url =
         "http://${dotenv.env['addressIp']}:5000/field/search/all?perPage=10";
-    //var url = "http://10.0.2.2:5000/field/getByOwner/1";
+    //var url = "http://10.0.2.2/field/getByOwner/1";
     print(url);
     try {
       final response = await http.get(
@@ -361,6 +361,7 @@ class FieldsProvider with ChangeNotifier {
       throw (error);
     }
   }
+
   Future<List> getOwnerBookings() async {
     var url = "http://${dotenv.env['addressIp']}:5000/reservation/owner";
 
@@ -393,10 +394,11 @@ class FieldsProvider with ChangeNotifier {
   }
 
   Future<void> cancelBookingClient(int id) async {
-    var url = "http://${dotenv.env['addressIp']}:5000/reservation/"+id.toString();
+    var url =
+        "http://${dotenv.env['addressIp']}:5000/reservation/" + id.toString();
 
     print(url);
-    
+
     try {
       final response = await http.delete(
         Uri.parse(url),

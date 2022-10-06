@@ -128,58 +128,64 @@ class _IndexPageState extends State<IndexPage> {
         child: Column(
           children: [
             getBody(),
-            SizedBox(height: 20,),
-            Row(children: [
-              TextButton(
-              onPressed: () async {
-                final storage = StorageService();
-
-                final StorageItem storageItem = StorageItem('token', "");
-                final StorageItem roleItem = StorageItem('role', "");
-                storage.writeSecureData(storageItem);
-                storage.writeSecureData(roleItem);
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: Text(
-                  'Logout ',
-                  style: GoogleFonts.montserrat(
-                    color: d_green,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  //TextStyle(fontSize: 20, color: Colors.black, fontStyle: GoogleFonts.),
-                ),
-              ),
+            SizedBox(
+              height: 20,
             ),
-            Spacer(),
-            TextButton(
-              onPressed: () async {
-                
-                Navigator.of(context).pushNamed(OwnerBookingScreen.routeName);
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: Text(
-                  'Bookings ',
-                  style: GoogleFonts.montserrat(
-                    color: d_green,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () async {
+                    final storage = StorageService();
+
+                    final StorageItem storageItem = StorageItem('token', "");
+                    final StorageItem roleItem = StorageItem('role', "");
+                    storage.writeSecureData(storageItem);
+                    storage.writeSecureData(roleItem);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: Text(
+                      'Logout ',
+                      style: GoogleFonts.montserrat(
+                        color: d_green,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      //TextStyle(fontSize: 20, color: Colors.black, fontStyle: GoogleFonts.),
+                    ),
                   ),
-                  //TextStyle(fontSize: 20, color: Colors.black, fontStyle: GoogleFonts.),
                 ),
-              ),
+                Spacer(),
+                TextButton(
+                  onPressed: () async {
+                    Navigator.of(context)
+                        .pushNamed(OwnerBookingScreen.routeName);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: Text(
+                      'Bookings ',
+                      style: GoogleFonts.montserrat(
+                        color: d_green,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      //TextStyle(fontSize: 20, color: Colors.black, fontStyle: GoogleFonts.),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            ],),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),
@@ -391,7 +397,7 @@ class _IndexPageState extends State<IndexPage> {
     //           margin: EdgeInsets.all(10),
     //           // child: Image.network(
     //           //   (model!.productImage == null || model!.productImage == "")
-    //           //       ? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
+    //           //       ? "http://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
     //           //       : model!.productImage!,
     //           //   height: 70,
     //           //   fit: BoxFit.scaleDown,

@@ -327,7 +327,6 @@ class _EditCardState extends State<EditCard> {
         surface: _surfaceController.text.toString(),
         description: _descriptionController.text.toString(),
         location: _locationController.text.toString(),
-        
       );
 
       Navigator.push(
@@ -482,7 +481,8 @@ class _EditCardState extends State<EditCard> {
 
   List<String> photos = [];
   fetchImages() async {
-    var url = "http://${dotenv.env['addressIp']}:5000/field/" + widget.id.toString();
+    var url =
+        "http://${dotenv.env['addressIp']}:5000/field/" + widget.id.toString();
     var response = await http.get(
       Uri.parse(url),
       headers: {
@@ -612,7 +612,7 @@ class _EditCardState extends State<EditCard> {
                   //               decoration: BoxDecoration(color: Colors.amber),
                   //               child: GestureDetector(
                   //                   child: Image.network(
-                  //                       "http://10.0.2.2:5000/static/" + i,
+                  //                       "http://10.0.2.2/static/" + i,
                   //                       fit: BoxFit.fill),
                   //                   onTap: () {}));
                   //         },

@@ -355,7 +355,7 @@ class _FieldsSectionState extends State<FieldsSection> {
                   //   MaterialPageRoute(
                   //     builder: (context) => Details(
                   //       imgUrl:
-                  //           'https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+                  //           'http://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
                   //       placeName: 'hammamet',
                   //       rating: 4.5,
                   //     ),
@@ -393,7 +393,7 @@ class FieldCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var images = json.decode(fieldData.images);
-    
+
     //print(images[0]['name'].toString());
     // print(fieldData.price.toString());
     return GestureDetector(
@@ -425,7 +425,9 @@ class FieldCard extends StatelessWidget {
                   topRight: Radius.circular(18),
                 ),
                 image: DecorationImage(
-                  image: NetworkImage("http://${dotenv.env['addressIp']}:5000/static/"+images[0]['name']),
+                  image: NetworkImage(
+                      "http://${dotenv.env['addressIp']}:5000/static/" +
+                          images[0]['name']),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -506,7 +508,6 @@ class FieldCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  
                 ],
               ),
             ),
@@ -554,7 +555,6 @@ class FieldCard extends StatelessWidget {
                       color: Colors.grey[500],
                       fontWeight: FontWeight.w400,
                     ),
-                    
                   ),
                   Spacer(),
                   Text(

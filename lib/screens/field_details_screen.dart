@@ -91,7 +91,7 @@ class _DetailsState extends State<Details> {
                       }).toList(),
                       // [
                       //   Image.network(
-                      //     "https://media.istockphoto.com/photos/tennis-playing-court-picture-id671277978?k=20&m=671277978&s=612x612&w=0&h=0p20LIrZereRi1Y6sLqunUPbt3Y6IINAm02KU4PuWZM=",
+                      //     "http://media.istockphoto.com/photos/tennis-playing-court-picture-id671277978?k=20&m=671277978&s=612x612&w=0&h=0p20LIrZereRi1Y6sLqunUPbt3Y6IINAm02KU4PuWZM=",
                       //     height: 300,
                       //     width: MediaQuery.of(context).size.width,
                       //     fit: BoxFit.cover,
@@ -429,8 +429,8 @@ class InfoField extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             children: <Widget>[
               SizedBox(
-          height: 12,
-        ),
+                height: 12,
+              ),
               FeaturesTile(
                 icon: Icon(Icons.car_repair, color: Color(0xff5A6C64)),
                 label: "Parking",

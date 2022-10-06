@@ -96,7 +96,7 @@ class Field with ChangeNotifier {
     required List<File> fieldImages,
   }) async {
     var url = 'http://${dotenv.env['addressIp']}:5000/field/add';
-     _token = (await _storageService.readSecureData('token'))!;
+    _token = (await _storageService.readSecureData('token'))!;
     print(url);
     print("*****************************");
     print(fieldImages);
@@ -122,9 +122,9 @@ class Field with ChangeNotifier {
         fieldImages[0].path,
       );
       Map<String, String> headers = {
-    'Content-Type': 'application/json',
-    'Authorization':"bearer ${_token}",
-  };
+        'Content-Type': 'application/json',
+        'Authorization': "bearer ${_token}",
+      };
       request.headers.addAll(headers);
       request.files.add(multipartFile);
 
@@ -172,7 +172,8 @@ class Field with ChangeNotifier {
     required int id,
     required List<File> fieldImages,
   }) async {
-    var url = 'http://${dotenv.env['addressIp']}:5000/field/image/add/' + id.toString();
+    var url = 'http://${dotenv.env['addressIp']}:5000/field/image/add/' +
+        id.toString();
     // print(url);
     // print("**********eeeeeeeeeeeeeeeeeeeeeeee*******************");
     // print(fieldImages);
@@ -270,7 +271,6 @@ class Field with ChangeNotifier {
     required String surface,
     required String description,
     required String location,
-    
   }) async {
     var url = 'http://${dotenv.env['addressIp']}:5000/field/' + id.toString();
     print(url);
@@ -279,10 +279,10 @@ class Field with ChangeNotifier {
       _token = (await _storageService.readSecureData('token'))!;
       final response = await http.put(
         Uri.parse(url),
-         headers: {
-    'Content-Type': 'application/json',
-    'Authorization':'bearer ${_token}',
-  },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ${_token}',
+        },
         body: json.encode(
           {
             'name': name,
@@ -297,7 +297,6 @@ class Field with ChangeNotifier {
             'surface': surface,
             'description': description,
             'localisation': location,
-            
           },
         ),
       );

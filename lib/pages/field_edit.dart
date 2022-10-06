@@ -777,7 +777,7 @@ class _EditFieldListState extends State<EditFieldList> {
 //   //                 )
 //   //           : SizedBox(
 //   //               child: Image.network(
-//   //                 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png",
+//   //                 "http://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png",
 //   //                 width: 200,
 //   //                 height: 200,
 //   //                 fit: BoxFit.scaleDown,

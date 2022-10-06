@@ -27,7 +27,6 @@ class _FieldsListState extends State<FieldsList> {
     // TODO: implement initState
     super.initState();
     futureData = Fields.getFields();
-    
   }
 
   Widget loadFields() {
@@ -39,7 +38,7 @@ class _FieldsListState extends State<FieldsList> {
         if (snapshot.hasData) {
           return ListView.builder(
             shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
+            physics: ClampingScrollPhysics(),
             itemCount: snapshot.data!.length,
             itemBuilder: (_, i) => Column(
               children: [
@@ -133,7 +132,7 @@ class _FieldsListState extends State<FieldsList> {
 //     //     id: "1",
 //     //     FieldName: "Haldiram",
 //     //     FieldImage:
-//     //         "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=85,metadata=none,w=400,h=400/app/images/Fields/full_screen/pro_86973.jpg",
+//     //         "http://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=85,metadata=none,w=400,h=400/app/images/Fields/full_screen/pro_86973.jpg",
 //     //     FieldDescription: "Haldiram Foods",
 //     //     FieldPrice: 500,
 //     //   ),
@@ -144,7 +143,7 @@ class _FieldsListState extends State<FieldsList> {
 //     //     id: "1",
 //     //     FieldName: "Haldiram",
 //     //     FieldImage:
-//     //         "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=85,metadata=none,w=400,h=400/app/images/Fields/full_screen/pro_86973.jpg",
+//     //         "http://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=85,metadata=none,w=400,h=400/app/images/Fields/full_screen/pro_86973.jpg",
 //     //     FieldDescription: "Haldiram Foods",
 //     //     FieldPrice: 500,
 //     //   ),

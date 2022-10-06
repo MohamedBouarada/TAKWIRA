@@ -250,7 +250,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                           Row(
                             children: [
                               Text(
-                                bookings[index]['finishDate']
+                                bookings[index]['date']
                                     .split(' ')
                                     .last
                                     .toString(),
@@ -260,6 +260,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                   fontSize: 14,
                                 ),
                               ),
+                              
                               SizedBox(
                                 width: 10,
                               ),
@@ -272,7 +273,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                 width: 10,
                               ),
                               Text(
-                                bookings[index]['date']
+                                bookings[index]['finishDate']
                                     .split(' ')
                                     .last
                                     .toString(),

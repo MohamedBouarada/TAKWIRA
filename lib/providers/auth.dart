@@ -20,7 +20,6 @@ class Auth with ChangeNotifier {
     required String password,
     required String repeatPassword,
     required String role,
-
   }) async {
     var url = 'http://${dotenv.env['addressIp']}:5000/user/add';
     try {
@@ -36,8 +35,8 @@ class Auth with ChangeNotifier {
             'lastName': lastName,
             'phoneNumber': phoneNumber,
             'password': password,
-            'repeatPassword':repeatPassword,
-            'role':role,
+            'repeatPassword': repeatPassword,
+            'role': role,
           },
         ),
       );
@@ -77,7 +76,8 @@ class Auth with ChangeNotifier {
 
 // Save an integer value to 'counter' key.
       final StorageService _storageService = StorageService();
-      final StorageItem storageItem = StorageItem('token', responseData['token']);
+      final StorageItem storageItem =
+          StorageItem('token', responseData['token']);
       final StorageItem roleItem = StorageItem('role', responseData['role']);
       _storageService.writeSecureData(storageItem);
       _storageService.writeSecureData(roleItem);
