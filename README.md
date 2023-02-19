@@ -11,10 +11,12 @@ A mobile application written in flutter for booking football ,tennis and basketb
 - search and find fields according to different criteria: location, availability, date, type, name,...
 - view field information : price , location ,description , type, services,...
 - TAKWIRA offers a notification system for its users and fields owners following a request for reservation or cancellation of the field.
+
 2- **Owner side :**
 - update all information concerning his field
 - view the information of the bookings of his fields : field name, client name , date of booking , ...
 - add new field (but it must be approved by the admin)
+
 3- **Admin side :**
 - consult all users and owners 
 - add , delete , update a user or an owner
